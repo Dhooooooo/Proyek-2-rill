@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h> // Untuk menggunakan fungsi system
+#include <stdlib.h> 
 
 // Deklarasi fungsi-fungsi untuk setiap jenis top up
 void topup_listrik();
