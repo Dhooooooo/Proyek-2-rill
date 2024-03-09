@@ -477,11 +477,12 @@ int kamar() {
     return noKmr;
 }
 
+// Untuk menampilkan harga yang dipisahkan dengan .
 void disHarga(int harga) {
-    if (harga < 1000) {
-        printf("%d", harga);
-        return;
-    }
-    disHarga(harga / 1000);
-    printf(".%03d", harga % 1000);
+   if (harga < 1000) {
+       printf("%d", harga);
+       return;
+   }
+   disHarga(harga / 1000);
+   printf(".%03d", harga % 1000);
 }

@@ -18,22 +18,17 @@ int main() {
     
 	int hargaMenginap = totalHariMenginap*hargaPerMalam;
 	
-	// Atur locale untuk pengaturan pemisah ribuan
-    setlocale(LC_NUMERIC, "en_US");
-	
 	int noKamar = kamar();
 	
 	// Menampilkan hasil ke user
 	system("cls");
 	printf("<user>\n");
-	printf("Anda akan menginap tanggal %s selama %d hari sampai tanggal %s \nNo kamar : %d\n", tanggalCheckIn, totalHariMenginap, tanggalCheckOut, noKamar);
-	printf("Harga : Rp. ");disHarga(hargaMenginap);
+	printf("Tanggal CheckIn\t : %s\nTanggal CheckOut : %s\nTotal menginap\t : %d hari\nNo kamar\t : %d\n", tanggalCheckIn, tanggalCheckOut, totalHariMenginap, noKamar);
+	printf("Harga\t\t : Rp. ");disHarga(hargaMenginap);
     
-    
-
-    // Menggabungkan tanggal check-in dan check-out ke dalam variabel hasil
-	sprintf(prompt, "%s,%s,%d,%d,%d,\n", tanggalCheckIn, tanggalCheckOut, totalHariMenginap, hargaMenginap, noKamar);   // Menggabungkan tanggal check-in dan check-out ke dalam variabel hasil
-
+    // Menggabungkan tanggal check-in dan check-out ke dalam variabel prompt
+	sprintf(prompt, "%s,%s,%d,%d,%d,\n", tanggalCheckIn, tanggalCheckOut, totalHariMenginap, hargaMenginap, noKamar);   
+	
 	// Enkripsi prompt
     char* enkripsiPesanan = enkripsi(prompt);
 
@@ -57,11 +52,11 @@ int main() {
         printf("Gagal membuka file.\n");
         return 1;
     }
-    
+
     printf("\n\n<admin>\n");
-	printf("+------------------------------------------------------------+\n");
-    printf("| %-12s | %-12s | %-4s | %-11s | %-6s |\n", "CheckIn", "CheckOut", "Hari", "Harga", "NoKamar");
-    printf("|--------------+--------------+------+-------------+---------|\n");
+	printf("+-----------------------------------------------------------------+\n");
+    printf("| %-12s | %-12s | %-4s | %-16s | %-6s |\n", "   CheckIn", "  CheckOut", "Hari", "     Harga", "NoKamar");
+    printf("|--------------+--------------+------+------------------+---------|\n");
 
     char line[100];
     while (fgets(line, sizeof(line), files)) {
@@ -73,9 +68,9 @@ int main() {
     	char *harga = strtok(NULL, ",");
     	char *no = strtok(NULL, ",");
     	
-    	printf("| %-12s | %-12s | %-4s | %-11s | %-7s |\n", CI, CO, hari, harga, no);
+    	printf("| %-12s | %-12s | %-4s |", CI, CO, hari);printf(" Rp. ");disHarga(atoi(harga));printf("\t| %-7s |\n", no);
     }
-    printf("+------------------------------------------------------------+\n");
+    printf("+-----------------------------------------------------------------+\n");
 	fclose(files);
     return 0;
 }
