@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include "primaJasa.h"
 
-
 int main() {
+
+	char *prompt = (char *)malloc(10 * sizeof(char)); // yang akan dituliskan ke dalam file
+	int hargaPerMalam = 500000; // harga hotel per malam
 	
-	char *prompt = (char *)malloc(10 * sizeof(char));
-	int hargaPerMalam = 500000;
     char *tanggalCheckIn = inputTanggalCheckIn();     
     printf("Tanggal check-in: %s\n", tanggalCheckIn);
     
@@ -15,9 +15,10 @@ int main() {
     int totalHariMenginap = hitungHariMenginap(tanggalCheckIn, tanggalCheckOut);
     int hargaMenginap = totalHariMenginap*hargaPerMalam;
     printf("\ntotal harga : Rp. %d \n", totalHariMenginap*hargaPerMalam);
-
     
-    sprintf(prompt, "%s, %s, %d, %d", tanggalCheckIn, tanggalCheckOut, totalHariMenginap, hargaMenginap);   // Menggabungkan tanggal check-in dan check-out ke dalam variabel hasil
+    int noKamar = kamar();
+
+    sprintf(prompt, "%s, %s, %d, %d, %d\n", tanggalCheckIn, tanggalCheckOut, totalHariMenginap, hargaMenginap, noKamar);   // Menggabungkan tanggal check-in dan check-out ke dalam variabel hasil
 
     printf("%s", prompt);
 
@@ -27,13 +28,13 @@ int main() {
 
     printf("Pesan terdekripsi: %s\n", pesan_terdekripsi);
     
-    FILE *file = fopen("pemesanan.txt", "w");
+    FILE *file = fopen("pemesanan.txt", "a"); // membuka dile dengan mode append atau mode menambahkan
     if (file == NULL) {
         printf("Gagal membuka file.\n");
-        return 1;
+        return 0;
     }
 
-    fprintf(file, "%s", pesan_terenkripsi);
+    fprintf(file, "%s", pesan_terenkripsi); // menulis ke file
 
     fclose(file);
     return 0;

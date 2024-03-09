@@ -5,6 +5,10 @@
 #include <stdlib.h>
 #include "primaJasa.h"
 
+// nomor kamar mulai dari 100 sampai 300
+#define minKamar 100
+#define maxKamar 300
+
 char char_set[] = "1qazZAQ2wsxXSW3edcCDE4rfvVFR5tgbBGT6yhnNHY7ujmMJU8ikKI9olLOpP";
 //char char_set[] = "`1qaz2wsx3edc4rfv5tgb6yhn7ujm8ik,9ol.p;-['=]/~!QAZ@WSX#EDC$RFV%TGB^YHN&UJM*IK<(OL>)P:?_\{+}|";
 int mod = sizeof(char_set);
@@ -429,4 +433,45 @@ int hitungHariMenginap(char *tanggalCheckIn, char *tanggalCheckOut){
 	}
 		
 	return jmlHari;
+}
+
+// Fungsi untuk memeriksa apakah nomor kamar sudah ada di dalam file
+bool isKamarExists(int noKamar) {
+    FILE *file = fopen("pemesanan.txt", "r");
+    if (file == NULL) {
+        printf("Gagal membuka file.\n");
+        exit(1);
+    }
+
+    char line[100];
+    while (fgets(line, sizeof(line), file)) {
+        // Membaca nomor kamar dari setiap baris dalam file
+        char *token = strtok(line, ",");
+		token = strtok(NULL, ",");
+        token = strtok(NULL, ",");
+        token = strtok(NULL, ",");
+        token = strtok(NULL, ",");
+        int *kamar = atoi(dekripsi(token)); // ngambil nomor kamar, dekrip dan diubah ke bentuk int
+        // Jika nomor kamar sudah ada dalam file, kembalikan true
+        if (kamar == noKamar) {
+            fclose(file);
+            return true;
+        }
+    }
+
+    fclose(file);
+    return false;
+}
+
+// Fungsi untuk memberikan nomor kamar random
+int kamar() {
+    int noKmr;
+
+    srand(time(NULL)); // Inisialisasi generator nomor acak
+
+    do {
+        noKmr = rand() % (maxKamar - minKamar + 1) + minKamar;
+    } while (isKamarExists(noKmr));
+
+    return noKmr;
 }

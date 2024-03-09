@@ -34,4 +34,10 @@ int hariDalamTahun(char *tanggal);
 // Fungsi untuk mengetahui total menginap berapa hari
 int hitungHariMenginap(char *tanggalCheckIn, char *tanggalCheckOut);
 
+// Fungsi untuk memberikan nomor kamar random
+int kamar();
+
+// Fungsi untuk memeriksa apakah nomor kamar sudah ada di dalam file
+bool isKamarExists(int noKamar);
+
 #endif
