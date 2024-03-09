@@ -453,6 +453,7 @@ bool isKamarExists(int noKamar) {
         token = strtok(NULL, ",");
         int *kamar = atoi(dekripsi(token)); // ngambil nomor kamar, dekrip dan diubah ke bentuk int
         // Jika nomor kamar sudah ada dalam file, kembalikan true
+        
         if (kamar == noKamar) {
             fclose(file);
             return true;
@@ -474,4 +475,13 @@ int kamar() {
     } while (isKamarExists(noKmr));
 
     return noKmr;
+}
+
+void disHarga(int harga) {
+    if (harga < 1000) {
+        printf("%d", harga);
+        return;
+    }
+    disHarga(harga / 1000);
+    printf(".%03d", harga % 1000);
 }

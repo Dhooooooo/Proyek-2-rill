@@ -40,4 +40,6 @@ int kamar();
 // Fungsi untuk memeriksa apakah nomor kamar sudah ada di dalam file
 bool isKamarExists(int noKamar);
 
+// Untuk menampilkan harga yang dipisahkan dengan .
+void disHarga(int harga);
 #endif
