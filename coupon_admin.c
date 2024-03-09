@@ -11,9 +11,11 @@ void encryptCoupon(char *coupon);
 void displayCouponList();
 
 void createCoupon(char *coupon, char *discount) {
+	// Membuat atau overwrite file database
     FILE *couponList;
     couponList = fopen("List_coupon.txt", "a");
 
+	// Menyimpan kupon yang dibuat ke database
     fprintf(couponList, "%s %s\n", coupon, discount);
     
     fclose(couponList);
@@ -30,6 +32,7 @@ void encryptCoupon(char *coupon) {
 }
 
 void displayCouponList() {
+	// Melakukan read file database
     FILE *couponList;
     couponList = fopen("List_coupon.txt", "r");
     if (!couponList) {
@@ -42,7 +45,8 @@ void displayCouponList() {
 
     printf("\nLIST COUPON\n");
     printf("============\n");
-
+	
+	// Menampilkan kupon yang ada di database
     while (fscanf(couponList, "%s %s", storedCoupon, storedDiscount) != EOF) {
 		printf("Kode Kupon: %s | Diskon: %s | ", storedCoupon, storedDiscount);
 		encryptCoupon(storedCoupon);
@@ -80,6 +84,7 @@ int main() {
     char discount[MAX_DISCOUNT_LENGTH];
     int choice;
     
+    // Main menu
     do {
         choice = displayMenu();
         system("cls");
@@ -90,8 +95,11 @@ int main() {
                 scanf("%s", coupon);
                 printf("Masukkan diskon: ");
                 scanf("%s", discount);
-    
+    			
+    			// Prosedur menyimpan kupon ke database
                 createCoupon(coupon, discount);
+                
+                // Prosedur enkripsi kupon yang diinput
                 encryptCoupon(coupon);
     
                 printf("\nKode kupon: %s\n", coupon);
