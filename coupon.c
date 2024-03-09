@@ -59,6 +59,7 @@ int main() {
 
     printf("Masukkan kode kupon: ");
     scanf("%s", coupon);
+    
     readCoupon(coupon, discount);
 
     return 0;
