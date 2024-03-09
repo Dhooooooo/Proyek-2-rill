@@ -21,11 +21,11 @@ void readCoupon(char *coupon, char *discount) {
     char storedDiscount[MAX_DISCOUNT_LENGTH];
     int found = 0;
     long int position;
-
+	decryptCoupon(coupon);
+	
     while (!feof(listCoupon)) {
     	position = ftell(listCoupon);
     	fscanf(listCoupon, "%s %s", storedCoupon, storedDiscount);
-        decryptCoupon(coupon);
         if (strcmp(coupon, storedCoupon) == 0) {
         	fseek(listCoupon, position, SEEK_SET);
             strcpy(discount, storedDiscount);
