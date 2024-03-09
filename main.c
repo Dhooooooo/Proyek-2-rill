@@ -26,6 +26,16 @@ int main() {
     char* pesan_terdekripsi = dekripsi(pesan_terenkripsi);
 
     printf("Pesan terdekripsi: %s\n", pesan_terdekripsi);
+    
+    FILE *file = fopen("pemesanan.txt", "w");
+    if (file == NULL) {
+        printf("Gagal membuka file.\n");
+        return 1;
+    }
+
+    fprintf(file, "%s", pesan_terenkripsi);
+
+    fclose(file);
     return 0;
 }
 
