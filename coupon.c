@@ -21,8 +21,11 @@ void readCoupon(char *coupon, char *discount) {
     char storedDiscount[MAX_DISCOUNT_LENGTH];
     int found = 0;
     long int position;
+    
+    // Dekripsi kupon yang diinput
 	decryptCoupon(coupon);
 	
+	// Mencari kupon di database
     while (!feof(listCoupon)) {
     	position = ftell(listCoupon);
     	fscanf(listCoupon, "%s %s", storedCoupon, storedDiscount);
@@ -60,6 +63,7 @@ int main() {
     printf("Masukkan kode kupon: ");
     scanf("%s", coupon);
     
+    // Prosedur mencari kupon di database
     readCoupon(coupon, discount);
 
     return 0;
