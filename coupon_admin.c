@@ -39,6 +39,7 @@ int main() {
     
     createCoupon(coupon, discount);
     encryptCoupon(coupon);
+    
     printf("\nKode kupon: %s\n", coupon);
     
     return 0;
