@@ -1,41 +1,47 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-char char_set[] = "`1qaz2wsx3edc4rfv5tgb6yhn7ujm8ik,9ol.p;-['=]/~!QAZ@WSX#EDC$RFV%TGB^YHN&UJM*IK<(OL>)P:?_\{+}|";
-int mod = sizeof(char_set)+1;
-int i, j;
-int MAXLENGTH = 1000;
+#define MAX_COUPON_LENGHT 10
+#define MAX_DISCOUNT_LENGHT 10
+#define ENCRYPTION_KEY 8
 
-void createCoupon(char cpn[8], int dsk);
-char encryptCoupon();
+void createCoupon(char *coupon, char *diskon);
+void encryptCoupon(char *coupon);
 
-typedef struct{
-	char fcoupon[8];
-	int fdiskon;
-}A;
-
-A a;
-
-void createCoupon(char cpn[], int dsk) {
-	printf("Masukkan kode voucher: ");
-	scanf("%s", &cpn);
-	printf("Masukkan diskon: ");
-	scanf("%d", &dsk);
+void createCoupon(char *coupon, char *diskon) {
+	FILE *couponList;
+	couponList = fopen("List_coupon.txt", "a");
+    fprintf(couponList, "%s %s\n", coupon, diskon);
+    
+    encryptCoupon(coupon);
+    
+    fclose(couponList);
 }
 
-char encryptCoupon() {
-	
+void encryptCoupon(char *coupon) {
+	char *ptr = coupon;
+    while (*ptr != '\0') {
+		if (*ptr != ' ') {
+    		*ptr = (*ptr + ENCRYPTION_KEY) % 126; // ASCII printable characters range
+        }
+        ptr++;
+    return;
+	}
 }
 
 int main() {
-	FILE *couponList;
-	couponList = fopen("List_coupon.txt", "a+");
-	char coupon[8];
-	int diskon;
+	char coupon[MAX_COUPON_LENGHT];
+	char diskon[MAX_DISCOUNT_LENGHT];
+	
+	printf("Masukkan kode kupon: ");
+	scanf("%s", &coupon);
+	printf("Masukkan diskon: ");
+	scanf("%s", &diskon);
+	
 	createCoupon(coupon, diskon);
-	strcpy(a.fcoupon, coupon);
-	a.fdiskon = diskon;
-	fscanf("%s" "%d", &a.fcoupon, &a.fdiskon);
-	fprintf(couponList, "%s" "%d", a.fcoupon, a.fdiskon);
-	fclose(couponList);
+	
+	printf("\nKode kupon: %s\n", coupon);
+	
+	return 0;
 }
