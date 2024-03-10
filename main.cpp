@@ -1,14 +1,14 @@
-#include "primaJasa.h"
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <conio.h>  // Library untuk fungsi getch() di Windows
+#include <string.h>
+#include "payPrim.h"
 
+#define MAX_USERNAME_LENGTH 50
+#define MAX_PASSWORD_LENGTH 50
+#define ENCRYPTION_KEY 3
 
-int main(){
-
-
-char username[MAX_USERNAME_LENGTH];
+int main() {
+    char username[MAX_USERNAME_LENGTH];
     char password[MAX_PASSWORD_LENGTH];
     int choice;
     
@@ -23,12 +23,8 @@ char username[MAX_USERNAME_LENGTH];
                 scanf("%s", username);
                 printf("Password: ");
                 scanf(" %[^\n]", password); // Membaca sampai karakter newline
-                if (registerUser(username, password)){
-                	printf("Registrasi Berhasil\n");
-				} else {
-					printf("Username Sudah Digunakan\n");
-				}
-                //system("cls");
+                registerUser(username, password);
+                system("cls");
                 break;
             case 2:
                 // Login
