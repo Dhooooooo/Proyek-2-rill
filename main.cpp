@@ -24,7 +24,7 @@ int main() {
                 printf("Password: ");
                 scanf(" %[^\n]", password); // Membaca sampai karakter newline
                 registerUser(username, password);
-                system("cls");
+                //system("cls");
                 break;
             case 2:
                 // Login
