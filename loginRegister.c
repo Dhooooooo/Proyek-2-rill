@@ -29,7 +29,7 @@ void decrypt(char *text) {
 }
 
 // Fungsi untuk registrasi
-void registerUser(char *username, char *password) {
+char registerUser(char *username, char *password) {
     // Melakukan enkripsi pada password sebelum disimpan
     encrypt(password);
     
@@ -37,12 +37,28 @@ void registerUser(char *username, char *password) {
     FILE *file = fopen("users.txt", "a");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
-        return;
+        return 0; // Registrasi gagal
     }
+    
+    char storedUsername[MAX_USERNAME_LENGTH];
+    char storedPassword[MAX_PASSWORD_LENGTH];
+    
+    rewind(file);
+ 	/*while(!feof(file)) {
+        fscanf(file, "%s %s\n", storedUsername, storedPassword);
+        printf("%s\n", storedUsername);
+        if (strcmp(username, storedUsername) == 0 || strcmp(password, storedPassword) == 0) {
+            fclose(file);
+            printf("Username Sudah Digunakan\n");
+            return 1; // Registrasi gagal
+        }
+    }*/
+    
     fprintf(file, "%s %s\n", username, password);
     fclose(file);
     
     printf("Registrasi berhasil.\n");
+    return 1; // Registrasi berhasil
 }
 
 // Fungsi untuk login
@@ -65,6 +81,7 @@ int loginUser(char *username, char *password) {
         fscanf(file, "%s %s\n", storedUsername, storedPassword);
         decrypt(storedPassword);
         printf("%s\n", storedPassword);
+        printf("%s\n", storedUsername);
         if (strcmp(username, storedUsername) == 0 && strcmp(password, storedPassword) == 0) {
             fclose(file);
             return 1; // Login berhasil
@@ -136,8 +153,12 @@ int main() {
                 scanf("%s", username);
                 printf("Password: ");
                 scanf(" %[^\n]", password); // Membaca sampai karakter newline
-                registerUser(username, password);
-                system("cls");
+                if (registerUser(username, password)){
+                	printf("Registrasi Berhasil\n");
+				} else {
+					printf("Username Sudah Digunakan\n");
+				}
+                //system("cls");
                 break;
             case 2:
                 // Login
