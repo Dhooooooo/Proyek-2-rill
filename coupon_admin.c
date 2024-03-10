@@ -3,20 +3,19 @@
 #include <string.h>
 
 #define MAX_COUPON_LENGTH 10
-#define MAX_DISCOUNT_LENGTH 10
 #define ENCRYPTION_KEY_LENGTH 8
 
-void createCoupon(char *coupon, char *discount);
+void createCoupon(char *coupon, int discount);
 void encryptCoupon(char *coupon);
 void displayCouponList();
 
-void createCoupon(char *coupon, char *discount) {
-	// Membuat atau overwrite file database
+void createCoupon(char *coupon, int discount) {
+    // Membuat atau overwrite file database
     FILE *couponList;
     couponList = fopen("List_coupon.txt", "a");
 
-	// Menyimpan kupon yang dibuat ke database
-    fprintf(couponList, "%s %s\n", coupon, discount);
+    // Menyimpan kupon yang dibuat ke database
+    fprintf(couponList, "%s %d\n", coupon, discount);
     
     fclose(couponList);
 }
@@ -32,7 +31,7 @@ void encryptCoupon(char *coupon) {
 }
 
 void displayCouponList() {
-	// Melakukan read file database
+    // Melakukan read file database
     FILE *couponList;
     couponList = fopen("List_coupon.txt", "r");
     if (!couponList) {
@@ -41,16 +40,16 @@ void displayCouponList() {
     }
 
     char storedCoupon[MAX_COUPON_LENGTH];
-    char storedDiscount[MAX_DISCOUNT_LENGTH];
+    int storedDiscount;
 
     printf("\nLIST COUPON\n");
     printf("============\n");
-	
-	// Menampilkan kupon yang ada di database
-    while (fscanf(couponList, "%s %s", storedCoupon, storedDiscount) != EOF) {
-		printf("Kode Kupon: %s | Diskon: %s | ", storedCoupon, storedDiscount);
-		encryptCoupon(storedCoupon);
-		printf("Kupon: %s\n", storedCoupon);
+    
+    // Menampilkan kupon yang ada di database
+    while (fscanf(couponList, "%s %d", storedCoupon, &storedDiscount) != EOF) {
+        printf("Kode Kupon: %s | Diskon: %d | ", storedCoupon, storedDiscount);
+        encryptCoupon(storedCoupon);
+        printf("Kupon (setelah enkripsi): %s\n", storedCoupon);
     }
 
     fclose(couponList);
@@ -71,7 +70,7 @@ int displayMenu() {
 
 int main() {
     char coupon[MAX_COUPON_LENGTH];
-    char discount[MAX_DISCOUNT_LENGTH];
+    int discount;
     int choice;
     
     // Main menu
@@ -84,9 +83,9 @@ int main() {
                 printf("Masukkan kode kupon: ");
                 scanf("%s", coupon);
                 printf("Masukkan diskon: ");
-                scanf("%s", discount);
-    			
-    			// Prosedur menyimpan kupon ke database
+                scanf("%d", &discount);
+                
+                // Prosedur menyimpan kupon ke database
                 createCoupon(coupon, discount);
                 
                 // Prosedur enkripsi kupon yang diinput

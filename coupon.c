@@ -3,13 +3,12 @@
 #include <string.h>
 
 #define MAX_COUPON_LENGTH 10
-#define MAX_DISCOUNT_LENGTH 10
 #define ENCRYPTION_KEY_LENGTH 8
 
-void readCoupon(char *coupon, char *discount);
+void readCoupon(char *coupon, int *discount);
 void decryptCoupon(char *coupon);
 
-void readCoupon(char *coupon, char *discount) {
+void readCoupon(char *coupon, int *discount) {
     FILE *listCoupon;
     listCoupon = fopen("List_coupon.txt", "r");
     if (!listCoupon) {
@@ -18,20 +17,20 @@ void readCoupon(char *coupon, char *discount) {
     }
 
     char storedCoupon[MAX_COUPON_LENGTH];
-    char storedDiscount[MAX_DISCOUNT_LENGTH];
+    int storedDiscount;
     int found = 0;
     long int position;
     
     // Dekripsi kupon yang diinput
-	decryptCoupon(coupon);
-	
-	// Mencari kupon di database
+    decryptCoupon(coupon);
+    
+    // Mencari kupon di database
     while (!feof(listCoupon)) {
-    	position = ftell(listCoupon);
-    	fscanf(listCoupon, "%s %s", storedCoupon, storedDiscount);
+        position = ftell(listCoupon);
+        fscanf(listCoupon, "%s %d", storedCoupon, &storedDiscount);
         if (strcmp(coupon, storedCoupon) == 0) {
-        	fseek(listCoupon, position, SEEK_SET);
-            strcpy(discount, storedDiscount);
+            fseek(listCoupon, position, SEEK_SET);
+            *discount = storedDiscount;
             found = 1;
             break;
         }
@@ -40,7 +39,7 @@ void readCoupon(char *coupon, char *discount) {
     fclose(listCoupon);
 
     if (found) {
-        printf("Selamat! Anda mendapatkan diskon sebesar %s\n", discount);
+        printf("Selamat! Anda mendapatkan diskon sebesar %d persen\n", *discount);
     } else {
         printf("Kode kupon tidak valid.\n");
     }
@@ -58,13 +57,13 @@ void decryptCoupon(char *coupon) {
 
 int main() {
     char coupon[MAX_COUPON_LENGTH];
-    char discount[MAX_DISCOUNT_LENGTH];
+    int discount;
 
     printf("Masukkan kode kupon: ");
     scanf("%s", coupon);
     
     // Prosedur mencari kupon di database
-    readCoupon(coupon, discount);
+    readCoupon(coupon, &discount);
 
     return 0;
 }
