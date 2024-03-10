@@ -8,6 +8,7 @@
 void createCoupon(char *coupon, int discount);
 void encryptCoupon(char *coupon);
 void displayCouponList();
+void changeDiscount(char *coupon, int newDiscount);
 
 void createCoupon(char *coupon, int discount) {
     // Membuat atau overwrite file database
@@ -55,12 +56,55 @@ void displayCouponList() {
     fclose(couponList);
 }
 
+void changeDiscount(char *coupon, int newDiscount) {
+    FILE *couponList;
+    FILE *tempList;
+    char tempCoupon[MAX_COUPON_LENGTH];
+    int tempDiscount;
+    int found = 0;
+
+    couponList = fopen("List_coupon.txt", "r");
+    if (!couponList) {
+        printf("File tidak ada.\n");
+        return;
+    }
+
+    tempList = fopen("temp_List_coupon.txt", "w");
+    if (!tempList) {
+        printf("File tidak ada.\n");
+        fclose(couponList);
+        return;
+    }
+
+    while (fscanf(couponList, "%s %d", tempCoupon, &tempDiscount) != EOF) {
+        if (strcmp(coupon, tempCoupon) == 0) {
+            fprintf(tempList, "%s %d\n", tempCoupon, newDiscount);
+            found = 1;
+        } else {
+            fprintf(tempList, "%s %d\n", tempCoupon, tempDiscount);
+        }
+    }
+
+    fclose(couponList);
+    fclose(tempList);
+
+    remove("List_coupon.txt");
+    rename("temp_List_coupon.txt", "List_coupon.txt");
+
+    if (found) {
+        printf("Diskon untuk kupon %s berhasil diubah menjadi %d\n", coupon, newDiscount);
+    } else {
+        printf("Kupon tidak ditemukan.\n");
+    }
+}
+
 int displayMenu() {
     int choice;
     printf("\nMENU\n");
     printf("1. Create coupon\n");
     printf("2. List coupon\n");
-    printf("3. Exit\n");
+    printf("3. Change discount\n");
+    printf("4. Exit\n");
     printf("Pilih menu: ");
     
     scanf("%d", &choice);
@@ -106,10 +150,23 @@ int main() {
                 break;
             
             case 3:
+                // Change discount
+                printf("Masukkan kode kupon yang ingin diubah diskonnya: ");
+                scanf("%s", coupon);
+                printf("Masukkan diskon baru: ");
+                scanf("%d", &discount);
+                changeDiscount(coupon, discount);
+                printf("\nMasukkan nomor apapun untuk kembali ke menu: ");
+                scanf("%d", &choice);
+                system("cls");
+                break;
+            
+            case 4:
                 printf("\nEXIT\n");
                 break;
         }
-    } while (choice != 3);
+    } while (choice != 4);
     
     return 0;
 }
+
