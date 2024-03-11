@@ -11,7 +11,7 @@ void registerUser(char *username, char *password) {
     // Melakukan enkripsi pada password sebelum disimpan
     encrypt(password);
     
-    FILE *file = fopen("users.txt", "r"); // Buka file untuk membaca
+    FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
@@ -32,7 +32,7 @@ void registerUser(char *username, char *password) {
     fclose(file);
     
     // Jika username belum ada, buka file untuk menulis dan tambahkan pengguna baru
-    file = fopen("users.txt", "a");
+    file = fopen("database/users.txt", "a");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
@@ -49,7 +49,7 @@ void registerUser(char *username, char *password) {
 int loginUser(char *username, char *password) {
 
 
-    FILE *file = fopen("users.txt", "r");
+    FILE *file = fopen("database/users.txt", "r");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return 0;
@@ -78,13 +78,13 @@ void modifyUser(char *username, char *newPassword) {
     // Melakukan enkripsi pada password baru sebelum disimpan
     encrypt(newPassword);
     
-    FILE *file = fopen("users.txt", "r"); // Buka file untuk membaca
+    FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
     }
     
-    FILE *tempFile = fopen("temp.txt", "w"); // Buka file sementara untuk menulis
+    FILE *tempFile = fopen("database/temp.txt", "w"); // Buka file sementara untuk menulis
     if (tempFile == NULL) {
         fclose(file);
         printf("Gagal membuka file sementara.\n");
@@ -97,7 +97,7 @@ void modifyUser(char *username, char *newPassword) {
     // Membaca file dan menyalin informasi pengguna ke file sementara
     while (fscanf(file, "%s %s", storedUsername, storedPassword) == 2) {
         if (strcmp(username, storedUsername) == 0) {
-            fprintf(tempFile, "%s %-50s\n", username, newPassword); // Menulis informasi pengguna yang dimodifikasi
+            fprintf(tempFile, "%s %s\n", username, newPassword); // Menulis informasi pengguna yang dimodifikasi
         } else {
             fprintf(tempFile, "%s %s\n", storedUsername, storedPassword); // Menyalin informasi pengguna lain tanpa modifikasi
         }
@@ -107,11 +107,11 @@ void modifyUser(char *username, char *newPassword) {
     fclose(tempFile);
     
     // Menghapus file asli dan mengganti dengan file sementara
-    if (remove("users.txt") != 0) {
+    if (remove("database/users.txt") != 0) {
         printf("Gagal menghapus file asli.\n");
         return;
     }
-    if (rename("temp.txt", "users.txt") != 0) {
+    if (rename("temp.txt", "database/users.txt") != 0) {
         printf("Gagal mengganti nama file sementara.\n");
         return;
     }
