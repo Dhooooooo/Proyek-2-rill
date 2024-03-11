@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "../payPrim.h"
 
 #define MAX_USERNAME_LENGTH 50
@@ -8,6 +9,23 @@
 #define ENCRYPTION_KEY 3
 
 // Fungsi untuk menampilkan menu
+
+void waitNext() {
+	printf("\nHarap tunggu");
+    for(int i = 0; i < 3; i++){
+    	printf(".");
+    	fflush(stdout);
+    	sleep(1);
+}
+}
+
+void inputAkun(char *username, char *password){
+ 	printf("Username: ");
+  	scanf("%s", username);
+   	printf("Password: ");
+    scanf(" %s", password);
+}
+
 int displayMenu() {
     int choice;
     printf("\nMenu:\n");

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "payPrim.h"
 
 #define MAX_USERNAME_LENGTH 50
@@ -19,29 +20,26 @@ int main() {
             case 1:
                 // Registrasi
                 printf("Registrasi\n");
-                printf("Username: ");
-                scanf("%s", username);
-                printf("Password: ");
-                scanf(" %[^\n]", password); // Membaca sampai karakter newline
+                inputAkun(username, password); 
                 registerUser(username, password);
                 //system("cls");
                 break;
             case 2:
                 // Login
-                printf("\nLogin\n");
-                printf("Username: ");
-                scanf("%s", username);
-                printf("Password: ");
-                scanf(" %[^\n]", password); // Membaca sampai karakter newline
+                printf("Login\n");
+                inputAkun(username, password); 
                 if (loginUser(username, password)) {
                     printf("Login berhasil.\n");
                     int menu2;
-                    
+                    waitNext();
                     do {
-                    	menu2 = displayMenuAfter();
                     	system("cls");
+                    	menu2 = displayMenuAfter();
                     	switch (menu2){
                     		case 1:
+                    			printf("Edit Password\n");
+                				inputAkun(username, password);
+                				modifyUser(username, password);
                     			break;
                    			case 2:
                    				break;
@@ -55,21 +53,12 @@ int main() {
                 }
                 break;
             case 3:
-                // Modifikasi Password
-                printf("\nModifikasi Password\n");
-                printf("Username: ");
-                scanf("%s", username);
-                printf("New Password: ");
-                scanf(" %[^\n]", password); // Membaca sampai karakter newline
-                modifyUser(username, password);
-                break;
-            case 4:
                 printf("Terima kasih!\n");
                 break;
             default:
                 printf("Pilihan tidak valid.\n");
         }
-    } while (choice != 4);
+    } while (choice != 3);
     
     return 0;
 }

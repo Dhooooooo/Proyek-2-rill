@@ -11,6 +11,8 @@ int loginUser(char *username, char *password);
 void modifyUser(char *username, char *newPassword);
 
 //Buat Menu
+void waitNext();
+void inputAkun(char *username, char *password);
 int displayMenu();
 int displayMenuAfter();
 
