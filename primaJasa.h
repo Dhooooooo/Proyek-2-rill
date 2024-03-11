@@ -42,4 +42,22 @@ bool isKamarExists(int noKamar);
 
 // Untuk menampilkan harga yang dipisahkan dengan .
 void disHarga(int harga);
+
+// Untuk menghitung ada berapa baris di file
+int hitungBaris();
+
+// Fungsi untuk memperbarui baris dengan nomor tertentu
+void updateBaris(char *baris, int nomor);
+
+// Prosedur untuk approval admin mana yang sudah berhasil mana yang belum
+void adminApprove(int nomorDicari);
+
+// Untuk tampilan yang dilihat oleh admin
+void disPemesananAdmin();
+
+// Prosedur ini untuk user memesan hotel
+void pemesananHotel(char username[]);
+
+// Prosedur untuk menampilkan pesanan ke user berdasarkan username
+void disPemesananUser(char username[]);
 #endif

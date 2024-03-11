@@ -256,15 +256,12 @@ bool *isTglCheckInValid(char *tanggalCheckIn){
     	
 		if (tahun == tahunSkrg+1 && bulan == bulanSkrg && hari == hariSkrg){ // maksimal mesen setahun kemudian dari hari saat user mau mesen
 			valid = true;
-			printf("tahun %d", valid);
 		}
 		else if (tahun == tahunSkrg && bulan > bulanSkrg){
 			valid = true;
-			printf("bulan %d", valid);
 		}
 		else if (tahun == tahunSkrg && bulan == bulanSkrg && hari >= hariSkrg){
 			valid = true;
-			printf("hari %d", valid);
 		}
 		else{
 			valid = false;
@@ -485,4 +482,208 @@ void disHarga(int harga) {
    }
    disHarga(harga / 1000);
    printf(".%03d", harga % 1000);
+}
+
+
+// Untuk menghitung ada berapa baris di file
+int hitungBaris() {
+    FILE *file = fopen("pemesanan.txt", "r");
+    if (file == NULL) {
+        printf("Gagal membuka file.\n");
+        return 0;
+    }
+
+    int baris = 0;
+    char c;
+    while ((c = fgetc(file)) != EOF) {
+        if (c == '\n') {
+            baris++;
+        }
+    }
+
+    fclose(file);
+    return baris;
+}
+
+// Fungsi untuk memperbarui baris dengan nomor tertentu
+void updateBaris(char *baris, int nomor) {
+    char *delim = ",";
+    
+    char *Nomer = strtok(baris, delim);
+    char *Username = strtok(NULL, delim);
+    char *CheckIn = strtok(NULL, delim);
+    char *CheckOut = strtok(NULL, delim);
+    char *Hari = strtok(NULL, delim);
+    char *Harga = strtok(NULL, delim);
+    char *Potongan = strtok(NULL, delim);
+    char *Total = strtok(NULL, delim);
+    char *NoKamar = strtok(NULL, delim);
+    char *Stats = strtok(NULL, delim);
+
+	if (atoi(Nomer) == nomor) { // Mengubah string ke integer dan membandingkan dengan nomor
+	    strcpy(Stats, "SUKSES"); // Mengganti stats dengan "SUKSES"
+	}
+	sprintf(baris, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,\n", Nomer, Username, CheckIn, CheckOut, Hari, Harga, Potongan, Total, NoKamar, Stats);
+}
+
+// Prosedur untuk approval admin mana yang sudah berhasil mana yang belum
+void adminApprove(int nomorDicari){
+	const char *namaFileInput = "pemesanan.txt";
+    const char *namaFileOutput = "pemesananTemp.txt";
+
+    FILE *fileInput = fopen(namaFileInput, "r+");
+    FILE *fileOutput = fopen(namaFileOutput, "w+");
+
+    if (fileInput == NULL || fileOutput == NULL) {
+        printf("Gagal membuka file.\n");
+    }
+
+    char baris[100];
+
+    // Menulis hasil ke file output
+    while (fgets(baris, sizeof(baris), fileInput)) {
+        char *dekripPemesanan = dekripsi(baris);
+        
+        updateBaris(dekripPemesanan, nomorDicari); // Mencari nomor yang dicari
+        char *enkripPemesanan = enkripsi(dekripPemesanan);
+        char *test = dekripsi(enkripPemesanan);
+        
+        fprintf(fileOutput, "%s", enkripPemesanan);
+    }
+
+    fclose(fileInput);
+    fclose(fileOutput);
+
+    // Membuka kembali file input dalam mode write-only untuk menulis ulang isinya
+    fileInput = fopen(namaFileInput, "w");
+    fileOutput = fopen(namaFileOutput, "r");
+
+    // Menyalin isi file output ke file input
+    while (fgets(baris, sizeof(baris), fileOutput)) {
+        fprintf(fileInput, "%s", baris);
+    }
+
+    fclose(fileInput);
+    fclose(fileOutput);
+}
+
+// Untuk tampilan yang dilihat oleh admin
+void disPemesananAdmin(){
+	int i;
+    char line[100];
+    
+    FILE *files = fopen("pemesanan.txt", "r");
+    if (files == NULL) {
+        printf("Gagal membuka file.\n");
+    }
+    printf("\n\n<admin>\n");
+	printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
+    printf("| %-3s | %-10s | %-12s | %-12s | %-4s | %-21s | %-4s | %-21s | %-6s | %-10s |\n", "No", " Username", "  CheckIn", "  CheckOut", "Hari", "        Harga","Kupon", "        Total", "NoKamar", "status");
+    printf("|-----+------------+--------------+--------------+------+-----------------------+-------+-----------------------+---------+------------|\n");
+
+    while (fgets(line, sizeof(line), files)) {
+    	char *dekripPemesanan = dekripsi(line);
+    	
+    	char *noOrder = strtok(dekripPemesanan, ",");
+    	char *namaCust = strtok(NULL, ",");
+    	char *CI = strtok(NULL, ",");
+    	char *CO = strtok(NULL, ",");
+    	char *hari = strtok(NULL, ",");
+    	char *harga = strtok(NULL, ",");
+    	char *ptgan = strtok(NULL, ",");
+    	char *total = strtok(NULL, ",");
+    	char *no = strtok(NULL, ",");
+    	char *status = strtok(NULL, ",");
+    	printf("| %-3s | %-10s | %-12s | %-12s | %-4s |",noOrder,namaCust, CI, CO, hari);printf("     Rp. ");disHarga(atoi(harga));printf("\t| %-4s%% |", ptgan);printf("     Rp. ");disHarga(atoi(total));printf("\t| %-7s | %-10s |\n", no, status);
+    }
+    printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
+	fclose(files);
+}
+
+// Prosedur ini untuk user memesan hotel
+void pemesananHotel(char username[]){
+	char *prompt = (char *)malloc(10 * sizeof(char)); // yang akan dituliskan ke dalam file
+	int hargaPerMalam = 1000000; // harga hotel per malam
+	int coupon; // % untuk kupon 
+	
+    char *tanggalCheckIn = inputTanggalCheckIn();     
+    printf("Tanggal check-in: %s\n", tanggalCheckIn);
+    
+    char *tanggalCheckOut = inputTanggalCheckOut(tanggalCheckIn);    
+    printf("Tanggal check-out: %s\n", tanggalCheckOut);
+    
+    printf("Kupon (jika tidak ada masukkan 0): ");scanf("%d", &coupon);
+    
+    int potongan = coupon;
+    
+    int totalHariMenginap = hitungHariMenginap(tanggalCheckIn, tanggalCheckOut);
+    
+	int hargaMenginap = totalHariMenginap*hargaPerMalam;
+	
+	int noKamar = kamar();
+	
+	int jumlahBaris = hitungBaris();
+    int no = jumlahBaris + 1;
+    
+    double hasil = hargaMenginap - (hargaMenginap*(double)potongan/100); // menghitung total harga setelah di diskon
+    int totHarga = (int) hasil; // mengubah bentuk double ke int
+    
+    char stats[] = "proses";
+    
+	system("cls");
+	printf("<user>\n");
+	printf("Tanggal CheckIn\t : %s\nTanggal CheckOut : %s\nTotal menginap\t : %d hari\nNo kamar\t : %d\n", tanggalCheckIn, tanggalCheckOut, totalHariMenginap, noKamar);
+	printf("Harga\t\t : Rp. ");disHarga(hargaMenginap);
+	printf("\nPotongan\t : %d%%", potongan);
+	printf("\nTotal Harga\t : Rp. ");disHarga(totHarga);
+    
+    // Menggabungkan tanggal check-in dan check-out ke dalam variabel prompt
+	sprintf(prompt, "%d,%s,%s,%s,%d,%d,%d,%d,%d,%s,\n", no,username,tanggalCheckIn, tanggalCheckOut, totalHariMenginap, hargaMenginap, potongan, totHarga, noKamar, stats);
+	
+	// Enkripsi prompt
+    char* enkripsiPesanan = enkripsi(prompt);
+
+    FILE *file = fopen("pemesanan.txt", "a"); // membuka dile dengan mode append atau mode menambahkan
+    if (file == NULL) {
+        printf("Gagal membuka file.\n");
+    }
+    
+    fprintf(file, "%s", enkripsiPesanan); // menulis ke file
+
+    fclose(file);
+}
+
+// Prosedur untuk menampilkan pesanan ke user berdasarkan username
+void disPemesananUser(char username[]){
+	const char *namaFile = "pemesanan.txt";
+	FILE *fileInput = fopen(namaFile, "r");
+	if (fileInput == NULL) {
+        printf("Gagal membuka file.\n");
+    }
+    char baris[100];
+    printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
+    printf("| %-3s | %-10s | %-12s | %-12s | %-4s | %-21s | %-4s | %-21s | %-6s | %-10s |\n", "No", " Username", "  CheckIn", "  CheckOut", "Hari", "        Harga","Kupon", "        Total", "NoKamar", "status");
+    printf("|-----+------------+--------------+--------------+------+-----------------------+-------+-----------------------+---------+------------|\n");
+
+    while (fgets(baris, sizeof(baris), fileInput)) {
+    	char *dekripPemesanan = dekripsi(baris);
+    	
+    	char *noOrder = strtok(dekripPemesanan, ",");
+    	char *namaCust = strtok(NULL, ",");
+    	char *CI = strtok(NULL, ",");
+    	char *CO = strtok(NULL, ",");
+    	char *hari = strtok(NULL, ",");
+    	char *harga = strtok(NULL, ",");
+    	char *ptgan = strtok(NULL, ",");
+    	char *total = strtok(NULL, ",");
+    	char *no = strtok(NULL, ",");
+    	char *status = strtok(NULL, ",");
+	
+		if (!strcmp(namaCust, username)) {
+
+	    	printf("| %-3s | %-10s | %-12s | %-12s | %-4s |",noOrder,namaCust, CI, CO, hari);printf("     Rp. ");disHarga(atoi(harga));printf("\t| %-4s%% |", ptgan);printf("     Rp. ");disHarga(atoi(total));printf("\t| %-7s | %-10s |\n", no, status);
+    	}
+	}
+    printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
+	fclose(fileInput);
 }
