@@ -19,20 +19,14 @@ int main() {
             case 1:
                 // Registrasi
                 printf("Registrasi\n");
-                printf("Username: ");
-                scanf("%s", username);
-                printf("Password: ");
-                scanf(" %[^\n]", password); // Membaca sampai karakter newline
+                inputAkun(username, password); // Membaca sampai karakter newline
                 registerUser(username, password);
                 //system("cls");
                 break;
             case 2:
                 // Login
-                printf("\nLogin\n");
-                printf("Username: ");
-                scanf("%s", username);
-                printf("Password: ");
-                scanf(" %[^\n]", password); // Membaca sampai karakter newline
+                printf("Login\n");
+                inputAkun(username, password); // Membaca sampai karakter newline
                 if (loginUser(username, password)) {
                     printf("Login berhasil.\n");
                 } else {
@@ -41,11 +35,8 @@ int main() {
                 break;
             case 3:
                 // Modifikasi Password
-                printf("\nModifikasi Password\n");
-                printf("Username: ");
-                scanf("%s", username);
-                printf("New Password: ");
-                scanf(" %[^\n]", password); // Membaca sampai karakter newline
+                printf("Edit Password\n");
+                inputAkun(username, password); // Membaca sampai karakter newline
                 modifyUser(username, password);
                 break;
             case 4:

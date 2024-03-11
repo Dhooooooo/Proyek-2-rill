@@ -152,3 +152,10 @@ int displayMenu() {
     scanf("%d", &choice);
     return choice;
 }
+
+void inputAkun(char *username, char *password){
+ 	printf("Username: ");
+  	scanf("%s", username);
+   	printf("Password: ");
+    scanf(" %s", password);
+}

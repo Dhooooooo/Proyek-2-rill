@@ -13,4 +13,6 @@ void modifyUser(char *username, char *newPassword);
 
 int displayMenu();
 
+void inputAkun(char *username, char *password);
+
 #endif
