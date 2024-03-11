@@ -7,8 +7,8 @@ LeftChar=1
 Order=0,3,2,4,1
 Focused=0
 [Editor_0]
-CursorCol=25
-CursorRow=35
+CursorCol=24
+CursorRow=48
 TopLine=25
 LeftChar=1
 [Editor_1]
@@ -22,7 +22,7 @@ CursorRow=4
 TopLine=1
 LeftChar=1
 [Editor_4]
-CursorCol=21
-CursorRow=17
-TopLine=4
+CursorCol=13
+CursorRow=48
+TopLine=11
 LeftChar=1

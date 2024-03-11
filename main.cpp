@@ -12,6 +12,7 @@ int main() {
     char username[MAX_USERNAME_LENGTH];
     char password[MAX_PASSWORD_LENGTH];
     int choice;
+    int backMenu;
     
     do {
         choice = displayMenu();
@@ -44,7 +45,12 @@ int main() {
                    			case 2:
                    				break;
             				case 3:
-            					break;	
+            					break;
+							case 4:
+								backMenu = 1;
+								break;
+							default:
+								printf("pilihan tidak valid");
 						}
                     	
 					}while (choice != 4);

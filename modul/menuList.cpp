@@ -31,8 +31,7 @@ int displayMenu() {
     printf("\nMenu:\n");
     printf("1. Register\n");
     printf("2. Login\n");
-    printf("3. Modify Password\n"); // Opsi baru
-    printf("4. Exit\n");
+    printf("3. Exit\n");
     printf("Pilih menu: ");
     scanf("%d", &choice);
     return choice;
@@ -41,11 +40,12 @@ int displayMenu() {
 int displayMenuAfter(){
 	int menu2;
 	printf("Selamat Datang di PayPrim\n");
-	printf("1. Pesan Tiket\n");
+	printf("1. Edit Password\n");
 	printf("2. Bayar Listrik\n");
-	printf("3. \n");
-	printf("4. \n");
+	printf("3. Beli Tiket\n");
+	printf("4. Logout\n");
 	printf("5. \n");
 	printf("6. \n");
+	printf("Pilih Menu : ");
 	scanf("%d", &menu2);
 }
