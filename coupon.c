@@ -7,6 +7,7 @@
 
 void readCoupon(char *coupon, int *discount);
 void decryptCoupon(char *coupon);
+int kupon(char *coupon);
 
 void readCoupon(char *coupon, int *discount) {
     FILE *listCoupon;
@@ -55,16 +56,26 @@ void decryptCoupon(char *coupon) {
     }
 }
 
-int main() {
-    char coupon[MAX_COUPON_LENGTH];
+int kupon(char *coupon) {
     int discount;
+    
+    readCoupon(coupon, &discount);
+    int potongan = discount;
+    
+    return potongan;
+}
+
+int main() { 
+    char coupon[MAX_COUPON_LENGTH];
+    int potongan;
+    int harga;
 
     printf("Masukkan kode kupon: ");
     scanf("%s", coupon);
     
-    // Prosedur mencari kupon di database
-    readCoupon(coupon, &discount);
-
+    // Menggunakan fungsi kupon untuk mendapatkan potongan harga
+    potongan = kupon(coupon);
+    
     return 0;
 }
 
