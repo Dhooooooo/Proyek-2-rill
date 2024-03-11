@@ -35,6 +35,21 @@ int main() {
                 scanf(" %[^\n]", password); // Membaca sampai karakter newline
                 if (loginUser(username, password)) {
                     printf("Login berhasil.\n");
+                    int menu2;
+                    
+                    do {
+                    	menu2 = displayMenuAfter();
+                    	system("cls");
+                    	switch (menu2){
+                    		case 1:
+                    			break;
+                   			case 2:
+                   				break;
+            				case 3:
+            					break;	
+						}
+                    	
+					}while (choice != 4);
                 } else {
                     printf("Login gagal. Periksa kembali username dan password.\n");
                 }

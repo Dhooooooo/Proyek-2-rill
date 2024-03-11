@@ -7,27 +7,6 @@
 #define MAX_PASSWORD_LENGTH 50
 #define ENCRYPTION_KEY 3
 
-
-void encrypt(char *text) {
-    char *ptr = text;
-    while (*ptr != '\0') {
-        if (*ptr != ' ') {
-            *ptr = (*ptr + ENCRYPTION_KEY) % 126; // ASCII printable characters range
-        }
-        ptr++;
-    }
-}
-
-void decrypt(char *text) {
-    char *ptr = text;
-    while (*ptr != '\0') {
-        if (*ptr != ' ') {
-            *ptr = (*ptr - ENCRYPTION_KEY + 126) % 126; // ASCII printable characters range
-        }
-        ptr++;
-    }
-}
-
 void registerUser(char *username, char *password) {
     // Melakukan enkripsi pada password sebelum disimpan
     encrypt(password);
@@ -138,17 +117,4 @@ void modifyUser(char *username, char *newPassword) {
     }
     
     printf("Password berhasil dimodifikasi.\n");
-}
-
-// Fungsi untuk menampilkan menu
-int displayMenu() {
-    int choice;
-    printf("\nMenu:\n");
-    printf("1. Register\n");
-    printf("2. Login\n");
-    printf("3. Modify Password\n"); // Opsi baru
-    printf("4. Exit\n");
-    printf("Pilih menu: ");
-    scanf("%d", &choice);
-    return choice;
 }
