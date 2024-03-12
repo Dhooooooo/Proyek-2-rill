@@ -48,4 +48,5 @@ int displayMenuAfter(){
 	printf("6. \n");
 	printf("Pilih Menu : ");
 	scanf("%d", &menu2);
+	return menu2;
 }

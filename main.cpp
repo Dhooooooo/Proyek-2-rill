@@ -35,6 +35,7 @@ int main() {
                     waitNext();
                     do {
                     	system("cls");
+                    	backMenu = 0;
                     	menu2 = displayMenuAfter();
                     	switch (menu2){
                     		case 1:
@@ -53,7 +54,7 @@ int main() {
 								printf("pilihan tidak valid");
 						}
                     	
-					}while (choice != 4);
+					}while ((menu2 != 4) && (backMenu = 0));
                 } else {
                     printf("Login gagal. Periksa kembali username dan password.\n");
                 }
