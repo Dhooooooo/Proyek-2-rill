@@ -48,6 +48,9 @@ int main() {
             				case 3:
             					break;
 							case 4:
+								system("cls");
+								waitNext();
+								system("cls");
 								backMenu = 1;
 								break;
 							default:

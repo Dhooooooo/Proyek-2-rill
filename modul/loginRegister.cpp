@@ -6,7 +6,7 @@
 
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
-#define ENCRYPTION_KEY 3
+#define ENCRYPTION_KEY 3*5
 
 void registerUser(char *username, char *password) {
     // Melakukan enkripsi pada password sebelum disimpan
