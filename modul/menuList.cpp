@@ -19,11 +19,13 @@ void waitNext() {
 }
 }
 
-void inputAkun(char *username, char *password){
+void inputAkun(char *username, char *password, char *pin){
  	printf("Username: ");
   	scanf("%s", username);
    	printf("Password: ");
     scanf(" %s", password);
+    printf("Pin: ");
+    scanf(" %s", pin);
 }
 
 int displayMenu() {

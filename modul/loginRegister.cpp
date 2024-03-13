@@ -6,11 +6,13 @@
 
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
+#define MAX_PIN 6
 #define ENCRYPTION_KEY 3*5
 
-void registerUser(char *username, char *password) {
+void registerUser(char *username, char *password, char *pin) {
     // Melakukan enkripsi pada password sebelum disimpan
     encrypt(password);
+    encrypt(pin);
     
     FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
     if (file == NULL) {
@@ -20,9 +22,10 @@ void registerUser(char *username, char *password) {
     
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
+    char storedPin[MAX_PIN];
     
     // Membaca file dan memeriksa apakah username sudah ada
-    while (fscanf(file, "%s %s", storedUsername, storedPassword) == 2) {
+    while (fscanf(file, "%s %s", storedUsername, storedPassword, storedPin) == 3) {
         if (strcmp(username, storedUsername) == 0) {
             fclose(file);
             printf("Username sudah digunakan.\n");
@@ -39,7 +42,7 @@ void registerUser(char *username, char *password) {
         return;
     }
     
-    fprintf(file, "%s %s\n", username, password);
+    fprintf(file, "%s %s %s\n", username, password, pin);
     fclose(file);
     
     printf("Registrasi berhasil.\n");
@@ -47,7 +50,7 @@ void registerUser(char *username, char *password) {
 
 
 // Fungsi untuk login
-int loginUser(char *username, char *password) {
+int loginUser(char *username, char *password, char *pin) {
 
 
     FILE *file = fopen("database/users.txt", "r");
@@ -59,12 +62,14 @@ int loginUser(char *username, char *password) {
     
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
+    char storedPin[MAX_PIN];
     
     while (!feof(file)) {
-        fscanf(file, "%s %s\n", storedUsername, storedPassword);
+        fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin);
+        decrypt(storedPin);
         decrypt(storedPassword);
         //printf("%s\n", storedPassword);
-        if (strcmp(username, storedUsername) == 0 && strcmp(password, storedPassword) == 0) {
+        if (strcmp(username, storedUsername) == 0 && strcmp(password, storedPassword) == 0 && strcmp(pin, storedPin) == 0) {
             fclose(file);
             return 1; // Login berhasil
         }
