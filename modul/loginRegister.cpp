@@ -7,12 +7,10 @@
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
 #define MAX_PIN 6
-#define ENCRYPTION_KEY 3*5
+#define ENCRYPTION_KEY 5
 
 void registerUser(char *username, char *password, char *pin) {
     // Melakukan enkripsi pada password sebelum disimpan
-    encrypt(password);
-    encrypt(pin);
     
     FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
     if (file == NULL) {
@@ -25,7 +23,7 @@ void registerUser(char *username, char *password, char *pin) {
     char storedPin[MAX_PIN];
     
     // Membaca file dan memeriksa apakah username sudah ada
-    while (fscanf(file, "%s %s", storedUsername, storedPassword, storedPin) == 3) {
+    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
         if (strcmp(username, storedUsername) == 0) {
             fclose(file);
             printf("Username sudah digunakan.\n");
@@ -35,12 +33,27 @@ void registerUser(char *username, char *password, char *pin) {
     
     fclose(file);
     
-    // Jika username belum ada, buka file untuk menulis dan tambahkan pengguna baru
     file = fopen("database/users.txt", "a");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
     }
+    
+    // Memeriksa PIN
+    int pinLength = strlen(pin);
+    if (pinLength != MAX_PIN) {
+        printf("Panjang PIN harus 6 angka.\n");
+        return; // PIN tidak valid
+    }
+    for (int i = 0; i < pinLength; i++) {
+        if (pin[i] < '0' || pin[i] > '9') {
+            printf("PIN hanya boleh terdiri dari angka.\n");
+            return; // PIN tidak valid
+        }
+    }
+    
+    encrypt(password);
+    encrypt(pin);
     
     fprintf(file, "%s %s %s\n", username, password, pin);
     fclose(file);
@@ -48,11 +61,8 @@ void registerUser(char *username, char *password, char *pin) {
     printf("Registrasi berhasil.\n");
 }
 
-
 // Fungsi untuk login
 int loginUser(char *username, char *password, char *pin) {
-
-
     FILE *file = fopen("database/users.txt", "r");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
@@ -68,7 +78,7 @@ int loginUser(char *username, char *password, char *pin) {
         fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin);
         decrypt(storedPin);
         decrypt(storedPassword);
-        //printf("%s\n", storedPassword);
+        
         if (strcmp(username, storedUsername) == 0 && strcmp(password, storedPassword) == 0 && strcmp(pin, storedPin) == 0) {
             fclose(file);
             return 1; // Login berhasil
@@ -80,9 +90,10 @@ int loginUser(char *username, char *password, char *pin) {
 }
 
 // Fungsi untuk memodifikasi password pengguna
-void modifyUser(char *username, char *newPassword) {
+void modifyUser(char *username, char *newPassword, char *pin) {
     // Melakukan enkripsi pada password baru sebelum disimpan
     encrypt(newPassword);
+    encrypt(pin);
     
     FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
     if (file == NULL) {
@@ -99,13 +110,14 @@ void modifyUser(char *username, char *newPassword) {
     
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
+    char storedPin[MAX_PIN];
     
     // Membaca file dan menyalin informasi pengguna ke file sementara
-    while (fscanf(file, "%s %s", storedUsername, storedPassword) == 2) {
+    while (fscanf(file, "%s %s %s", storedUsername, storedPassword, storedPin) == 3) {
         if (strcmp(username, storedUsername) == 0) {
-            fprintf(tempFile, "%s %s\n", username, newPassword); // Menulis informasi pengguna yang dimodifikasi
+            fprintf(tempFile, "%s %s %s\n", username, newPassword, pin); // Menulis informasi pengguna yang dimodifikasi
         } else {
-            fprintf(tempFile, "%s %s\n", storedUsername, storedPassword); // Menyalin informasi pengguna lain tanpa modifikasi
+            fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, storedPin); // Menyalin informasi pengguna lain tanpa modifikasi
         }
     }
     
@@ -117,10 +129,11 @@ void modifyUser(char *username, char *newPassword) {
         printf("Gagal menghapus file asli.\n");
         return;
     }
-    if (rename("temp.txt", "database/users.txt") != 0) {
+    if (rename("database/temp.txt", "database/users.txt") != 0) {
         printf("Gagal mengganti nama file sementara.\n");
         return;
     }
     
     printf("Password berhasil dimodifikasi.\n");
 }
+

@@ -5,7 +5,7 @@
 
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
-#define ENCRYPTION_KEY 3*5
+#define ENCRYPTION_KEY 5
 
 
 void encrypt(char *text) {

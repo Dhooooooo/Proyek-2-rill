@@ -6,7 +6,7 @@
 
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
-#define ENCRYPTION_KEY 3*5
+#define ENCRYPTION_KEY 5
 
 // Fungsi untuk menampilkan menu
 
@@ -26,6 +26,13 @@ void inputAkun(char *username, char *password, char *pin){
     scanf(" %s", password);
     printf("Pin: ");
     scanf(" %s", pin);
+}
+
+void inputEdit(char *username, char *password){
+ 	printf("Username: ");
+  	scanf("%s", username);
+   	printf("Password: ");
+    scanf(" %s", password);
 }
 
 int displayMenu() {

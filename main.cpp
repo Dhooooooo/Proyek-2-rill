@@ -7,13 +7,13 @@
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
 #define MAX_PIN 6
-#define ENCRYPTION_KEY 3
+#define ENCRYPTION_KEY 5
 
 int main() {
     char username[MAX_USERNAME_LENGTH];
     char password[MAX_PASSWORD_LENGTH];
     char pin[MAX_PIN];
-    int choice;
+    int choice; int lolos;
     int backMenu;
     
     do {
@@ -25,7 +25,6 @@ int main() {
                 printf("Registrasi\n");
                 inputAkun(username, password, pin); 
                 registerUser(username, password, pin);
-                //system("cls");
                 break;
             case 2:
                 // Login
@@ -42,8 +41,8 @@ int main() {
                     	switch (menu2){
                     		case 1:
                     			printf("Edit Password\n");
-                				inputAkun(username, password, pin);
-                				modifyUser(username, password);
+                				inputEdit(username, password);
+                				modifyUser(username, password, pin);
                     			break;
                    			case 2:
                    				break;
