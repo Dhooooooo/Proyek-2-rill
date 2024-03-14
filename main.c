@@ -13,8 +13,7 @@ int main() {
     char username[MAX_USERNAME_LENGTH];
     char password[MAX_PASSWORD_LENGTH];
     char pin[MAX_PIN];
-    int choice; int lolos;
-    int backMenu;
+    int choice, lolos, backMenu, beli;
     
     do {
         choice = displayMenu();
@@ -40,7 +39,23 @@ int main() {
                     	menu2 = displayMenuAfter();
                     	switch (menu2){
                     		case 1:
-                    			//pembelian : jagad angel
+                    			system("cls");
+                    			beli = displayMenuPembelian();
+                    			switch (beli){
+                    				case 1:
+                    					printf("Anda akan memesan kamar hotel");
+                    					pemesananHotel(username);
+                    					spaceToContinue();
+                    					break;
+                    				case 2:
+                    					printf("Anda akan membeli pulsa");
+                    					//function untuk beli pulsa*****
+                    					spaceToContinue();
+                    					break;
+                    				default:
+                    					printf("Pilihan tidak valid.");
+								}
+                    			
                     			break;
                    			case 2:
                    				//top-up saldo e-wallet :ridho
@@ -48,8 +63,13 @@ int main() {
             				case 3:
             					//cek kupon :hapiz
             					break;
-							case 4:
-								//profile :prima
+							case 4://profile :prima
+								system("cls");
+								printf("Pemesanan Hotel\n");
+								disPemesananUser(username);
+								printf("\nTop Up pulsa");
+								//prosedur top up pulsa*****
+								spaceToContinue();
 								break;
 							case 5:
 								//logout

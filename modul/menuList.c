@@ -60,4 +60,17 @@ int displayMenuAfter(){
 	return menu2;
 }
 
-//int menupemesanan()
+int displayMenuPembelian(){
+	int menuPembelian;
+	printf("Silakan pilih menu Pembelian\n");
+	printf("1. Pesan hotel\n");
+	printf("2. Isi Pulsa\n");
+	printf("Pilih Menu : ");
+	scanf("%d", &menuPembelian);
+	return menuPembelian;
+}
+void spaceToContinue(){
+	printf("\n\nTekan spasi untuk melanjutkan");
+    while(getch() != ' '); // menunggu user menekan spasi untuk melanjutkan
+    system("cls");
+}
