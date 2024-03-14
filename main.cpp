@@ -49,7 +49,7 @@ int main() {
             					//cek kupon :hapiz
             					break;
 							case 4:
-								//edit profile :prima
+								//profile :prima
 								break;
 							case 5:
 								//logout

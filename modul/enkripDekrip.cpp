@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "../payPrim.h"
 
 #define MAX_USERNAME_LENGTH 50

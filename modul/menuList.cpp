@@ -52,11 +52,11 @@ int displayMenuAfter(){
 	printf("1. Pembelian\n");
 	printf("2. Top-up Saldo E-Wallet\n");
 	printf("3. cek kupon\n");
-	printf("4. edit profile\n");
+	printf("4. profile\n");
 	printf("5. logout\n");
 	printf("Pilih Menu : ");
 	scanf("%d", &menu2);
 	return menu2;
 }
 
-int menupemesanan()
+//int menupemesanan()
