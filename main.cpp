@@ -40,20 +40,23 @@ int main() {
                     	menu2 = displayMenuAfter();
                     	switch (menu2){
                     		case 1:
-                    			printf("Edit Password\n");
-                				inputEdit(username, password);
-                				modifyUser(username, password, pin);
+                    			//pembelian : jagad angel
                     			break;
                    			case 2:
+                   				//top-up saldo e-wallet :ridho
                    				break;
             				case 3:
+            					//cek kupon :hapiz
             					break;
 							case 4:
+								//edit profile :prima
+								break;
+							case 5:
+								//logout
 								system("cls");
 								waitNext();
 								system("cls");
 								backMenu = 1;
-								break;
 							default:
 								printf("pilihan tidak valid");
 						}
