@@ -36,6 +36,8 @@ int getLastOrderNumber();
 void disHarga(int harga);
 void printDecryptedFile(char* filename);
 
+void pembelianPulsa(char *username);
+
 
 #endif /* TRANSACTION_H */
 
