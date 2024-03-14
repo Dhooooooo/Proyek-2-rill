@@ -12,7 +12,7 @@ MakeIncludes=
 Compiler=
 CppCompiler=
 Linker=
-IsCpp=1
+IsCpp=0
 Icon=
 ExeOutput=
 ObjectOutput=
@@ -51,8 +51,8 @@ AutoIncBuildNr=0
 SyncProduct=1
 
 [Unit1]
-FileName=main.cpp
-CompileCpp=1
+FileName=main.c
+CompileCpp=0
 Folder=
 Compile=1
 Link=1
@@ -62,7 +62,7 @@ BuildCmd=
 
 [Unit2]
 FileName=payPrim.h
-CompileCpp=1
+CompileCpp=0
 Folder=
 Compile=1
 Link=1
@@ -71,8 +71,8 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit3]
-FileName=modul\enkripDekrip.cpp
-CompileCpp=1
+FileName=modul\enkripDekrip.c
+CompileCpp=0
 Folder=
 Compile=1
 Link=1
@@ -81,8 +81,8 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit4]
-FileName=modul\loginRegister.cpp
-CompileCpp=1
+FileName=modul\menuList.c
+CompileCpp=0
 Folder=
 Compile=1
 Link=1
@@ -91,8 +91,8 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit5]
-FileName=modul\menuList.cpp
-CompileCpp=1
+FileName=modul\loginRegister.c
+CompileCpp=0
 Folder=
 Compile=1
 Link=1

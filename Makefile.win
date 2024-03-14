@@ -4,8 +4,8 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = main.o modul/enkripDekrip.o modul/loginRegister.o modul/menuList.o
-LINKOBJ  = main.o modul/enkripDekrip.o modul/loginRegister.o modul/menuList.o
+OBJ      = main.o modul/enkripDekrip.o modul/menuList.o modul/loginRegister.o
+LINKOBJ  = main.o modul/enkripDekrip.o modul/menuList.o modul/loginRegister.o
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
@@ -22,16 +22,16 @@ clean: clean-custom
 	${RM} $(OBJ) $(BIN)
 
 $(BIN): $(OBJ)
-	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
 
-main.o: main.cpp
-	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+main.o: main.c
+	$(CC) -c main.c -o main.o $(CFLAGS)
 
-modul/enkripDekrip.o: modul/enkripDekrip.cpp
-	$(CPP) -c modul/enkripDekrip.cpp -o modul/enkripDekrip.o $(CXXFLAGS)
+modul/enkripDekrip.o: modul/enkripDekrip.c
+	$(CC) -c modul/enkripDekrip.c -o modul/enkripDekrip.o $(CFLAGS)
 
-modul/loginRegister.o: modul/loginRegister.cpp
-	$(CPP) -c modul/loginRegister.cpp -o modul/loginRegister.o $(CXXFLAGS)
+modul/menuList.o: modul/menuList.c
+	$(CC) -c modul/menuList.c -o modul/menuList.o $(CFLAGS)
 
-modul/menuList.o: modul/menuList.cpp
-	$(CPP) -c modul/menuList.cpp -o modul/menuList.o $(CXXFLAGS)
+modul/loginRegister.o: modul/loginRegister.c
+	$(CC) -c modul/loginRegister.c -o modul/loginRegister.o $(CFLAGS)

@@ -12,7 +12,8 @@
 
 void waitNext() {
 	printf("\nHarap tunggu");
-    for(int i = 0; i < 3; i++){
+	int i;
+    for(i = 0; i < 3; i++){
     	printf(".");
     	fflush(stdout);
     	sleep(1);

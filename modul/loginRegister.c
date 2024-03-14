@@ -45,7 +45,8 @@ void registerUser(char *username, char *password, char *pin) {
         printf("Panjang PIN harus 6 angka.\n");
         return; // PIN tidak valid
     }
-    for (int i = 0; i < pinLength; i++) {
+    int i;
+    for (i = 0; i < pinLength; i++) {
         if (pin[i] < '0' || pin[i] > '9') {
             printf("PIN hanya boleh terdiri dari angka.\n");
             return; // PIN tidak valid
