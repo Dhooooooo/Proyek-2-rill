@@ -78,12 +78,16 @@ int getLastOrderNumber() {
         return 0; // Jika file tidak ditemukan, mengembalikan nomor 0
     }
 
-    fseek(file, 0, SEEK_END);
-    long fileSize = ftell(file);
-    int numLines = fileSize / MAX_LENGTH;
+    int baris = 0;
+    char c;
+    while ((c = fgetc(file)) != EOF) {
+        if (c == '\n') {
+            baris++;
+        }
+    }
 
     fclose(file);
-    return numLines + 2; // Mengembalikan nomor antrian terbaru
+    return baris + 1; // Mengembalikan nomor antrian terbaru
 }
 
 
@@ -96,7 +100,7 @@ void printDecryptedFile(char *username) {
 	
     printf("+-------------------------------------------------------------------------------------------------------------------------------------+\n");
     printf("| %-3s | %-12s | %-12s| %-25s | %-14s |%-7s| %-9s | %-16s | %-12s |\n", 
-	        "No", " Username", "Pembelian", "  Catatan", "Harga Asli", "  Disc", "Admin", "   Total", " Keterangan");
+	        "No", " Username", "Pembelian", "  Catatan", "Harga Asli", " Kupon", "Admin", "   Total", "Status");
     printf("|-----+--------------+-------------+---------------------------+----------------+-------+-----------+------------------+--------------|\n");
 	
 	char line[MAX_LENGTH];
@@ -190,17 +194,8 @@ void pembelianPulsa(char *username) {
     transaction.orderNumber = orderNumber;
     strcpy(transaction.topupType, "pulsa");
     
-    // Mengisi status pembelian
-    bool isSaldoCukup = 1; // DISINI GANTI 1 JADI FUNCTION NGECEK SALDO isSaldoCukup(username, totHarga);
-//    char status[8];
     
-    if(isSaldoCukup){ // kalo saldo cukup artinya return true
-    	strcpy(transaction.status, "BERHASIL");
-	}
-	else{
-		strcpy(transaction.status, "GAGAL");
-	}
-	
+
     // Mengisi detail transaksi
     strcpy(transaction.username, username);
 	sprintf(transaction.note, "%s (%s)", phoneNumber, providerName);
@@ -222,10 +217,16 @@ void pembelianPulsa(char *username) {
    	// Menghitung total biaya
 	transaction.adminFee = ADMIN_FEE;
 	transaction.total = transaction.originalPrice + transaction.discount + transaction.adminFee;
-
+	
+    if(isSaldoCukup(username, transaction.total)){ // kalo saldo cukup artinya return true
+    	strcpy(transaction.status, "BERHASIL");
+	}
+	else{
+		strcpy(transaction.status, "GAGAL");
+	}
+	
     // Menambahkan transaksi ke file admin.txt
     addTransactionToFile(transaction);
-    printf("Transaksi berhasil.\n");
    			
     system("cls");
     
@@ -256,4 +257,5 @@ void pembelianPulsa(char *username) {
 	printf("\nBiaya Admin\t\t : ");disHarga(intAdminFee);
 	printf("\nPotongan\t\t : %d%%", transaction.discount);
 	printf("\nTotal Harga\t\t : Rp. ");disHarga(intTotal);
+	printf("\nStatus\t\t\t : %s", transaction.status);
 }

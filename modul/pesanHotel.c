@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include "../payPrim.h"
 
+// harga hotel per malam
+int hargaPerMalam = 1000000;
+
 // nomor kamar mulai dari 100 sampai 300
 #define minKamar 100
 #define maxKamar 300
@@ -552,7 +555,10 @@ void disPemesananAdmin(){
 }
 
 // Prosedur ini untuk user memesan hotel
-void pemesananHotel(char username[], float totHarga){
+void pemesananHotel(char username[]){
+	char *prompt = (char *)malloc(10 * sizeof(char)); // yang akan dituliskan ke dalam file
+
+	char coupon[MAX_COUPON_LENGTH]; // % untuk kupon 
 	system("cls");
 	printf(" /$$   /$$  /$$$$$$  /$$$$$$$$ /$$$$$$$$ /$$                /$$$$$ /$$$$$$$$ /$$$$$$$$ /$$$$$$$$ /$$   /$$  /$$$$$$ \n");
 	printf("| $$  | $$ /$$__  $$|__  $$__/| $$_____/| $$               |__  $$| $$_____/|__  $$__/| $$_____/| $$  /$$/ /$$__  $$\n");
@@ -561,10 +567,10 @@ void pemesananHotel(char username[], float totHarga){
 	printf("| $$__  $$| $$  | $$   | $$   | $$__/   | $$             /$$  | $$| $$__/      | $$   | $$__/   | $$  $$  | $$__  $$\n");
 	printf("| $$  | $$| $$  | $$   | $$   | $$      | $$            | $$  | $$| $$         | $$   | $$      | $$\\  $$ | $$  | $$\n");
 	printf("| $$  | $$|  $$$$$$/   | $$   | $$$$$$$$| $$$$$$$$      |  $$$$$$/| $$$$$$$$   | $$   | $$$$$$$$| $$ \\  $$| $$  | $$\n");
-	printf("|__/  |__/ \\______/    |__/   |________/|________/       \\______/ |________/   |__/   |________/|__/  \\__/|__/  |__/\n\n");
-	char *prompt = (char *)malloc(10 * sizeof(char)); // yang akan dituliskan ke dalam file
-	int hargaPerMalam = 1000000; // harga hotel per malam
-	char coupon[MAX_COUPON_LENGTH]; // % untuk kupon 
+	printf("|__/  |__/ \\______/    |__/   |________/|________/       \\______/ |________/   |__/   |________/|__/  \\__/|__/  |__/\n");
+	printf("Harga per malam : Rp. ");disHarga(hargaPerMalam);
+	printf("\n\n");
+	
 	
     char *tanggalCheckIn = inputTanggalCheckIn();     
     printf("Tanggal check-in: %s\n", tanggalCheckIn);
@@ -589,36 +595,40 @@ void pemesananHotel(char username[], float totHarga){
 	int hargaMenginap = totalHariMenginap*hargaPerMalam;
 	//totHarga = hargaMenginap;
 	
-	int noKamar = kamar();
+	int noKamar = 0;
 	
 	int jumlahBaris = hitungBaris();
     int no = jumlahBaris + 1;
     
     double hasil = hargaMenginap - (hargaMenginap*(double)potongan/100); // menghitung total harga setelah di diskon
-    totHarga = (int) hasil; // mengubah bentuk double ke int
-    
-    //bool isSaldoCukup = 1; // DISINI GANTI 1 JADI FUNCTION NGECEK SALDO isSaldoCukup(username, totHarga);
-    //isSaldoCukup(username, totHarga);
+    int totHarga = (int) hasil; // mengubah bentuk double ke int
     char stats[8];
     
-    printf("%.2f\n", totHarga);
-    
-    if(isSaldoCukup(username, totHarga)){ // kalo saldo cukup artinya return true
+    if(isSaldoCukup(username, totHarga)){ // cek apakah saldo cukup
     	strcpy(stats, "BERHASIL");
-    	printf("berhasil");
+    	noKamar = kamar();
 	}
 	else{
 		strcpy(stats, "GAGAL");
-		printf("gagal");
 	}
-     
+    
+	system("cls");
+	printf(" /$$   /$$  /$$$$$$  /$$$$$$$$ /$$$$$$$$ /$$                /$$$$$ /$$$$$$$$ /$$$$$$$$ /$$$$$$$$ /$$   /$$  /$$$$$$ \n");
+	printf("| $$  | $$ /$$__  $$|__  $$__/| $$_____/| $$               |__  $$| $$_____/|__  $$__/| $$_____/| $$  /$$/ /$$__  $$\n");
+	printf("| $$  | $$| $$  \\ $$   | $$   | $$      | $$                  | $$| $$         | $$   | $$      | $$ /$$/ | $$  \\ $$\n");
+	printf("| $$$$$$$$| $$  | $$   | $$   | $$$$$   | $$                  | $$| $$$$$      | $$   | $$$$$   | $$$$$/  | $$$$$$$$\n");
+	printf("| $$__  $$| $$  | $$   | $$   | $$__/   | $$             /$$  | $$| $$__/      | $$   | $$__/   | $$  $$  | $$__  $$\n");
+	printf("| $$  | $$| $$  | $$   | $$   | $$      | $$            | $$  | $$| $$         | $$   | $$      | $$\\  $$ | $$  | $$\n");
+	printf("| $$  | $$|  $$$$$$/   | $$   | $$$$$$$$| $$$$$$$$      |  $$$$$$/| $$$$$$$$   | $$   | $$$$$$$$| $$ \\  $$| $$  | $$\n");
+	printf("|__/  |__/ \\______/    |__/   |________/|________/       \\______/ |________/   |__/   |________/|__/  \\__/|__/  |__/\n");
+	printf("----------------------------------------------------------------------------------------------------------------------\n\n");
     
 	printf("Berikut rincian pesanan anda\n\n");
 	printf("Tanggal CheckIn\t : %s\nTanggal CheckOut : %s\nTotal menginap\t : %d hari\nNo kamar\t : %d\n", tanggalCheckIn, tanggalCheckOut, totalHariMenginap, noKamar);
 	printf("Harga\t\t : Rp. ");disHarga(hargaMenginap);
 	printf("\nPotongan\t : %d%%", potongan);
 	printf("\nTotal Harga\t : Rp. ");disHarga(totHarga);
-
+	printf("\nStatus\t\t : %s", stats);
 
     // Menggabungkan tanggal check-in dan check-out ke dalam variabel prompt
 	sprintf(prompt, "%d,%s,%s,%s,%d,%d,%d,%d,%d,%s,\n", no,username,tanggalCheckIn, tanggalCheckOut, totalHariMenginap, hargaMenginap, potongan, totHarga, noKamar, stats);

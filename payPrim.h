@@ -62,7 +62,7 @@ void adminApprove(int nomorDicari);
 // Untuk tampilan yang dilihat oleh admin
 void disPemesananAdmin();
 // Prosedur ini untuk user memesan hotel
-void pemesananHotel(char username[], float totHarga);
+void pemesananHotel(char username[]);
 // Prosedur untuk menampilkan pesanan ke user berdasarkan username
 void disPemesananUser(char username[]);
 

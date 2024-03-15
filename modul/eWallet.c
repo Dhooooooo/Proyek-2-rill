@@ -58,13 +58,11 @@ int isSaldoCukup(char *username, float totHarga) {
     int userFound = 0;
 
     while (fscanf(file, "%s %f", storedUsername, &saldo) == 2) {
-    	printf("%.2f", saldo);
         if (strcmp(storedUsername, username) == 0) {
             userFound = 1;
             if (saldo >= totHarga) {
                 lastSaldo = saldo - totHarga;
             } else {
-                printf("Saldo tidak cukup\n");
                 fclose(file);
                 fclose(tempFile);
                 return 0; //gagal
