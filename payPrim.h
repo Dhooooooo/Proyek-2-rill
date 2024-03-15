@@ -23,6 +23,7 @@ void inputEdit(char *username, char *password);
 int displayMenu();
 int displayMenuAfter();
 int displayMenuPembelian();
+void clearScreen();
 
 // Tekan spasi untuk melanjutkan
 void spaceToContinue();

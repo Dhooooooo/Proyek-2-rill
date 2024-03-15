@@ -26,23 +26,24 @@ int main() {
                 inputAkun(username, password, pin); 
                 registerUser(username, password, pin);
                 dataSaldoNew(username);
+                clearScreen();
                 break;
             case 2:
                 // Login
                 printf("Login\n");
                 inputAkun(username, password, pin); 
                 if (loginUser(username, password, pin)) {
-                    printf("Login berhasil.\n");
+                    printf("\nLogin berhasil.\n");
                     dataSaldoNew(username);
                     int menu2;
                     waitNext();
                     do {
-                        system("cls");
+                        clearScreen();
                         menu2 = displayMenuAfter();
                         switch (menu2){
                             case 1:
                             	do {
-                                system("cls");
+                                clearScreen();
                                 beli = displayMenuPembelian();
                                     switch (beli){
                                         case 1:
@@ -56,9 +57,9 @@ int main() {
                                             spaceToContinue();
                                             break;
                                         case 3:
-                                            system("cls");
+                                            clearScreen();
                                             waitNext();
-                                            system("cls");
+                                            clearScreen();
                                             //backMenu = 1; // Update backMenu to indicate returning to main menu
                                             break;
                                         default:
@@ -73,7 +74,7 @@ int main() {
                                 //cek kupon :hapiz 
                                 break;
                             case 4://profile :prima
-                                system("cls");
+                                clearScreen();
                                 printf("Pemesanan Hotel\n");
                                 disPemesananUser(username);
                                 printf("\nTop Up pulsa\n");
@@ -82,9 +83,9 @@ int main() {
                                 break;
                             case 5:
                                 //logout
-                                system("cls");
+                                clearScreen();
                                 waitNext();
-                                system("cls");
+                                clearScreen();
                                 backMenu = 1;
                                 break; // Add a break here to exit the switch case after logging out
                             default:

@@ -75,3 +75,7 @@ void spaceToContinue(){
     while(getch() != ' '); // menunggu user menekan spasi untuk melanjutkan
     system("cls");
 }
+
+void clearScreen(){
+	system("cls");
+}
