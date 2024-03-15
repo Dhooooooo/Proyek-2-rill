@@ -193,8 +193,6 @@ void pembelianPulsa(char *username) {
     Transaction transaction;
     transaction.orderNumber = orderNumber;
     strcpy(transaction.topupType, "pulsa");
-    
-    
 
     // Mengisi detail transaksi
     strcpy(transaction.username, username);
@@ -213,11 +211,27 @@ void pembelianPulsa(char *username) {
     	transaction.discount = potongan;
 	}
     clearScreen();
-
-   	// Menghitung total biaya
+    
+    // Mengatur biaya admin ke nilai konstan
 	transaction.adminFee = ADMIN_FEE;
-	transaction.total = transaction.originalPrice + transaction.discount + transaction.adminFee;
+    
+  	float originalPrice = transaction.originalPrice;
+	float total = transaction.total;
+	float adminFee = transaction.adminFee;
 	
+	// Mengkonversi harga asli, biaya admin, dan total ke tipe data integer
+	int intOriginalPrice = (int)originalPrice;
+	int intAdminFee = (int)adminFee;
+	
+	// Menghitung total biaya tanpa diskon
+	int tempTotal = transaction.originalPrice + transaction.adminFee;
+	
+	// Menghitung total biaya dengan diskon
+	int intTotal = (int)tempTotal - ((int)tempTotal * transaction.discount / 100);
+	
+	// Mengatur total biaya setelah diskon ke nilai yang dihitung
+	transaction.total = intTotal;
+
     if(isSaldoCukup(username, transaction.total)){ // kalo saldo cukup artinya return true
     	strcpy(transaction.status, "BERHASIL");
 	}
@@ -240,16 +254,6 @@ void pembelianPulsa(char *username) {
     printf("|__/       \\______/ |________/ \\______/ |__/  |__/       \\______/ |________/   |__/   |______/ \\______/  \\______/ \n");
 
 	printf("--------------------------------------------------------------------------------------------------------------------\n\n");
-	
-	float originalPrice = transaction.originalPrice;
-    float adminFee = transaction.adminFee;
-    float total = transaction.total;
-    int intOriginalPrice;
-	int intAdminFee;
-	int intTotal;
-	intTotal = (int)total - ((int)total*(double)transaction.discount/100);
-	intOriginalPrice = (int)originalPrice;
-	intAdminFee = (int)adminFee;
     
 	printf("Berikut rincian pesanan anda\n\n");
 	printf("Nomor (Provider)\t : %s\n", transaction.note);

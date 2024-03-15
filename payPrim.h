@@ -93,9 +93,6 @@ typedef struct {
 // Function prototypes
 Transaction createTransaction(int orderNumber, const char* username, const char* topupType, const char* note, float originalPrice, float discount, float adminFee, float total, const char* status);
 
-// Untuk display history
-// void printTransaction(const Transaction* transaction);
-
 // Fungsi untuk mencari provider berdasarkan kode are
 char* findProvider(char* phoneNumber, Provider providers[], int numProviders);
 

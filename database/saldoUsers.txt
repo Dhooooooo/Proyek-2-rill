@@ -1,8 +1,9 @@
-prima 0.00
-prima 0.00
-aji 0.00
-do 0.00
-ji 0.00
-prim 0.00
-hafidz 0.00
-1 0.00
+prima 0.000000
+prima 0.000000
+aji 0.000000
+do 0.000000
+ji 0.000000
+prim 0.000000
+hafidz 0.000000
+1 0.000000
+angel 0.000000
