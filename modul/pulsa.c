@@ -246,7 +246,7 @@ void pembelianPulsa(char *username) {
     int intOriginalPrice;
 	int intAdminFee;
 	int intTotal;
-	intTotal = (int)total;
+	intTotal = (int)total - ((int)total*(double)transaction.discount/100);
 	intOriginalPrice = (int)originalPrice;
 	intAdminFee = (int)adminFee;
     
