@@ -574,7 +574,7 @@ void pemesananHotel(char username[]){
     
     printf("Kupon (jika tidak ada masukkan 0): ");scanf("%d", &coupon);
     
-    int potongan = coupon;
+    int potongan = coupon; //voucher(coupon);
     
     int totalHariMenginap = hitungHariMenginap(tanggalCheckIn, tanggalCheckOut);
     
@@ -588,7 +588,7 @@ void pemesananHotel(char username[]){
     double hasil = hargaMenginap - (hargaMenginap*(double)potongan/100); // menghitung total harga setelah di diskon
     int totHarga = (int) hasil; // mengubah bentuk double ke int
     
-    bool isSaldoCukup = 1; // DISINI GANTI 1 JADI FUNCTION NGECEK SALDO 
+    bool isSaldoCukup = 1; // DISINI GANTI 1 JADI FUNCTION NGECEK SALDO isSaldoCukup(username, totHarga);
     char stats[8];
     
     if(isSaldoCukup){ // kalo saldo cukup artinya return true
@@ -650,7 +650,6 @@ void disPemesananUser(char username[]){
     	char *status = strtok(NULL, ",");
 	
 		if (!strcmp(namaCust, username)) {
-
 	    	printf("| %-3s | %-10s | %-12s | %-12s | %-4s |",noOrder,namaCust, CI, CO, hari);printf("     Rp. ");disHarga(atoi(harga));printf("\t| %-4s%% |", ptgan);printf("     Rp. ");disHarga(atoi(total));printf("\t| %-7s | %-10s |\n", no, status);
     	}
 	}

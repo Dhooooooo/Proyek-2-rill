@@ -49,7 +49,7 @@ int main() {
                     					break;
                     				case 2:
                     					printf("Anda akan membeli pulsa");
-                    					//function untuk beli pulsa*****
+                    					pembelianPulsa(username);
                     					spaceToContinue();
                     					break;
                     				default:
@@ -61,14 +61,14 @@ int main() {
                    				//top-up saldo e-wallet :ridho
                    				break;
             				case 3:
-            					//cek kupon :hapiz
+            					//cek kupon :hapiz 
             					break;
 							case 4://profile :prima
 								system("cls");
 								printf("Pemesanan Hotel\n");
 								disPemesananUser(username);
-								printf("\nTop Up pulsa");
-								//prosedur top up pulsa*****
+								printf("\nTop Up pulsa\n");
+								printDecryptedFile(username);
 								spaceToContinue();
 								break;
 							case 5:
