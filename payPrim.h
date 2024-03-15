@@ -111,4 +111,17 @@ void printDecryptedFile(char *username);
 // Fungsi untuk memanggil fitur 
 void pembelianPulsa(char *username);
 
+/*COUPON*/
+
+#define MAX_COUPON_LENGTH 10
+
+// Prosedur untuk melakukan 
+void readCoupon(char *coupon, int *discount);
+
+// Prosedur untuk memanggil fitur kupon
+int kupon(char *coupon);
+
+// Prosedur untuk melakukan cek kupon
+void checkCoupon (char *username[]);
+
 #endif

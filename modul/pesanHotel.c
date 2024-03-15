@@ -564,7 +564,7 @@ void pemesananHotel(char username[], float totHarga){
 	printf("|__/  |__/ \\______/    |__/   |________/|________/       \\______/ |________/   |__/   |________/|__/  \\__/|__/  |__/\n\n");
 	char *prompt = (char *)malloc(10 * sizeof(char)); // yang akan dituliskan ke dalam file
 	int hargaPerMalam = 1000000; // harga hotel per malam
-	int coupon; // % untuk kupon 
+	char coupon[MAX_COUPON_LENGTH]; // % untuk kupon 
 	
     char *tanggalCheckIn = inputTanggalCheckIn();     
     printf("Tanggal check-in: %s\n", tanggalCheckIn);
@@ -572,9 +572,17 @@ void pemesananHotel(char username[], float totHarga){
     char *tanggalCheckOut = inputTanggalCheckOut(tanggalCheckIn);    
     printf("Tanggal check-out: %s\n", tanggalCheckOut);
     
-    printf("Kupon (jika tidak ada masukkan 0): ");scanf("%d", &coupon);
+    int pilihan;
+    int potongan;
+    printf("Apakah anda ingin menggunakan kupon?\n(1) Ya\n(2) Tidak\n");
+    printf("Masukkan pilihan anda: ");
+    scanf("%d", &pilihan);
     
-    int potongan = coupon; //voucher(coupon);
+    if (pilihan == 1) {
+    	potongan = kupon(coupon); // melakukan read coupon
+	}
+    
+    clearScreen();
     
     int totalHariMenginap = hitungHariMenginap(tanggalCheckIn, tanggalCheckOut);
     
@@ -605,7 +613,6 @@ void pemesananHotel(char username[], float totHarga){
 	}
      
     
-	//system("cls");
 	printf("Berikut rincian pesanan anda\n\n");
 	printf("Tanggal CheckIn\t : %s\nTanggal CheckOut : %s\nTotal menginap\t : %d hari\nNo kamar\t : %d\n", tanggalCheckIn, tanggalCheckOut, totalHariMenginap, noKamar);
 	printf("Harga\t\t : Rp. ");disHarga(hargaMenginap);

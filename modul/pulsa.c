@@ -206,8 +206,18 @@ void pembelianPulsa(char *username) {
 	sprintf(transaction.note, "%s (%s)", phoneNumber, providerName);
 	printf("Masukkan jumlah yang diinginkan: ");
     scanf("%f", &transaction.originalPrice);
-    printf("Masukkan kode diskon (jika tidak ada, ketik 0): ");
-    scanf("%f", &transaction.discount);
+    char coupon[MAX_COUPON_LENGTH]; // % untuk kupon
+    int pilihan;
+    int potongan;
+    printf("Apakah anda ingin menggunakan kupon?\n(1) Ya\n(2) Tidak\n");
+    printf("Masukkan pilihan anda: ");
+    scanf("%d", &pilihan);
+    
+    if (pilihan == 1) {
+    	potongan = kupon(coupon); // melakukan read coupon
+    	transaction.discount = potongan;
+	}
+    clearScreen();
 
    	// Menghitung total biaya
 	transaction.adminFee = ADMIN_FEE;

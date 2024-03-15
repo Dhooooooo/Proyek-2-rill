@@ -72,8 +72,12 @@ int main() {
                                 //top-up saldo e-wallet :ridho
                                 break;
                             case 3:
-                                //cek kupon :hapiz 
-                                break;
+                            	clearScreen();
+                                printf("Cek Kupon\n");
+            					checkCoupon(username);
+            					spaceToContinue();
+            					waitNext();
+            					break; 
                             case 4://profile :prima
                                 clearScreen();
                                 printf("Pemesanan Hotel\n");

@@ -4,3 +4,4 @@ aji 0.00
 do 0.00
 ji 0.00
 prim 0.00
+hafidz 0.00
