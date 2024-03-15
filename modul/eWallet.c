@@ -102,4 +102,21 @@ int isSaldoCukup(char *username, float totHarga) {
     return 1; //berhasil
 }
 
+/*void topUpSaldo(char *username){
+	
+	FILE *file = fopen("database/saldoUsers.txt", "r");
+    if (file == NULL) {
+        printf("Gagal membuka file.\n");
+        return; //gagal
+    }
+    
+    FILE *tempFile = fopen("database/saldoUsersTemp.txt", "w");
+    if (tempFile == NULL) {
+        printf("Gagal membuka file.\n");
+        fclose(file);
+        return; //gagal
+    }
+    
+    
+}*/
 
