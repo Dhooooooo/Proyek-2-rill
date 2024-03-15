@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <conio.h>
 #include "../payPrim.h"
 
 #define MAX_USERNAME_LENGTH 50
@@ -65,6 +66,7 @@ int displayMenuPembelian(){
 	printf("Silakan pilih menu Pembelian\n");
 	printf("1. Pesan hotel\n");
 	printf("2. Isi Pulsa\n");
+	printf("3. Kembali\n");
 	printf("Pilih Menu : ");
 	scanf("%d", &menuPembelian);
 	return menuPembelian;
