@@ -552,7 +552,7 @@ void disPemesananAdmin(){
 }
 
 // Prosedur ini untuk user memesan hotel
-void pemesananHotel(char username[]){
+void pemesananHotel(char username[], float totHarga){
 	system("cls");
 	printf(" /$$   /$$  /$$$$$$  /$$$$$$$$ /$$$$$$$$ /$$                /$$$$$ /$$$$$$$$ /$$$$$$$$ /$$$$$$$$ /$$   /$$  /$$$$$$ \n");
 	printf("| $$  | $$ /$$__  $$|__  $$__/| $$_____/| $$               |__  $$| $$_____/|__  $$__/| $$_____/| $$  /$$/ /$$__  $$\n");
@@ -579,6 +579,7 @@ void pemesananHotel(char username[]){
     int totalHariMenginap = hitungHariMenginap(tanggalCheckIn, tanggalCheckOut);
     
 	int hargaMenginap = totalHariMenginap*hargaPerMalam;
+	//totHarga = hargaMenginap;
 	
 	int noKamar = kamar();
 	
@@ -586,9 +587,9 @@ void pemesananHotel(char username[]){
     int no = jumlahBaris + 1;
     
     double hasil = hargaMenginap - (hargaMenginap*(double)potongan/100); // menghitung total harga setelah di diskon
-    int totHarga = (int) hasil; // mengubah bentuk double ke int
+    totHarga = (int) hasil; // mengubah bentuk double ke int
     
-    bool isSaldoCukup = 1; // DISINI GANTI 1 JADI FUNCTION NGECEK SALDO isSaldoCukup(username, totHarga);
+    //bool isSaldoCukup = 1; // DISINI GANTI 1 JADI FUNCTION NGECEK SALDO isSaldoCukup(username, totHarga);
     char stats[8];
     
     if(isSaldoCukup){ // kalo saldo cukup artinya return true

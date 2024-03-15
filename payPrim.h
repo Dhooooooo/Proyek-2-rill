@@ -12,6 +12,7 @@ void registerUser(char *username, char *password, char *pin);
 int loginUser(char *username, char *password, char *pin);
 void modifyUser(char *username, char *newPassword, char *pin);
 void dataSaldoNew(char *username);
+int isSaldoCukup(char *username, float totHarga);
 
 //Buat Menu
 void waitNext();
@@ -58,7 +59,7 @@ void adminApprove(int nomorDicari);
 // Untuk tampilan yang dilihat oleh admin
 void disPemesananAdmin();
 // Prosedur ini untuk user memesan hotel
-void pemesananHotel(char username[]);
+void pemesananHotel(char username[], float totHarga);
 // Prosedur untuk menampilkan pesanan ke user berdasarkan username
 void disPemesananUser(char username[]);
 

@@ -13,6 +13,7 @@ int main() {
     char username[MAX_USERNAME_LENGTH];
     char password[MAX_PASSWORD_LENGTH];
     char pin[MAX_PIN];
+    float harga;
     int choice, lolos, backMenu, beli;
     
     do {
@@ -32,6 +33,7 @@ int main() {
                 inputAkun(username, password, pin); 
                 if (loginUser(username, password, pin)) {
                     printf("Login berhasil.\n");
+                    dataSaldoNew(username);
                     int menu2;
                     waitNext();
                     do {
@@ -45,7 +47,7 @@ int main() {
                                     switch (beli){
                                         case 1:
                                             printf("Anda akan memesan kamar hotel");
-                                            pemesananHotel(username);
+                                            pemesananHotel(username, harga);
                                             spaceToContinue();
                                             break;
                                         case 2:
