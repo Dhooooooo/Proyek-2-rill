@@ -92,6 +92,10 @@ int loginUser(char *username, char *password, char *pin) {
         }
     }
     
+    printf("===============\n");
+    printf("= Login Gagal =\n");
+	printf("===============\n");
+	spaceToContinue();
     fclose(file);
     return 0; // Login gagal
 }
