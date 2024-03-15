@@ -26,7 +26,11 @@ void registerUser(char *username, char *password, char *pin) {
     while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
         if (strcmp(username, storedUsername) == 0) {
             fclose(file);
+            printf("====================\n");
+    		printf("= Registrasi Gagal =\n");
+    		printf("====================\n");
             printf("Username sudah digunakan.\n");
+            spaceToContinue();
             return;
         }
     }
@@ -42,13 +46,21 @@ void registerUser(char *username, char *password, char *pin) {
     // Memeriksa PIN
     int pinLength = strlen(pin);
     if (pinLength != MAX_PIN) {
+    	printf("====================\n");
+   		printf("= Registrasi Gagal =\n");
+   		printf("====================\n");
         printf("Panjang PIN harus 6 angka.\n");
+        spaceToContinue();
         return; // PIN tidak valid
     }
     int i;
     for (i = 0; i < pinLength; i++) {
         if (pin[i] < '0' || pin[i] > '9') {
+        	printf("====================\n");
+    		printf("= Registrasi Gagal =\n");
+    		printf("====================\n");
             printf("PIN hanya boleh terdiri dari angka.\n");
+            spaceToContinue();
             return; // PIN tidak valid
         }
     }
