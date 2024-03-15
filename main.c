@@ -41,9 +41,9 @@ int main() {
                         menu2 = displayMenuAfter();
                         switch (menu2){
                             case 1:
+                            	do {
                                 system("cls");
                                 beli = displayMenuPembelian();
-                                do {
                                     switch (beli){
                                         case 1:
                                             printf("Anda akan memesan kamar hotel");
@@ -59,7 +59,7 @@ int main() {
                                             system("cls");
                                             waitNext();
                                             system("cls");
-                                            backMenu = 1; // Update backMenu to indicate returning to main menu
+                                            //backMenu = 1; // Update backMenu to indicate returning to main menu
                                             break;
                                         default:
                                             printf("Pilihan tidak valid.");
@@ -105,4 +105,3 @@ int main() {
     
     return 0;
 }
-

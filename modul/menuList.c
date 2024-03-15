@@ -16,7 +16,6 @@ void waitNext() {
 	int i;
     for(i = 0; i < 3; i++){
     	printf(".");
-    	fflush(stdout);
     	sleep(1);
 }
 }
