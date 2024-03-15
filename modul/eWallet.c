@@ -18,7 +18,7 @@ void dataSaldoNew(char *username){
     }
     
     char storedUsername[MAX_USERNAME_LENGTH];
-    float saldo; int ada;
+    float saldo; int ada; float saldoAwal = 0;
     
     while(fscanf(file, "%s %f\n", storedUsername, &saldo) == 2){
     	if(strcmp(storedUsername, username) == 0){
@@ -35,7 +35,7 @@ void dataSaldoNew(char *username){
     }
     
  
-    	fprintf(file,"%s %.2f\n", username, saldo);
+    	fprintf(file,"%s %.2f\n", username, saldoAwal);
     fclose(file);
 }
 
