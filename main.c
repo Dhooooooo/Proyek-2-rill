@@ -24,6 +24,7 @@ int main() {
                 printf("Registrasi\n");
                 inputAkun(username, password, pin); 
                 registerUser(username, password, pin);
+                dataSaldoNew(username);
                 break;
             case 2:
                 // Login
