@@ -88,7 +88,7 @@ int main() {
                                 			break;
                                			case 2:
                                				inputEdit(username, password);
-                               				modifyPass(username, password, pin);
+                               				modifyPass(username, password);
                                				break;
                         				case 3:
                         					break;

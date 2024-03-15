@@ -113,10 +113,9 @@ int loginUser(char *username, char *password, char *pin) {
 }
 
 // Fungsi untuk memodifikasi password pengguna
-void modifyPass(char *username, char *newPassword, char *pin) {
+void modifyPass(char *username, char *newPassword) {
     // Melakukan enkripsi pada password baru sebelum disimpan
     encrypt(newPassword);
-    encrypt(pin);
     
     FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
     if (file == NULL) {
@@ -138,7 +137,7 @@ void modifyPass(char *username, char *newPassword, char *pin) {
     // Membaca file dan menyalin informasi pengguna ke file sementara
     while (fscanf(file, "%s %s %s", storedUsername, storedPassword, storedPin) == 3) {
         if (strcmp(username, storedUsername) == 0) {
-            fprintf(tempFile, "%s %s %s\n", username, newPassword, pin); // Menulis informasi pengguna yang dimodifikasi
+            fprintf(tempFile, "%s %s %s\n", storedUsername, newPassword, storedPin); // Menulis informasi pengguna yang dimodifikasi
         } else {
             fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, storedPin); // Menyalin informasi pengguna lain tanpa modifikasi
         }
@@ -157,6 +156,7 @@ void modifyPass(char *username, char *newPassword, char *pin) {
         return;
     }
     
-    printf("Password berhasil dimodifikasi.\n");
+    printf("Password berhasil diubah\n");
+    spaceToContinue();
 }
 
