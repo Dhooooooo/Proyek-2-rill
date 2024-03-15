@@ -17,23 +17,24 @@ int main() {
     int choice, lolos, backMenu, beli;
     
     do {
+    	clearScreen();
         choice = displayMenu();
-        system("cls");
+        clearScreen();
         switch (choice) {
             case 1:
                 // Registrasi
                 printf("Registrasi\n");
                 inputAkun(username, password, pin); 
                 registerUser(username, password, pin);
+                waitNext();
                 dataSaldoNew(username);
-                clearScreen();
                 break;
             case 2:
                 // Login
                 printf("Login\n");
                 inputAkun(username, password, pin); 
+                clearScreen();
                 if (loginUser(username, password, pin)) {
-                    printf("\nLogin berhasil.\n");
                     dataSaldoNew(username);
                     int menu2;
                     waitNext();

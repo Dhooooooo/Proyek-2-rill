@@ -590,18 +590,22 @@ void pemesananHotel(char username[], float totHarga){
     totHarga = (int) hasil; // mengubah bentuk double ke int
     
     //bool isSaldoCukup = 1; // DISINI GANTI 1 JADI FUNCTION NGECEK SALDO isSaldoCukup(username, totHarga);
-    isSaldoCukup(username, totHarga);
+    //isSaldoCukup(username, totHarga);
     char stats[8];
     
-    if(isSaldoCukup){ // kalo saldo cukup artinya return true
+    printf("%.2f\n", totHarga);
+    
+    if(isSaldoCukup(username, totHarga)){ // kalo saldo cukup artinya return true
     	strcpy(stats, "BERHASIL");
+    	printf("berhasil");
 	}
 	else{
 		strcpy(stats, "GAGAL");
+		printf("gagal");
 	}
      
     
-	system("cls");
+	//system("cls");
 	printf("Berikut rincian pesanan anda\n\n");
 	printf("Tanggal CheckIn\t : %s\nTanggal CheckOut : %s\nTotal menginap\t : %d hari\nNo kamar\t : %d\n", tanggalCheckIn, tanggalCheckOut, totalHariMenginap, noKamar);
 	printf("Harga\t\t : Rp. ");disHarga(hargaMenginap);

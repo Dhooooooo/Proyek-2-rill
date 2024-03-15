@@ -58,8 +58,11 @@ void registerUser(char *username, char *password, char *pin) {
     
     fprintf(file, "%s %s %s\n", username, password, pin);
     fclose(file);
+    clearScreen();
     
-    printf("Registrasi berhasil.\n");
+    printf("=======================\n");
+    printf("= Registrasi berhasil =\n");
+    printf("=======================\n");
 }
 
 // Fungsi untuk login
@@ -82,6 +85,9 @@ int loginUser(char *username, char *password, char *pin) {
         
         if (strcmp(username, storedUsername) == 0 && strcmp(password, storedPassword) == 0 && strcmp(pin, storedPin) == 0) {
             fclose(file);
+            printf("==================\n");
+            printf("= Login berhasil =\n");
+            printf("==================\n");
             return 1; // Login berhasil
         }
     }

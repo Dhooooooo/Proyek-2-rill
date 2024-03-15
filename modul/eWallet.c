@@ -18,81 +18,89 @@ void dataSaldoNew(char *username){
     }
     
     char storedUsername[MAX_USERNAME_LENGTH];
-    float saldo;
+    float saldo; int ada;
     
-    while(!feof){
-    	fscanf(file, "%s %f", storedUsername, saldo );
+    while(fscanf(file, "%s %f\n", storedUsername, &saldo) == 2){
     	if(strcmp(storedUsername, username) == 0){
+    		fclose(file);
     		return;
 		}
 	}
 	fclose(file);
 	
-	file = fopen("database/saldoUsers.txt", "w");
+	file = fopen("database/saldoUsers.txt", "a");
 	if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
     }
     
-    fprintf(file,"%s %.2f", username, saldo);
+ 
+    	fprintf(file,"%s %.2f\n", username, saldo);
     fclose(file);
 }
 
-int isSaldoCukup(char *username, float totHarga){
-	
-	FILE *file = fopen("database/saldoUsers.txt", "r"); // Buka file untuk membaca
+int isSaldoCukup(char *username, float totHarga) {
+    FILE *file = fopen("database/saldoUsers.txt", "r");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
-        return;
+        return 0; //gagal
     }
     
-    FILE *tempFile = fopen("database/saldoUsersTemp.txt", "w"); // Buka file untuk membaca
-    if (file == NULL) {
+    FILE *tempFile = fopen("database/saldoUsersTemp.txt", "w");
+    if (tempFile == NULL) {
         printf("Gagal membuka file.\n");
-        return;
+        fclose(file);
+        return 0; //gagal
     }
     
     char storedUsername[MAX_USERNAME_LENGTH];
-    float saldo; float lastSaldo;
-    
-    while(!feof){
-    	fscanf(file, "%s %f\n", storedUsername, saldo);
- 		if (strcmp(storedUsername, username) == 0){
-			if (saldo >= totHarga){
-				lastSaldo = saldo - totHarga;
-			} else{
-				printf("saldo tidak cukup");
-				return 0; //gagal
-			}
-		} else{
-			printf("Pengguna tidak ditemukan");
-			return 0; //gagal
-		}
-	} 
-	rewind(file);
-	
-	while (!feof){
-		fscanf(file, "%s %f", storedUsername, saldo);
-		if (strcmp(username, storedUsername) == 0) {
-            fprintf(tempFile, "%s %f\n", username, lastSaldo); // Menulis informasi pengguna yang dimodifikasi
-        } else {
-            fprintf(tempFile, "%s %f\n", username, saldo); // Menyalin informasi pengguna lain tanpa modifikasi
+    float saldo, lastSaldo;
+    int userFound = 0;
+
+    while (fscanf(file, "%s %f", storedUsername, &saldo) == 2) {
+    	printf("%.2f", saldo);
+        if (strcmp(storedUsername, username) == 0) {
+            userFound = 1;
+            if (saldo >= totHarga) {
+                lastSaldo = saldo - totHarga;
+            } else {
+                printf("Saldo tidak cukup\n");
+                fclose(file);
+                fclose(tempFile);
+                return 0; //gagal
+            }
         }
-	}
-	
-	fclose(file);
-    fclose(tempFile);
+    }
+
+    if (!userFound) {
+        printf("Pengguna tidak ditemukan\n");
+        fclose(file);
+        fclose(tempFile);
+        return 0; //gagal
+    }
+
+    rewind(file);
+
+    while (fscanf(file, "%s %f", storedUsername, &saldo) == 2) {
+        if (strcmp(username, storedUsername) == 0) {
+            fprintf(tempFile, "%s %f\n", username, lastSaldo);
+        } else {
+            fprintf(tempFile, "%s %f\n", storedUsername, saldo);
+        }
+    }
     
-    // Menghapus file asli dan mengganti dengan file sementara
+    fclose(file);
+    fclose(tempFile);
+
     if (remove("database/saldoUsers.txt") != 0) {
         printf("Gagal menghapus file asli.\n");
-        return;
+        return 0; //gagal
     }
     if (rename("database/saldoUsersTemp.txt", "database/saldoUsers.txt") != 0) {
         printf("Gagal mengganti nama file sementara.\n");
-        return;
+        return 0; //gagal
     }
-    
+
     return 1; //berhasil
 }
 
