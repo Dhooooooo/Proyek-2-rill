@@ -10,7 +10,7 @@ void decrypt(char *text);
 //Akun Register Login
 void registerUser(char *username, char *password, char *pin);
 int loginUser(char *username, char *password, char *pin);
-void modifyUser(char *username, char *newPassword, char *pin);
+void modifyPass(char *username, char *newPassword, char *pin);
 
 //Per e-Wallet an
 void dataSaldoNew(char *username);
@@ -23,6 +23,7 @@ void inputEdit(char *username, char *password);
 int displayMenu();
 int displayMenuAfter();
 int displayMenuPembelian();
+int displayMenuProfil();
 void clearScreen();
 
 // Tekan spasi untuk melanjutkan
@@ -119,6 +120,6 @@ void readCoupon(char *coupon, int *discount);
 int kupon(char *coupon);
 
 // Prosedur untuk melakukan cek kupon
-void checkCoupon (char *username[]);
+void checkCoupon (char username[]);
 
 #endif

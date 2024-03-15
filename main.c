@@ -14,7 +14,7 @@ int main() {
     char password[MAX_PASSWORD_LENGTH];
     char pin[MAX_PIN];
     float harga;
-    int choice, lolos, backMenu, beli;
+    int choice, lolos, backMenu, beli, profil;
     
     do {
     	clearScreen();
@@ -49,7 +49,7 @@ int main() {
                                     switch (beli){
                                         case 1:
                                             printf("Anda akan memesan kamar hotel");
-                                            pemesananHotel(username, harga);
+                                            pemesananHotel(username);
                                             spaceToContinue();
                                             break;
                                         case 2:
@@ -79,12 +79,32 @@ int main() {
             					waitNext();
             					break; 
                             case 4://profile :prima
-                                clearScreen();
-                                printf("Pemesanan Hotel\n");
-                                disPemesananUser(username);
-                                printf("\nTop Up pulsa\n");
-                                printDecryptedFile(username);
-                                spaceToContinue();
+                                do{
+                                	clearScreen();
+                                	profil = displayMenuProfil();
+                                	switch (profil){
+                                		case 1:
+                                			break;
+                               			case 2:
+                               				inputEdit(username, password);
+                               				//modifyPass(username,)
+                               				break;
+                        				case 3:
+                        					break;
+                       					case 4:
+                       						clearScreen();
+                                			printf("Pemesanan Hotel\n");
+                                			disPemesananUser(username);
+                                			printf("\nTop Up pulsa\n");
+                                			printDecryptedFile(username);
+                                			spaceToContinue();
+                       						break;
+       									case 5:
+       										break;
+       									default:
+       										printf("Pilihan Tidak Valid");
+									}
+								} while(profil != 5);
                                 break;
                             case 5:
                                 //logout

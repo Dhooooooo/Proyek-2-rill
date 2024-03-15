@@ -113,7 +113,7 @@ int loginUser(char *username, char *password, char *pin) {
 }
 
 // Fungsi untuk memodifikasi password pengguna
-void modifyUser(char *username, char *newPassword, char *pin) {
+void modifyPass(char *username, char *newPassword, char *pin) {
     // Melakukan enkripsi pada password baru sebelum disimpan
     encrypt(newPassword);
     encrypt(pin);

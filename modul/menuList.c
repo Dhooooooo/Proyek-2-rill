@@ -70,6 +70,20 @@ int displayMenuPembelian(){
 	scanf("%d", &menuPembelian);
 	return menuPembelian;
 }
+
+int displayMenuProfil() {
+    int profil;
+    printf("\nMenu:\n");
+    printf("1. Edit Username\n");
+    printf("2. Edit Password\n");
+    printf("3. Edit Pin\n");
+    printf("4. Cek Histori Pembelian\n");
+    printf("Pilih menu: ");
+    scanf("%d", &profil);
+    return profil;
+}
+
+
 void spaceToContinue(){
 	printf("\n\nTekan spasi untuk melanjutkan");
     while(getch() != ' '); // menunggu user menekan spasi untuk melanjutkan
