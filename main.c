@@ -81,13 +81,14 @@ int main() {
                             case 4://profile :prima
                                 do{
                                 	clearScreen();
+                                	showInfo(username);
                                 	profil = displayMenuProfil();
                                 	switch (profil){
                                 		case 1:
                                 			break;
                                			case 2:
                                				inputEdit(username, password);
-                               				//modifyPass(username,)
+                               				modifyPass(username, password, pin);
                                				break;
                         				case 3:
                         					break;

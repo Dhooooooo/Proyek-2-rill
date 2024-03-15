@@ -32,7 +32,7 @@ void inputAkun(char *username, char *password, char *pin){
 void inputEdit(char *username, char *password){
  	printf("Username: ");
   	scanf("%s", username);
-   	printf("Password: ");
+   	printf(" New Password: ");
     scanf(" %s", password);
 }
 
@@ -78,6 +78,7 @@ int displayMenuProfil() {
     printf("2. Edit Password\n");
     printf("3. Edit Pin\n");
     printf("4. Cek Histori Pembelian\n");
+    printf("5. Kembali\n");
     printf("Pilih menu: ");
     scanf("%d", &profil);
     return profil;

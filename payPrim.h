@@ -12,6 +12,8 @@ void registerUser(char *username, char *password, char *pin);
 int loginUser(char *username, char *password, char *pin);
 void modifyPass(char *username, char *newPassword, char *pin);
 
+void showInfo(char *username);
+
 //Per e-Wallet an
 void dataSaldoNew(char *username);
 int isSaldoCukup(char *username, float totHarga);
