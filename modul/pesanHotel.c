@@ -590,6 +590,7 @@ void pemesananHotel(char username[], float totHarga){
     totHarga = (int) hasil; // mengubah bentuk double ke int
     
     //bool isSaldoCukup = 1; // DISINI GANTI 1 JADI FUNCTION NGECEK SALDO isSaldoCukup(username, totHarga);
+    isSaldoCukup(username, totHarga);
     char stats[8];
     
     if(isSaldoCukup){ // kalo saldo cukup artinya return true
