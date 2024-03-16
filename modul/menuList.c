@@ -96,3 +96,5 @@ void spaceToContinue(){
 void clearScreen(){
 	system("cls");
 }
+
+

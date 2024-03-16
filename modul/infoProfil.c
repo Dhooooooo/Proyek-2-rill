@@ -29,3 +29,7 @@ void showInfo(char *username){
 		}
 	}
 }
+
+/*void totalPengeluaran(char *username){
+	FILE *file = fopen
+}*/

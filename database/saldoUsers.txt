@@ -1,3 +1,4 @@
-prima 8000000.000000
+prima 0.00
 aji 0.00
 ihsan 0.00
+Ridho 540000.00
