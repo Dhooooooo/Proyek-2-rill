@@ -6,8 +6,9 @@
 
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
-#define ENCRYPTION_KEY 3
+#define ENCRYPTION_KEY 5
 #define MAX_LENGTH 100
+#define MAX_COUPON_LENGTH 10
 
 
 char char_set[] = "1qazZAQ2wsxXSW3edcCDE4rfvVFR5tgbBGT6yhnNHY7ujmMJU8ikKI9olLOpP";
@@ -177,12 +178,162 @@ void totalpemasukan(int hotel, int pulsa){
 	printf("%d", &totPemasukan);
 	
 }
+//fitur kupon
+void createCoupon(char *coupon, int discount) {
+    // Membuat atau overwrite file database
+    FILE *couponList;
+    couponList = fopen("List_coupon.txt", "a");
+
+    // Menyimpan kupon yang dibuat ke database
+    fprintf(couponList, "%s %d\n", coupon, discount);
+    
+    fclose(couponList);
+}
+
+void displayCouponList() {
+    // Melakukan read file database
+    FILE *couponList;
+    couponList = fopen("List_coupon.txt", "r");
+    if (!couponList) {
+        printf("File tidak ada.\n");
+        return;
+    }
+
+    char storedCoupon[MAX_COUPON_LENGTH];
+    int storedDiscount;
+
+    printf("\nLIST COUPON\n");
+    printf("============\n");
+    
+    // Menampilkan kupon yang ada di database
+    while (fscanf(couponList, "%s %d", storedCoupon, &storedDiscount) != EOF) {
+        printf("Kode Kupon: %s | Diskon: %d | ", storedCoupon, storedDiscount);
+        encrypt(storedCoupon);
+        printf("Kupon (setelah enkripsi): %s\n", storedCoupon);
+    }
+
+    fclose(couponList);
+}
+
+void changeDiscount(char *coupon, int newDiscount) {
+    FILE *couponList;
+    FILE *tempList;
+    char tempCoupon[MAX_COUPON_LENGTH];
+    int tempDiscount;
+    int found = 0;
+
+    couponList = fopen("List_coupon.txt", "r");
+    if (!couponList) {
+        printf("File tidak ada.\n");
+        return;
+    }
+
+    tempList = fopen("temp_List_coupon.txt", "w");
+    if (!tempList) {
+        printf("File tidak ada.\n");
+        fclose(couponList);
+        return;
+    }
+
+    while (fscanf(couponList, "%s %d", tempCoupon, &tempDiscount) != EOF) {
+        if (strcmp(coupon, tempCoupon) == 0) {
+            fprintf(tempList, "%s %d\n", tempCoupon, newDiscount);
+            found = 1;
+        } else {
+            fprintf(tempList, "%s %d\n", tempCoupon, tempDiscount);
+        }
+    }
+
+    fclose(couponList);
+    fclose(tempList);
+
+    remove("List_coupon.txt");
+    rename("temp_List_coupon.txt", "List_coupon.txt");
+
+    if (found) {
+        printf("Diskon untuk kupon %s berhasil diubah menjadi %d\n", coupon, newDiscount);
+    } else {
+        printf("Kupon tidak ditemukan.\n");
+    }
+}
+
+int displayMenu() {
+    int choice;
+    printf("\nMENU\n");
+    printf("1. Create coupon\n");
+    printf("2. List coupon\n");
+    printf("3. Change discount\n");
+    printf("4. Exit\n");
+    printf("Pilih menu: ");
+    
+    scanf("%d", &choice);
+    
+    return choice;
+}
+
+void coupon() {
+    char coupon[MAX_COUPON_LENGTH];
+    int discount;
+    int choice;
+    
+    // Main menu
+    do {
+        choice = displayMenu();
+        system("cls");
+        switch (choice) {
+            case 1:
+                // create coupon
+                printf("Masukkan kode kupon: ");
+                scanf("%s", coupon);
+                printf("Masukkan diskon: ");
+                scanf("%d", &discount);
+                
+                // Prosedur menyimpan kupon ke database
+                createCoupon(coupon, discount);
+                
+                // Prosedur enkripsi kupon yang diinput
+                encrypt(coupon);
+    
+                printf("\nKode kupon: %s\n", coupon);
+                printf("\nMasukkan nomor apapun untuk kembali ke menu: ");
+                scanf("%d", &choice);
+                system("cls");
+                break;
+            
+            case 2:
+                // List coupon
+                displayCouponList();
+                printf("\nMasukkan nomor apapun untuk kembali ke menu: ");
+                scanf("%d", &choice);
+                system("cls");
+                break;
+            
+            case 3:
+                // Change discount
+                printf("Masukkan kode kupon yang ingin diubah diskonnya: ");
+                scanf("%s", coupon);
+                printf("Masukkan diskon baru: ");
+                scanf("%d", &discount);
+                changeDiscount(coupon, discount);
+                printf("\nMasukkan nomor apapun untuk kembali ke menu: ");
+                scanf("%d", &choice);
+                system("cls");
+                break;
+            
+            case 4:
+                printf("\nEXIT\n");
+                break;
+        	default:
+        		printf("Pilihan tidak valid\n");
+        }
+    } while (choice != 4);
+}
 
 //register admin
 void registerAdmin(char *username, char *password) {
     // Melakukan enkripsi pada password sebelum disimpan
     
-    FILE *file = fopen("database/admin.txt", "r"); // Buka file untuk membaca
+    FILE *file = fopen("databaseadmin.txt", "r"); // Buka file untuk membaca
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
