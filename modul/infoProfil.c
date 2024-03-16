@@ -19,11 +19,13 @@ void showInfo(char *username){
     
     char storedUsername[MAX_USERNAME_LENGTH];
     float saldo;
+    int intSaldo;
     
     while(fscanf(file, "%s %f\n", storedUsername, &saldo) == 2){
     	if(strcmp(storedUsername, username) == 0){
+    		intSaldo = (int)saldo;
     		printf("Username : %s\n", storedUsername);
-    		printf("Saldo	 : %.2f\n", saldo);
+    		printf("Saldo	 : Rp. ");disHarga(intSaldo);printf("\n");
     		fclose(file);
     		return;
 		}
