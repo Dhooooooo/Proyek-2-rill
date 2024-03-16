@@ -70,7 +70,6 @@ void registerUser(char *username, char *password, char *pin) {
     
     fprintf(file, "%s %s %s\n", username, password, pin);
     fclose(file);
-    clearScreen();
     
     printf("=======================\n");
     printf("= Registrasi berhasil =\n");
@@ -157,6 +156,5 @@ void modifyPass(char *username, char *newPassword) {
     }
     
     printf("Password berhasil diubah\n");
-    spaceToContinue();
 }
 

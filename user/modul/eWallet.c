@@ -103,7 +103,7 @@ int isSaldoCukup(char *username, float totHarga) {
 }
 
 void topUpSaldo(char *username, float amount) {
-	printf("Masukkan jumlah saldo :\n");
+	printf("Masukkan jumlah saldo : ");
     scanf("%f", &amount);
     FILE *file = fopen("database/saldoUsers.txt", "r");
     if (file == NULL) {

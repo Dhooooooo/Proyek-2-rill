@@ -18,11 +18,13 @@ int main() {
     
     do {
     	clearScreen();
+    	title();
         choice = displayMenu();
         clearScreen();
         switch (choice) {
             case 1:
                 // Registrasi
+                title();
                 printf("Registrasi\n");
                 inputAkun(username, password, pin); 
                 registerUser(username, password, pin);
@@ -31,20 +33,22 @@ int main() {
                 break;
             case 2:
                 // Login
+                title();
                 printf("Login\n");
                 inputAkun(username, password, pin); 
-                clearScreen();
                 if (loginUser(username, password, pin)) {
                     dataSaldoNew(username);
                     int menu2;
                     waitNext();
                     do {
                         clearScreen();
+                        title();
                         menu2 = displayMenuAfter();
                         switch (menu2){
                             case 1:
                             	do {
                                 clearScreen();
+                                title();
                                 beli = displayMenuPembelian();
                                     switch (beli){
                                         case 1:
@@ -58,9 +62,9 @@ int main() {
                                             spaceToContinue();
                                             break;
                                         case 3:
-                                            clearScreen();
+                                            
                                             waitNext();
-                                            clearScreen();
+                                            
                                             break;
                                         default:
                                             printf("Pilihan tidak valid.");
@@ -70,11 +74,13 @@ int main() {
                             case 2:
                                 //top-up saldo e-wallet :ridho
                                 clearScreen();
+                                title();
                             	topUpSaldo(username, amount);
                             	spaceToContinue();
                                 break;
                             case 3:
                             	clearScreen();
+                            	title();
                                 printf("Cek Kupon\n");
             					checkCoupon(username);
             					spaceToContinue();
@@ -83,14 +89,18 @@ int main() {
                             case 4://profile :prima
                                 do{
                                 	clearScreen();
+                                	title();
                                 	showInfo(username);
                                 	profil = displayMenuProfil();
                                 	switch (profil){
                                 		case 1:
                                 			break;
                                			case 2:
+                               				clearScreen();
+                               				title();
                                				inputEdit(username, password);
                                				modifyPass(username, password);
+                               				spaceToContinue();
                                				break;
                         				case 3:
                         					break;
@@ -110,9 +120,9 @@ int main() {
 								} while(profil != 5);
                                 break;
                             case 5: //logout
-                                clearScreen();
+                                
                                 waitNext();
-                                clearScreen();
+                                
                                 backMenu = 1;
                                 break;
                             default:

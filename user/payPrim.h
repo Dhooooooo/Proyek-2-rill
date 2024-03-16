@@ -20,6 +20,7 @@ int isSaldoCukup(char *username, float totHarga);
 
 //Buat Menu
 void waitNext();
+void title();
 void inputAkun(char *username, char *password, char *pin);
 void inputEdit(char *username, char *password);
 int displayMenu();

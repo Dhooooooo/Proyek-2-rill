@@ -31,3 +31,19 @@ void showInfo(char *username){
 		}
 	}
 }
+
+void title(){
+	FILE *file = fopen("database/grafiti.txt", "r");
+    if (file == NULL) {
+        fprintf(stderr, "Gagal membuka file list_barang.txt.\n");
+        return;
+    }
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+		printf(" %s", buffer);
+    }
+    printf("\n");
+
+    fclose(file);
+}
