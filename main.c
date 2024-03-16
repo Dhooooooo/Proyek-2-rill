@@ -61,13 +61,12 @@ int main() {
                                             clearScreen();
                                             waitNext();
                                             clearScreen();
-                                            //backMenu = 1; // Update backMenu to indicate returning to main menu
                                             break;
                                         default:
                                             printf("Pilihan tidak valid.");
                                     }
                                 } while (beli != 3);
-                                break; // Add a break here to exit the switch case after purchasing
+                                break;
                             case 2:
                                 //top-up saldo e-wallet :ridho
                                 break;
@@ -107,17 +106,16 @@ int main() {
 									}
 								} while(profil != 5);
                                 break;
-                            case 5:
-                                //logout
+                            case 5: //logout
                                 clearScreen();
                                 waitNext();
                                 clearScreen();
                                 backMenu = 1;
-                                break; // Add a break here to exit the switch case after logging out
+                                break;
                             default:
                                 printf("pilihan tidak valid");
                         }
-                    } while (backMenu == 0); // Fix the condition here
+                    } while (backMenu == 0); 
                 } else {
                     printf("Login gagal. Periksa kembali username dan password.\n");
                 }

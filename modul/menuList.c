@@ -17,7 +17,7 @@ void waitNext() {
     for(i = 0; i < 3; i++){
     	printf(".");
     	sleep(1);
-}
+	}
 }
 
 void inputAkun(char *username, char *password, char *pin){
