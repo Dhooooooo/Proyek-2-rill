@@ -17,6 +17,7 @@ void showInfo(char *username);
 //Per e-Wallet an
 void dataSaldoNew(char *username);
 int isSaldoCukup(char *username, float totHarga);
+int confirmPay(char *username);
 
 //Buat Menu
 void waitNext();

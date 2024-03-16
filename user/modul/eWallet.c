@@ -153,6 +153,7 @@ void topUpSaldo(char *username, float amount) {
 }
 
 int confirmPay(char *username) {
+	title();
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
