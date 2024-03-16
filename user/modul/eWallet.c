@@ -121,7 +121,9 @@ void topUpSaldo(char *username, float amount) {
     char storedUsername[MAX_USERNAME_LENGTH];
     float saldo;
     int userFound = 0;
-
+	
+	clearScreen();
+	if(confirmPay(username)){
     while (fscanf(file, "%s %f", storedUsername, &saldo) == 2) {
         if (strcmp(storedUsername, username) == 0) {
             userFound = 1;
@@ -150,6 +152,10 @@ void topUpSaldo(char *username, float amount) {
     }
 
     printf("Saldo berhasil ditambahkan.\n");
+} else{
+	printf("Pengisian Saldo Dibatalkan");
+	return;
+}    
 }
 
 int confirmPay(char *username) {
