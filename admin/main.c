@@ -7,14 +7,6 @@
 #define MAX_PASSWORD_LENGTH 50
 #define ENCRYPTION_KEY 3
 
-// Function prototypes
-int mainMenu();
-int loginAdmin(const char *username, const char *password);
-int menuAdmin();
-void totalHotel();
-void totalpulsa();
-
-
 int main() {
     int pilihan;
     char username[MAX_USERNAME_LENGTH];

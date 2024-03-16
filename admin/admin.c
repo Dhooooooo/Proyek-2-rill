@@ -1,10 +1,43 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include "admin.h"
 
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
 #define ENCRYPTION_KEY 3
+#define MAX_LENGTH 100
+
+
+char char_set[] = "1qazZAQ2wsxXSW3edcCDE4rfvVFR5tgbBGT6yhnNHY7ujmMJU8ikKI9olLOpP";
+int mod = sizeof(char_set);
+
+//dekrip
+char* dekripsi(char cipherText[]) {
+	
+    static char dekrip[100]; // assuming the length won't exceed 100 characters
+    int i,j;
+    for (i = 0; i < strlen(cipherText); i++) {
+    	bool isCipherInChar = false;
+        int index = 0;
+        for (j = 0; j < strlen(char_set); j++) {
+            if (char_set[j] == cipherText[i]) {
+            	isCipherInChar = true;
+                while ((index - 7) % 3 != 0)
+                    index += mod;
+                int hasil = (index - 7) / 3;
+                dekrip[i] = char_set[hasil];
+                break;
+            }
+            index++;
+        }
+        if(!isCipherInChar){
+        	dekrip[i] = cipherText[i];
+		}
+    }
+    return dekrip;
+}
 
 
 // Fungsi untuk mengenkripsi password
@@ -29,15 +62,119 @@ void decrypt(char *text) {
     }
 }
 
-//hitung total hotel
-void totalHotel(){
+//file penyimpanan hotel
+char dbsPemesanan[] = "database/pemesananHotel.txt";
+//menampilkan harga
+void disHarga(int harga) {
+   if (harga < 1000) {
+       printf("%d", harga);
+       return;
+   }
+   disHarga(harga / 1000);
+   printf(".%03d", harga % 1000);
+}
+//hitung transaksi hotel
+int transaksiHotel(int hotel){
+	int i, totalHotel;
+    char line[100];
+    
+    FILE *files = fopen(dbsPemesanan, "r");
+    if (files == NULL) {
+        printf("Gagal membuka file.\n");
+    }
+    printf("\n\n<admin>\n");
+	printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
+    printf("| %-3s | %-10s | %-12s | %-12s | %-4s | %-21s | %-4s | %-21s | %-6s | %-10s |\n", "No", " Username", "  CheckIn", "  CheckOut", "Hari", "        Harga","Kupon", "        Total", "NoKamar", "status");
+    printf("|-----+------------+--------------+--------------+------+-----------------------+-------+-----------------------+---------+------------|\n");
+
+    while (fgets(line, sizeof(line), files)) {
+    	char *dekripPemesanan = dekripsi(line);
+    	
+    	char *noOrder = strtok(dekripPemesanan, ",");
+    	char *namaCust = strtok(NULL, ",");
+    	char *CI = strtok(NULL, ",");
+    	char *CO = strtok(NULL, ",");
+    	char *hari = strtok(NULL, ",");
+    	char *harga = strtok(NULL, ",");
+    	char *ptgan = strtok(NULL, ",");
+    	char *total = strtok(NULL, ",");
+    	char *no = strtok(NULL, ",");
+    	char *status = strtok(NULL, ",");
+    	
+    	totalHotel += atoi(total);
+    	hotel=totalHotel;
+    	printf("| %-3s | %-10s | %-12s | %-12s | %-4s |",noOrder,namaCust, CI, CO, hari);printf("     Rp. ");disHarga(atoi(harga));printf("\t| %-4s%% |", ptgan);printf("     Rp. ");disHarga(atoi(total));printf("\t| %-7s | %-10s |\n", no, status);
+    }
+    printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
+	fclose(files);
+	printf("Total pemasukan hotel: \n");
+	printf("%d", &hotel);
+	hotel=totalHotel;
 	
+	return hotel;
+}
 	
+
+
+//file pulsa
+char dbsPembelian[] = "database/HistoryPulsa.txt";
+//hitung transaksi pulsa
+int transaksiPulsa(int pulsa, char *username){
+	int totalPulsa;
+    FILE *file = fopen(dbsPembelian, "r");
+    if (file == NULL) {
+        printf("Gagal membuka file %s.\n", dbsPembelian);
+        return;
+    }
+	
+    printf("+-------------------------------------------------------------------------------------------------------------------------------------+\n");
+    printf("| %-3s | %-12s | %-12s| %-25s | %-14s |%-7s| %-9s | %-16s | %-12s |\n", 
+	        "No", " Username", "Pembelian", "  Catatan", "Harga Asli", " Kupon", "Admin", "   Total", "Status");
+    printf("|-----+--------------+-------------+---------------------------+----------------+-------+-----------+------------------+--------------|\n");
+	
+	char line[MAX_LENGTH];
+	while (fgets(line, sizeof(line), file)) {
+    	char *dekripsiLine = dekripsi(line);
+		
+    	char *orderNumber = strtok(dekripsiLine, ",");
+    	char *namaCust = strtok(NULL, ",");
+    	char *topupType = strtok(NULL, ",");
+    	char *note = strtok(NULL, ",");
+    	char *originalPrice = strtok(NULL, ",");
+    	char *discount = strtok(NULL, ",");
+    	char *adminFee = strtok(NULL, ",");
+    	char *total = strtok(NULL, ",");
+    	char *status = strtok(NULL, ",");
+//		char *space = " ";
+		
+		printf("| %-3s | %-12s | %-11s | %-25s |",
+		orderNumber, username, topupType, note);
+		printf(" Rp.");
+		disHarga(atoi(originalPrice));
+		printf("\t| %-4s%% |", discount);
+		printf(" Rp. ");
+		disHarga(atoi(adminFee)); 
+		printf(" |");
+		printf(" Rp.");
+		disHarga(atoi(total));
+		printf("  \t| %-12s |\n", status);
+		totalPulsa += atoi(total);
+		pulsa=totalPulsa;
+		    
+	}
+		
+	printf("+-------------------------------------------------------------------------------------------------------------------------------------+\n");	
+	printf("Total transaksi pulsa: \n");
+	printf("%d", &pulsa);
+    fclose(file);
 }
 
 
-//hitung total pulsa
-void totalPulsa(){
+void totalpemasukan(int hotel, int pulsa){
+	int totPemasukan;
+	totPemasukan= hotel + pulsa;
+	printf("Total pemasukan: \n");
+	printf("%d", &totPemasukan);
 	
 }
 
@@ -45,7 +182,7 @@ void totalPulsa(){
 void registerAdmin(char *username, char *password) {
     // Melakukan enkripsi pada password sebelum disimpan
     
-    FILE *file = fopen("admin.txt", "r"); // Buka file untuk membaca
+    FILE *file = fopen("database/admin.txt", "r"); // Buka file untuk membaca
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
@@ -67,7 +204,7 @@ void registerAdmin(char *username, char *password) {
     }
     	fclose(file);
     	
-    	 file = fopen("admin.txt", "a");
+    	 file = fopen("database/admin.txt", "a");
     	if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
@@ -84,7 +221,7 @@ void registerAdmin(char *username, char *password) {
 
 //login admin
 int loginAdmin(char *username, char *password) {
-    FILE *file = fopen("admin.txt", "r");
+    FILE *file = fopen("database/admin.txt", "r");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return 0;
@@ -115,7 +252,7 @@ int loginAdmin(char *username, char *password) {
 }
 
 void pemasukan(){
-	FILE *pemesanan=fopen("pemesanan.txt", "r");
+	FILE *pemesanan=fopen("database/pemesanan.txt", "r");
 	if (pemesanan == NULL){
 		printf("Gagal membuka file");
 	}
