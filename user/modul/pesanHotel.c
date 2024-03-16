@@ -604,11 +604,16 @@ void pemesananHotel(char username[]){
     int totHarga = (int) hasil; // mengubah bentuk double ke int
     char stats[8];
     
+    if(confirmPay(username)){
+	
     if(isSaldoCukup(username, totHarga)){ // cek apakah saldo cukup
     	strcpy(stats, "BERHASIL");
     	noKamar = kamar();
+	} else {
+		strcpy(stats, "GAGAL");
 	}
-	else{
+	
+	} else { 
 		strcpy(stats, "GAGAL");
 	}
     
