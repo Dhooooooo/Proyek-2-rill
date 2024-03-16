@@ -13,7 +13,7 @@ int main() {
     char username[MAX_USERNAME_LENGTH];
     char password[MAX_PASSWORD_LENGTH];
     char pin[MAX_PIN];
-    float harga;
+    float harga, amount;
     int choice, lolos, backMenu, beli, profil;
     
     do {
@@ -69,6 +69,9 @@ int main() {
                                 break;
                             case 2:
                                 //top-up saldo e-wallet :ridho
+                                clearScreen();
+                            	topUpSaldo(username, amount);
+                            	spaceToContinue();
                                 break;
                             case 3:
                             	clearScreen();

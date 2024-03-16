@@ -124,4 +124,7 @@ int kupon(char *coupon);
 // Prosedur untuk melakukan cek kupon
 void checkCoupon (char username[]);
 
+/*TOPUP*/
+void topUpSaldo(char *username, float amount);
+
 #endif
