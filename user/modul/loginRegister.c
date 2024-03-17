@@ -111,6 +111,7 @@ int loginUser(char *username, char *password, char *pin) {
             printf("==================\n");
             printf("= Login berhasil =\n");
             printf("==================\n");
+            encrypt(password);
             return 1; // Login berhasil
         }
     }
