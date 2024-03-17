@@ -118,13 +118,13 @@ void pembelianPulsa(char *username);
 #define MAX_COUPON_LENGTH 10
 
 // Prosedur untuk melakukan 
-void readCoupon(char *coupon, int *discount);
+void readCoupon(char *coupon, int discount);
 
 // Prosedur untuk memanggil fitur kupon
 int kupon(char *coupon);
 
 // Prosedur untuk melakukan cek kupon
-void checkCoupon (char username[]);
+void checkCoupon (char *username[]);
 
 /*TOPUP*/
 void topUpSaldo(char *username, float amount);

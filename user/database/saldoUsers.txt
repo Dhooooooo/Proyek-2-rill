@@ -7,3 +7,4 @@ konss 0.000000
 brian 0.000000
 kontol 0.000000
 Lonet 17000000.000000
+hafidz 0.00
