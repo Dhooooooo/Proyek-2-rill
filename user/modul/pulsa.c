@@ -228,11 +228,17 @@ void pembelianPulsa(char *username) {
 	// Mengatur total biaya setelah diskon ke nilai yang dihitung
 	transaction.total = intTotal;
 
-    if(isSaldoCukup(username, transaction.total)){ // kalo saldo cukup artinya return true
-    	strcpy(transaction.status, "BERHASIL");
+    if(confirmPay(username)){
+	
+    if(isSaldoCukup(username, totHarga)){ // cek apakah saldo cukup
+    	strcpy(stats, "BERHASIL");
+    	noKamar = kamar();
+	} else {
+		strcpy(stats, "GAGAL");
 	}
-	else{
-		strcpy(transaction.status, "GAGAL");
+	
+	} else { 
+		strcpy(stats, "GAGAL");
 	}
 	
     // Menambahkan transaksi ke file admin.txt
