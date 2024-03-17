@@ -94,6 +94,11 @@ int main() {
                                 	profil = displayMenuProfil();
                                 	switch (profil){
                                 		case 1:
+                                			clearScreen();
+                               				title();
+                               				inputEditUser(username, password);
+                               				modifyUser(username, password);
+                               				spaceToContinue();
                                 			break;
                                			case 2:
                                				clearScreen();
@@ -103,6 +108,8 @@ int main() {
                                				spaceToContinue();
                                				break;
                         				case 3:
+                        					clearScreen();
+                               				title();
                         					inputEditPin(username, pin);
                                				modifyPin(username, pin);
                                				spaceToContinue();

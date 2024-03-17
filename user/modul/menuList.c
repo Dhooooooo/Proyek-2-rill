@@ -39,6 +39,11 @@ void inputEditPin(char *username, char *newPin){
     scanf(" %s", newPin);
 }
 
+void inputEditUser(char *newUsername){
+	 printf("New Username: ");
+    scanf(" %s", newUsername);
+}
+
 int displayMenu() {
     int choice;
     printf("1. Register\n");

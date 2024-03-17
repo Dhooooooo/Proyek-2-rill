@@ -183,6 +183,7 @@ void modifyPin(char *username, char *newPin) {
         return;
     }
     
+    
     FILE *tempFile = fopen("database/temp.txt", "w"); // Buka file sementara untuk menulis
     if (tempFile == NULL) {
         fclose(file);
@@ -198,6 +199,64 @@ void modifyPin(char *username, char *newPin) {
     while (fscanf(file, "%s %s %s", storedUsername, storedPassword, storedPin) == 3) {
         if (strcmp(username, storedUsername) == 0) {
             fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, newPin); // Menulis informasi pengguna yang dimodifikasi
+        } else {
+            fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, storedPin); // Menyalin informasi pengguna lain tanpa modifikasi
+        }
+    }
+    
+    fclose(file);
+    fclose(tempFile);
+    
+    // Menghapus file asli dan mengganti dengan file sementara
+    if (remove("database/users.txt") != 0) {
+        printf("Gagal menghapus file asli.\n");
+        return;
+    }
+    if (rename("database/temp.txt", "database/users.txt") != 0) {
+        printf("Gagal mengganti nama file sementara.\n");
+        return;
+    }
+    
+    printf("PIN berhasil diubah\n");
+}
+
+void modifyUser(char *newUsername, char *password) {
+    // Melakukan enkripsi pada password baru sebelum disimpan
+    encrypt(password);
+    
+    FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
+    if (file == NULL) {
+        printf("Gagal membuka file.\n");
+        return;
+    }
+    
+    char storedUsername[MAX_USERNAME_LENGTH];
+    char storedPassword[MAX_PASSWORD_LENGTH];
+    char storedPin[MAX_PIN];
+    
+    // Membaca file dan memeriksa apakah username sudah ada
+    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
+        if (strcmp(newUsername, storedUsername) == 0) {
+            fclose(file);
+            printf("Username sudah digunakan.\n");
+            spaceToContinue();
+            strcpy(newUsername, storedUsername);
+            return;
+        }
+    }
+    rewind(file);
+    
+    FILE *tempFile = fopen("database/temp.txt", "w"); // Buka file sementara untuk menulis
+    if (tempFile == NULL) {
+        fclose(file);
+        printf("Gagal membuka file sementara.\n");
+        return;
+    }
+    
+    // Membaca file dan menyalin informasi pengguna ke file sementara
+    while (fscanf(file, "%s %s %s", storedUsername, storedPassword, storedPin) == 3) {
+        if (strcmp(password, storedPassword) == 0) {
+            fprintf(tempFile, "%s %s %s\n", newUsername, storedPassword, storedPin); // Menulis informasi pengguna yang dimodifikasi
         } else {
             fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, storedPin); // Menyalin informasi pengguna lain tanpa modifikasi
         }

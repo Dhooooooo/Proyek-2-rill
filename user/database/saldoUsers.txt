@@ -9,3 +9,4 @@ kontol 0.000000
 Lonet 17000000.000000
 hafidz 0.00
 ebang 0.00
+ebang21 0.00

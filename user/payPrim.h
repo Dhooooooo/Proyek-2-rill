@@ -12,7 +12,7 @@ void registerUser(char *username, char *password, char *pin);
 int loginUser(char *username, char *password, char *pin);
 void modifyPass(char *username, char *newPassword);
 void modifyPin(char *username, char *newPin);
-
+void modifyUser(char *newUsername, char *password);
 void showInfo(char *username);
 
 //Per e-Wallet an
@@ -25,6 +25,8 @@ void waitNext();
 void title();
 void inputAkun(char *username, char *password, char *pin);
 void inputEdit(char *username, char *password);
+void inputEditPin(char *username, char *newPin);
+void inputEditUser(char *newUsername, char *password);
 int displayMenu();
 int displayMenuAfter();
 int displayMenuPembelian();
@@ -125,7 +127,7 @@ void readCoupon(char *coupon, int discount);
 int kupon(char *coupon);
 
 // Prosedur untuk melakukan cek kupon
-void checkCoupon (char *username[]);
+void checkCoupon (char username[]);
 
 /*TOPUP*/
 void topUpSaldo(char *username, float amount);
