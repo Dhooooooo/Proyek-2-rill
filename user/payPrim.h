@@ -26,7 +26,7 @@ void title();
 void inputAkun(char *username, char *password, char *pin);
 void inputEdit(char *username, char *password);
 void inputEditPin(char *username, char *newPin);
-void inputEditUser(char *newUsername, char *password);
+void inputEditUser(char *username, char *password);
 int displayMenu();
 int displayMenuAfter();
 int displayMenuPembelian();

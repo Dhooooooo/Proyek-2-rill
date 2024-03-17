@@ -224,7 +224,7 @@ void modifyUser(char *username, char *password) {
     // Melakukan enkripsi pada password baru sebelum disimpan
     encrypt(password);
     
-    FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
+    FILE *file = fopen("database/users.txt", "r+"); // Buka file untuk membaca
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
@@ -239,7 +239,6 @@ void modifyUser(char *username, char *password) {
         if (strcmp(username, storedUsername) == 0) {
             fclose(file);
             printf("Username sudah digunakan.\n");
-            spaceToContinue();
             strcpy(username, storedUsername);
             return;
         }
@@ -275,7 +274,7 @@ void modifyUser(char *username, char *password) {
         return;
     }
     
-    printf("Password berhasil diubah\n");
+    printf("Username berhasil diubah\n");
 }
 
 

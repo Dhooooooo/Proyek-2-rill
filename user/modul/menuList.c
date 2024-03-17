@@ -39,9 +39,9 @@ void inputEditPin(char *username, char *newPin){
     scanf(" %s", newPin);
 }
 
-void inputEditUser(char *newUsername){
+void inputEditUser(char *username, char *password){
 	 printf("New Username: ");
-    scanf(" %s", newUsername);
+    scanf(" %s", username);
 }
 
 int displayMenu() {
