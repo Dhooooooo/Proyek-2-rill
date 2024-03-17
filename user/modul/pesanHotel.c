@@ -388,7 +388,7 @@ int hitungHariMenginap(char *tanggalCheckIn, char *tanggalCheckOut){
 
 // Fungsi untuk memeriksa apakah nomor kamar sudah ada di dalam file
 bool isKamarExists(int noKamar) {
-    FILE *file = fopen(dbsPemesanan, "r");
+    FILE *file = fopen(dbsPemesanan, "r+");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         exit(1);
@@ -441,7 +441,7 @@ void disHarga(int harga) {
 
 // Untuk menghitung ada berapa baris di file
 int hitungBaris() {
-    FILE *file = fopen("database/pemesananHotel.txt", "r");
+    FILE *file = fopen("database/pemesananHotel.txt", "r+");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return 0;
@@ -510,7 +510,7 @@ void adminApprove(int nomorDicari){
 
     // Membuka kembali file input dalam mode write-only untuk menulis ulang isinya
     fileInput = fopen(namaFileInput, "w");
-    fileOutput = fopen(namaFileOutput, "r");
+    fileOutput = fopen(namaFileOutput, "r+");
 
     // Menyalin isi file output ke file input
     while (fgets(baris, sizeof(baris), fileOutput)) {
@@ -654,7 +654,7 @@ void pemesananHotel(char username[]){
 
 // Prosedur untuk menampilkan pesanan ke user berdasarkan username
 void disPemesananUser(char username[]){
-	FILE *fileInput = fopen(dbsPemesanan, "r");
+	FILE *fileInput = fopen(dbsPemesanan, "r+");
 	if (fileInput == NULL) {
         printf("Gagal membuka file.\n");
     }

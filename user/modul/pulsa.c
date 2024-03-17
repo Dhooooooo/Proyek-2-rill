@@ -230,15 +230,15 @@ void pembelianPulsa(char *username) {
 
     if(confirmPay(username)){
 	
-    if(isSaldoCukup(username, totHarga)){ // cek apakah saldo cukup
-    	strcpy(stats, "BERHASIL");
-    	noKamar = kamar();
+    if(isSaldoCukup(username, transaction.total)){ // cek apakah saldo cukup
+    	strcpy(transaction.status, "BERHASIL");
+    	//noKamar = kamar();
 	} else {
-		strcpy(stats, "GAGAL");
+		strcpy(transaction.status, "GAGAL");
 	}
 	
 	} else { 
-		strcpy(stats, "GAGAL");
+		strcpy(transaction.status, "GAGAL");
 	}
 	
     // Menambahkan transaksi ke file admin.txt
