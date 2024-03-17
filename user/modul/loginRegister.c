@@ -220,7 +220,7 @@ void modifyPin(char *username, char *newPin) {
     printf("PIN berhasil diubah\n");
 }
 
-void modifyUser(char *newUsername, char *password) {
+void modifyUser(char *username, char *password) {
     // Melakukan enkripsi pada password baru sebelum disimpan
     encrypt(password);
     
@@ -236,11 +236,11 @@ void modifyUser(char *newUsername, char *password) {
     
     // Membaca file dan memeriksa apakah username sudah ada
     while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
-        if (strcmp(newUsername, storedUsername) == 0) {
+        if (strcmp(username, storedUsername) == 0) {
             fclose(file);
             printf("Username sudah digunakan.\n");
             spaceToContinue();
-            strcpy(newUsername, storedUsername);
+            strcpy(username, storedUsername);
             return;
         }
     }
@@ -256,7 +256,7 @@ void modifyUser(char *newUsername, char *password) {
     // Membaca file dan menyalin informasi pengguna ke file sementara
     while (fscanf(file, "%s %s %s", storedUsername, storedPassword, storedPin) == 3) {
         if (strcmp(password, storedPassword) == 0) {
-            fprintf(tempFile, "%s %s %s\n", newUsername, storedPassword, storedPin); // Menulis informasi pengguna yang dimodifikasi
+            fprintf(tempFile, "%s %s %s\n", username, storedPassword, storedPin); // Menulis informasi pengguna yang dimodifikasi
         } else {
             fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, storedPin); // Menyalin informasi pengguna lain tanpa modifikasi
         }

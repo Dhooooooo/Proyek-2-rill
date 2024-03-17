@@ -22,7 +22,7 @@ void showInfo(char *username){
     int intSaldo;
     
     while(fscanf(file, "%s %f\n", storedUsername, &saldo) == 2){
-    	if(strcmp(storedUsername, username) == 0){
+    	if(strcmp(username, storedUsername) == 0){
     		intSaldo = (int)saldo;
     		printf("Username : %s\n", storedUsername);
     		printf("Saldo	 : Rp. ");disHarga(intSaldo);printf("\n");
