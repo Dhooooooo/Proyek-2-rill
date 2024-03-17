@@ -34,6 +34,18 @@ void registerUser(char *username, char *password, char *pin) {
             return;
         }
     }
+    rewind(file);
+    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
+        if (strcmp(password, password) == 0) {
+            fclose(file);
+            printf("====================\n");
+    		printf("= Registrasi Gagal =\n");
+    		printf("====================\n");
+            printf("Password sudah digunakan.\n");
+            spaceToContinue();
+            return;
+        }
+    }
     
     fclose(file);
     
@@ -223,6 +235,7 @@ void modifyPin(char *username, char *newPin) {
 void modifyUser(char *username, char *password) {
     // Melakukan enkripsi pada password baru sebelum disimpan
     encrypt(password);
+    char tempUser[MAX_USERNAME_LENGTH];
     
     FILE *file = fopen("database/users.txt", "r+"); // Buka file untuk membaca
     if (file == NULL) {
@@ -241,8 +254,44 @@ void modifyUser(char *username, char *password) {
             printf("Username sudah digunakan.\n");
             strcpy(username, storedUsername);
             return;
+        } if (strcmp(password, storedPassword) == 0){
+        	strcpy(tempUser, storedUsername);
+		}
+    }
+    
+    FILE *files = fopen("database/saldoUsers.txt", "r");
+    if (file == NULL) {
+        printf("Gagal membuka file.\n");
+        return; //gagal
+    }
+    
+    FILE *tempFiles = fopen("database/saldoUsersTemp.txt", "w");
+    if (tempFiles == NULL) {
+        printf("Gagal membuka file.\n");
+        fclose(file);
+        return; //gagal
+    }
+    float saldo;
+    while (fscanf(files, "%s %f", storedUsername, &saldo) == 2) {
+        if (strcmp(tempUser, storedUsername) == 0) {
+            fprintf(tempFiles, "%s %f\n", username, saldo);
+        } else {
+            fprintf(tempFiles, "%s %f\n", storedUsername, saldo);
         }
     }
+    
+    fclose(files);
+    fclose(tempFiles);
+
+    if (remove("database/saldoUsers.txt") != 0) {
+        printf("Gagal menghapus file asli.\n");
+        return; //gagal
+    }
+    if (rename("database/saldoUsersTemp.txt", "database/saldoUsers.txt") != 0) {
+        printf("Gagal mengganti nama file sementara.\n");
+        return; //gagal
+    }
+    
     rewind(file);
     
     FILE *tempFile = fopen("database/temp.txt", "w"); // Buka file sementara untuk menulis
