@@ -252,6 +252,7 @@ void modifyUser(char *username, char *password) {
         if (strcmp(username, storedUsername) == 0) {
             fclose(file);
             printf("Username sudah digunakan.\n");
+            strcpy(username, storedUsername);
             return;
         }
     }

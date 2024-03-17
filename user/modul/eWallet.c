@@ -40,7 +40,7 @@ void dataSaldoNew(char *username){
 }
 
 int isSaldoCukup(char *username, float totHarga) {
-    FILE *file = fopen("database/saldoUsers.txt", "r");
+    FILE *file = fopen("database/saldoUsers.txt", "r+");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return 0; //gagal
