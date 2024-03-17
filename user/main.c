@@ -133,12 +133,12 @@ int main() {
                                 
                                 waitNext();
                                 
-                                backMenu = 1;
+                                //backMenu = 1;
                                 break;
                             default:
                                 printf("pilihan tidak valid");
                         }
-                    } while (backMenu == 0); 
+                    } while (menu2 != 5); 
                 } else {
                     printf("Login gagal. Periksa kembali username dan password.\n");
                 }
