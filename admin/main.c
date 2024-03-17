@@ -78,7 +78,7 @@ int main() {
                 printf("Password: ");
                 scanf(" %[^\n]", password); 
                 registerAdmin(username, password);
-                system("cls");
+                spaceToContinue();
                 break;
             case 3:
                 // Exit

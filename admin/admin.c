@@ -64,7 +64,7 @@ void decrypt(char *text) {
 }
 
 //file penyimpanan hotel
-char dbsPemesanan[] = "pemesananHotel.txt";
+char dbsPemesanan[] = "../user/database/pemesananHotel.txt";
 //menampilkan harga
 void disHarga(int harga) {
    if (harga < 1000) {
@@ -123,7 +123,7 @@ int transaksiHotel() {
 
 
 //file pulsa
-char dbsPembelian[] = "HistoryPulsa.txt";
+char dbsPembelian[] = "../user/database/HistoryPulsa.txt";
 //hitung transaksi pulsa
 int printDecryptedFile(char *username) {
 	int totalPembelian=0;
@@ -188,7 +188,7 @@ int printDecryptedFile(char *username) {
 void createCoupon(char *coupon, int discount) {
     // Membuat atau overwrite file database
     FILE *couponList;
-    couponList = fopen("List_coupon.txt", "a");
+    couponList = fopen(",,/user/database/List_coupon.txt", "a");
 
     // Menyimpan kupon yang dibuat ke database
     fprintf(couponList, "%s %d\n", coupon, discount);
@@ -228,7 +228,7 @@ void changeDiscount(char *coupon, int newDiscount) {
     int tempDiscount;
     int found = 0;
 
-    couponList = fopen("List_coupon.txt", "r");
+    couponList = fopen("../user/database/List_coupon.txt", "r");
     if (!couponList) {
         printf("File tidak ada.\n");
         return;
@@ -253,8 +253,8 @@ void changeDiscount(char *coupon, int newDiscount) {
     fclose(couponList);
     fclose(tempList);
 
-    remove("List_coupon.txt");
-    rename("temp_List_coupon.txt", "List_coupon.txt");
+    remove("../user/database/List_coupon.txt");
+    rename("temp_List_coupon.txt", "../user/database/List_coupon.txt");
 
     if (found) {
         printf("Diskon untuk kupon %s berhasil diubah menjadi %d\n", coupon, newDiscount);
@@ -265,7 +265,7 @@ void changeDiscount(char *coupon, int newDiscount) {
 
 int displayMenu() {
     int choice;
-    printf("KUPON\n");
+    printf("\nMENU\n");
     printf("1. Create coupon\n");
     printf("2. List coupon\n");
     printf("3. Change discount\n");
@@ -305,7 +305,7 @@ void coupon() {
     // Main menu
     do {
         choice = displayMenu();
-        clearScreen();
+        system("cls");
         switch (choice) {
             case 1:
                 // create coupon
@@ -321,15 +321,17 @@ void coupon() {
                 encrypt(coupon);
     
                 printf("\nKode kupon: %s\n", coupon);
-                spaceToContinue();
-                clearScreen();
+                printf("\nMasukkan nomor apapun untuk kembali ke menu: ");
+                scanf("%d", &choice);
+                system("cls");
                 break;
             
             case 2:
                 // List coupon
                 displayCouponList();
-                spaceToContinue();
-                clearScreen();
+                printf("\nMasukkan nomor apapun untuk kembali ke menu: ");
+                scanf("%d", &choice);
+                system("cls");
                 break;
             
             case 3:
@@ -339,12 +341,13 @@ void coupon() {
                 printf("Masukkan diskon baru: ");
                 scanf("%d", &discount);
                 changeDiscount(coupon, discount);
-                spaceToContinue();
-                clearScreen();
+                printf("\nMasukkan nomor apapun untuk kembali ke menu: ");
+                scanf("%d", &choice);
+                system("cls");
                 break;
             
             case 4:
-                clearScreen();
+                printf("\nEXIT\n");
                 break;
         	default:
         		printf("Pilihan tidak valid\n");
@@ -369,6 +372,7 @@ void registerAdmin(char *username, char *password) {
     while (fscanf(file, "%s %s\n", storedUsername, storedPassword) == 2) {
         if (strcmp(username, storedUsername) == 0) {
             fclose(file);
+            system("cls");
             printf("====================\n");
     		printf("= Registrasi Gagal =\n");
     		printf("====================\n");
@@ -387,6 +391,7 @@ void registerAdmin(char *username, char *password) {
  
         fprintf(file, "%s %s \n", username, password);
 	    fclose(file);
+	    system("cls");
     
 	    printf("=======================\n");
     	printf("= Registrasi berhasil =\n");

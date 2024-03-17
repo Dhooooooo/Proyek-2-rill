@@ -7,8 +7,6 @@ int loginAdmin(char *username, char *password);
 int menuAdmin();
 int transaksiHotel();
 int transaksiPulsa(int pulsa, char *username);
-void totalHotel();
-void totalPulsa();
 void createCoupon(char *coupon, int discount);
 void displayCouponList();
 void changeDiscount(char *coupon, int newDiscount);
