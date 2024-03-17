@@ -188,7 +188,7 @@ int printDecryptedFile(char *username) {
 void createCoupon(char *coupon, int discount) {
     // Membuat atau overwrite file database
     FILE *couponList;
-    couponList = fopen(",,/user/database/List_coupon.txt", "a");
+    couponList = fopen("../user/database/List_coupon.txt", "a");
 
     // Menyimpan kupon yang dibuat ke database
     fprintf(couponList, "%s %d\n", coupon, discount);
@@ -199,7 +199,7 @@ void createCoupon(char *coupon, int discount) {
 void displayCouponList() {
     // Melakukan read file database
     FILE *couponList;
-    couponList = fopen("List_coupon.txt", "r");
+    couponList = fopen("../user/database/List_coupon.txt", "r");
     if (!couponList) {
         printf("File tidak ada.\n");
         return;
@@ -234,13 +234,14 @@ void changeDiscount(char *coupon, int newDiscount) {
         return;
     }
 
-    tempList = fopen("temp_List_coupon.txt", "w");
+    tempList = fopen("../user/database/temp_List_coupon.txt", "w");
     if (!tempList) {
         printf("File tidak ada.\n");
         fclose(couponList);
         return;
     }
-
+	
+	
     while (fscanf(couponList, "%s %d", tempCoupon, &tempDiscount) != EOF) {
         if (strcmp(coupon, tempCoupon) == 0) {
             fprintf(tempList, "%s %d\n", tempCoupon, newDiscount);
@@ -254,7 +255,7 @@ void changeDiscount(char *coupon, int newDiscount) {
     fclose(tempList);
 
     remove("../user/database/List_coupon.txt");
-    rename("temp_List_coupon.txt", "../user/database/List_coupon.txt");
+    rename("../user/database/temp_List_coupon.txt", "../user/database/List_coupon.txt");
 
     if (found) {
         printf("Diskon untuk kupon %s berhasil diubah menjadi %d\n", coupon, newDiscount);
@@ -321,17 +322,15 @@ void coupon() {
                 encrypt(coupon);
     
                 printf("\nKode kupon: %s\n", coupon);
-                printf("\nMasukkan nomor apapun untuk kembali ke menu: ");
-                scanf("%d", &choice);
-                system("cls");
+                spaceToContinue();
+                clearScreen();
                 break;
             
             case 2:
                 // List coupon
                 displayCouponList();
-                printf("\nMasukkan nomor apapun untuk kembali ke menu: ");
-                scanf("%d", &choice);
-                system("cls");
+                spaceToContinue();
+                clearScreen();
                 break;
             
             case 3:
@@ -341,13 +340,12 @@ void coupon() {
                 printf("Masukkan diskon baru: ");
                 scanf("%d", &discount);
                 changeDiscount(coupon, discount);
-                printf("\nMasukkan nomor apapun untuk kembali ke menu: ");
-                scanf("%d", &choice);
-                system("cls");
+                spaceToContinue();
+                clearScreen();
                 break;
             
             case 4:
-                printf("\nEXIT\n");
+            	clearScreen();
                 break;
         	default:
         		printf("Pilihan tidak valid\n");
