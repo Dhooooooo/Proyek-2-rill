@@ -6,21 +6,6 @@
 
 char dbsPembelian[] = "database/HistoryPulsa.txt";
 
-// Function to create a transaction
-//Transaction createTransaction(int orderNumber, const char* username, const char* topupType, const char* note, float originalPrice, float discount, float adminFee, float total, const char* status) {
-//    Transaction transaction;
-//    transaction.orderNumber = orderNumber;
-//    strcpy(transaction.username, username);
-//    strcpy(transaction.topupType, topupType);
-//    strcpy(transaction.note, note);
-//    transaction.originalPrice = originalPrice;
-//    transaction.discount = discount;
-//    transaction.adminFee = adminFee;
-//    transaction.total = total;
-//    strcpy(transaction.status, status);
-//    return transaction;
-//}
-
 // Function to print a transaction
 void printTransaction(const Transaction* transaction) {
     printf("Order Number: %d\n", transaction->orderNumber);
@@ -53,7 +38,7 @@ char* findProvider(char* phoneNumber, Provider providers[], int numProviders) {
 void addTransactionToFile(Transaction transaction) {
     FILE *file = fopen(dbsPembelian, "a");
    if (file == NULL) {
-        printf("Gagal membuka file admin.txt untuk penulisan.\n");
+        printf("Gagal membuka file database untuk penulisan.\n");
         return;
     }
 
@@ -74,7 +59,7 @@ void addTransactionToFile(Transaction transaction) {
 int getLastOrderNumber() {
     FILE *file = fopen(dbsPembelian, "rb");
     if (file == NULL) {
-        printf("Gagal membuka file admin.txt.\n");
+        printf("Gagal membuka file database.\n");
         return 0; // Jika file tidak ditemukan, mengembalikan nomor 0
     }
 
@@ -94,7 +79,7 @@ int getLastOrderNumber() {
 void printDecryptedFile(char *username) {
     FILE *file = fopen(dbsPembelian, "r");
     if (file == NULL) {
-        printf("Gagal membuka file %s.\n", dbsPembelian);
+        printf("Gagal membuka file database.\n", dbsPembelian);
         return;
     }
 	
@@ -116,8 +101,7 @@ void printDecryptedFile(char *username) {
     	char *adminFee = strtok(NULL, ",");
     	char *total = strtok(NULL, ",");
     	char *status = strtok(NULL, ",");
-//		char *space = " ";
-		
+				
 		if(!strcmp(username, namaCust)){
 			printf("| %-3s | %-12s | %-11s | %-25s |",
 			orderNumber, username, topupType, note);
@@ -174,20 +158,32 @@ void pembelianPulsa(char *username) {
     char phoneNumber[MAX_LENGTH];
     printf("Masukkan nomor telepon: ");
     scanf("%s", phoneNumber);
+	
+	while (strlen(phoneNumber) < 10 || strlen(phoneNumber) > 13) {
+		printf("NOMOR TIDAK VALID. (Nomor telepon harus memiliki minimal 10 angka dan maksimal 13 angka)\n");
+		printf("\nMasukkan nomor telepon :");
+		scanf("%s", phoneNumber);
+		
+		if(strlen(phoneNumber) < 10 || strlen(phoneNumber) > 13){
+			break;
+		}
+	}
 
     // Mencari provider berdasarkan kode area nomor telepon
 	char*providerName = findProvider(phoneNumber, providers, numProviders);
 	
-	while (!strcmp(providerName, "Unknown")){ // selama masih unknown maka masih ngeloop
-		printf("NOMOR SALAH\n");
-		printf("Masukkan nomor telepon :");
+	while (!strcmp(providerName, "Unknown")) {
+		printf("NOMOR TIDAK VALID. (Provider tidak ditemukan)\n");
+		printf("\nMasukkan nomor telepon :");
 		scanf("%s", phoneNumber);
 		
-    	char*providerName = findProvider(phoneNumber, providers, numProviders);
+		providerName = findProvider(phoneNumber, providers, numProviders);
 		if(strcmp(providerName, "Unknown")){
 			break;
 		}
 	}
+	
+	printf("Provider : %s\n", providerName);
 	
     // Membuat transaksi dengan nilai default
     Transaction transaction;
