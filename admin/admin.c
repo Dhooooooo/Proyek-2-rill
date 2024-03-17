@@ -265,7 +265,7 @@ void changeDiscount(char *coupon, int newDiscount) {
 
 int displayMenu() {
     int choice;
-    printf("\nMENU\n");
+    printf("KUPON\n");
     printf("1. Create coupon\n");
     printf("2. List coupon\n");
     printf("3. Change discount\n");
@@ -305,7 +305,7 @@ void coupon() {
     // Main menu
     do {
         choice = displayMenu();
-        system("cls");
+        clearScreen();
         switch (choice) {
             case 1:
                 // create coupon
@@ -321,17 +321,15 @@ void coupon() {
                 encrypt(coupon);
     
                 printf("\nKode kupon: %s\n", coupon);
-                printf("\nMasukkan nomor apapun untuk kembali ke menu: ");
-                scanf("%d", &choice);
-                system("cls");
+                spaceToContinue();
+                clearScreen();
                 break;
             
             case 2:
                 // List coupon
                 displayCouponList();
-                printf("\nMasukkan nomor apapun untuk kembali ke menu: ");
-                scanf("%d", &choice);
-                system("cls");
+                spaceToContinue();
+                clearScreen();
                 break;
             
             case 3:
@@ -341,13 +339,12 @@ void coupon() {
                 printf("Masukkan diskon baru: ");
                 scanf("%d", &discount);
                 changeDiscount(coupon, discount);
-                printf("\nMasukkan nomor apapun untuk kembali ke menu: ");
-                scanf("%d", &choice);
-                system("cls");
+                spaceToContinue();
+                clearScreen();
                 break;
             
             case 4:
-                printf("\nEXIT\n");
+                clearScreen();
                 break;
         	default:
         		printf("Pilihan tidak valid\n");
