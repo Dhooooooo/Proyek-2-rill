@@ -36,7 +36,7 @@ void registerUser(char *username, char *password, char *pin) {
     }
     rewind(file);
     while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
-        if (strcmp(password, password) == 0) {
+        if (strcmp(password, storedPassword) == 0) {
             fclose(file);
             printf("====================\n");
     		printf("= Registrasi Gagal =\n");
