@@ -64,7 +64,7 @@ void decrypt(char *text) {
 }
 
 //file penyimpanan hotel
-char dbsPemesanan[] = "database/pemesananHotel.txt";
+char dbsPemesanan[] = "pemesananHotel.txt";
 //menampilkan harga
 void disHarga(int harga) {
    if (harga < 1000) {
@@ -75,53 +75,58 @@ void disHarga(int harga) {
    printf(".%03d", harga % 1000);
 }
 //hitung transaksi hotel
-int transaksiHotel(int hotel){
-	int i, totalHotel;
-    char line[100];
-    
+int transaksiHotel() {
+    int totalHotel = 0; // Inisialisasi total pemasukan hotel
+
     FILE *files = fopen(dbsPemesanan, "r");
     if (files == NULL) {
         printf("Gagal membuka file.\n");
+        return 0; // Kembalikan 0 jika gagal membuka file
     }
-    printf("\n\n<admin>\n");
-	printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
+
+    printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
     printf("| %-3s | %-10s | %-12s | %-12s | %-4s | %-21s | %-4s | %-21s | %-6s | %-10s |\n", "No", " Username", "  CheckIn", "  CheckOut", "Hari", "        Harga","Kupon", "        Total", "NoKamar", "status");
     printf("|-----+------------+--------------+--------------+------+-----------------------+-------+-----------------------+---------+------------|\n");
 
+    char line[100];
     while (fgets(line, sizeof(line), files)) {
-    	char *dekripPemesanan = dekripsi(line);
-    	
-    	char *noOrder = strtok(dekripPemesanan, ",");
-    	char *namaCust = strtok(NULL, ",");
-    	char *CI = strtok(NULL, ",");
-    	char *CO = strtok(NULL, ",");
-    	char *hari = strtok(NULL, ",");
-    	char *harga = strtok(NULL, ",");
-    	char *ptgan = strtok(NULL, ",");
-    	char *total = strtok(NULL, ",");
-    	char *no = strtok(NULL, ",");
-    	char *status = strtok(NULL, ",");
-    	
-    	totalHotel += atoi(total);
-    	hotel=totalHotel;
-    	printf("| %-3s | %-10s | %-12s | %-12s | %-4s |",noOrder,namaCust, CI, CO, hari);printf("     Rp. ");disHarga(atoi(harga));printf("\t| %-4s%% |", ptgan);printf("     Rp. ");disHarga(atoi(total));printf("\t| %-7s | %-10s |\n", no, status);
+        char *dekripPemesanan = dekripsi(line);
+        char *noOrder = strtok(dekripPemesanan, ",");
+        char *namaCust = strtok(NULL, ",");
+        char *CI = strtok(NULL, ",");
+        char *CO = strtok(NULL, ",");
+        char *hari = strtok(NULL, ",");
+        char *harga = strtok(NULL, ",");
+        char *ptgan = strtok(NULL, ",");
+        char *total = strtok(NULL, ",");
+        char *no = strtok(NULL, ",");
+        char *status = strtok(NULL, ",");
+        
+        if (strcmp(status, "BERHASIL") == 0){
+        // Hitung total hotel dan tambahkan ke totalHotel
+        totalHotel += atoi(total);
+		} 
+
+
+        printf("| %-3s | %-10s | %-12s | %-12s | %-4s |", noOrder, namaCust, CI, CO, hari); printf("     Rp. "); disHarga(atoi(harga)); printf("\t| %-4s%% |", ptgan); printf("     Rp. "); disHarga(atoi(total)); printf("\t| %-7s | %-10s |\n", no, status);
     }
     printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
-	fclose(files);
-	printf("Total pemasukan hotel: \n");
-	printf("%d", &hotel);
-	hotel=totalHotel;
-	
-	return hotel;
+    fclose(files);
+    printf("Total transaksi hotel berhasil: Rp. "); // Cetak total pemasukan hotel
+    disHarga(totalHotel);
+    printf("\n");
+
+    return totalHotel; // Kembalikan total pemasukan hotel
 }
+
 	
 
 
 //file pulsa
-char dbsPembelian[] = "database/HistoryPulsa.txt";
+char dbsPembelian[] = "HistoryPulsa.txt";
 //hitung transaksi pulsa
-int transaksiPulsa(int pulsa, char *username){
-	int totalPulsa;
+int printDecryptedFile(char *username) {
+	int totalPembelian=0;
     FILE *file = fopen(dbsPembelian, "r");
     if (file == NULL) {
         printf("Gagal membuka file %s.\n", dbsPembelian);
@@ -148,36 +153,37 @@ int transaksiPulsa(int pulsa, char *username){
     	char *status = strtok(NULL, ",");
 //		char *space = " ";
 		
-		printf("| %-3s | %-12s | %-11s | %-25s |",
-		orderNumber, username, topupType, note);
-		printf(" Rp.");
-		disHarga(atoi(originalPrice));
-		printf("\t| %-4s%% |", discount);
-		printf(" Rp. ");
-		disHarga(atoi(adminFee)); 
-		printf(" |");
-		printf(" Rp.");
-		disHarga(atoi(total));
-		printf("  \t| %-12s |\n", status);
-		totalPulsa += atoi(total);
-		pulsa=totalPulsa;
-		    
+		if (strcmp(status, "BERHASIL") == 0){
+			totalPembelian += atoi(total);
+		}
+		
+		
+			
+			printf("| %-3s | %-12s | %-11s | %-25s |",
+			orderNumber, username, topupType, note);
+			printf(" Rp.");
+			disHarga(atoi(originalPrice));
+			printf("\t| %-4s%% |", discount);
+			printf(" Rp. ");
+			disHarga(atoi(adminFee)); 
+			printf(" |");
+			printf(" Rp.");
+			disHarga(atoi(total));
+			printf("  \t| %-12s |\n", status);
+			
+		
+	    
 	}
 		
 	printf("+-------------------------------------------------------------------------------------------------------------------------------------+\n");	
-	printf("Total transaksi pulsa: \n");
-	printf("%d", &pulsa);
+	printf("Total trasnsaksi pulsa berhasil: Rp. ", username);
+    disHarga(totalPembelian); // Print the totalPembelian in proper format
+    printf("\n");
     fclose(file);
-}
+    
+    return totalPembelian;
+};
 
-
-void totalpemasukan(int hotel, int pulsa){
-	int totPemasukan;
-	totPemasukan= hotel + pulsa;
-	printf("Total pemasukan: \n");
-	printf("%d", &totPemasukan);
-	
-}
 //fitur kupon
 void createCoupon(char *coupon, int discount) {
     // Membuat atau overwrite file database
@@ -271,6 +277,26 @@ int displayMenu() {
     return choice;
 }
 
+void waitNext() {
+	printf("\nHarap tunggu");
+	int i;
+    for(i = 0; i < 3; i++){
+    	printf(".");
+    	sleep(1);
+	}
+};
+
+void clearScreen(){
+	system("cls");
+}
+
+void spaceToContinue(){
+	printf("\n\nTekan spasi untuk melanjutkan");
+    while(getch() != ' '); // menunggu user menekan spasi untuk melanjutkan
+    system("cls");
+};
+
+
 void coupon() {
     char coupon[MAX_COUPON_LENGTH];
     int discount;
@@ -333,7 +359,7 @@ void coupon() {
 void registerAdmin(char *username, char *password) {
     // Melakukan enkripsi pada password sebelum disimpan
     
-    FILE *file = fopen("databaseadmin.txt", "r"); // Buka file untuk membaca
+    FILE *file = fopen("admin.txt", "r"); // Buka file untuk membaca
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
@@ -355,7 +381,7 @@ void registerAdmin(char *username, char *password) {
     }
     	fclose(file);
     	
-    	 file = fopen("database/admin.txt", "a");
+    	 file = fopen("admin.txt", "a");
     	if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
@@ -372,7 +398,7 @@ void registerAdmin(char *username, char *password) {
 
 //login admin
 int loginAdmin(char *username, char *password) {
-    FILE *file = fopen("database/admin.txt", "r");
+    FILE *file = fopen("admin.txt", "r");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return 0;
@@ -388,6 +414,7 @@ int loginAdmin(char *username, char *password) {
         
         if (strcmp(username, storedUsername) == 0 && strcmp(password, storedPassword) == 0) {
             fclose(file);
+            system("cls");
             printf("==================\n");
             printf("= Login berhasil =\n");
             printf("==================\n");
@@ -402,17 +429,12 @@ int loginAdmin(char *username, char *password) {
     return 0; // Login gagal
 }
 
-void pemasukan(){
-	FILE *pemesanan=fopen("database/pemesanan.txt", "r");
-	if (pemesanan == NULL){
-		printf("Gagal membuka file");
-	}
-}
 
 //menu utama
 int mainMenu(){
 	int pilihan;
-	printf("\tMenu\n");
+	system("cls");
+	printf("\n\tMenu\n");
 	printf("1. Login\n");
 	printf("2. Register\n");
 	printf("3. Exit\n");
@@ -430,6 +452,7 @@ int menuAdmin(){
 	printf("3. Buat atau ubah kupon\n");
 	printf("4. Pemasukan\n");
 	printf("5. exit\n");
+	printf("Pilih menu: \n");
 	scanf("%d", &pil);
 	return pil;
 }

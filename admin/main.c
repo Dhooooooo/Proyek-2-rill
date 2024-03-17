@@ -8,7 +8,7 @@
 #define ENCRYPTION_KEY 5
 
 int main() {
-    int pilihan;
+    int pilihan, hotel, pulsa, totalHotel, totalPembelian=0, totalPemasukan=10;
     char username[MAX_USERNAME_LENGTH];
     char password[MAX_PASSWORD_LENGTH];
 
@@ -25,32 +25,39 @@ int main() {
                 printf("Password:");
                 scanf(" %[^\n]", password);
                 if (loginAdmin(username, password)) {
-                    printf("Login berhasil.\n");
+                    waitNext();
+                    system("cls");
                     int pil;
                     do{
                     	pil=menuAdmin();
-                    	system("cls");
                     	switch (pil){
                     		case 1:
+                    			clearScreen();
                     			printf("Riwayat hotel: \n");
+                    			transaksiHotel();
+                    			spaceToContinue();
                     			break;
                     		case 2:
+                    			clearScreen();
                     			printf("Riwayat pembelian pulsa: \n");
+                    			printDecryptedFile(username);
+                    			spaceToContinue();
                     			break;
                     		case 3:
-                    			printf("Buat atau rubah kupon\n");
+                    			clearScreen();
                     			coupon();
                     			break;
                     		case 4:
-                    			printf("Informasi pemasukan: \n");
-                    			int totalPemasukan;
-                    			void totalHotel();
-                    			void totalPulsa();
-                    			int totHotel;
-                    			int totPulsa;
-                    			totalPemasukan=totHotel + totPulsa;
-                    			printf("Total pemasukan:");
-                    			printf("%s", totalPemasukan);
+                    			clearScreen();
+                    			printf("Informasi transaksi: \n");
+                    			printf("Transaksi hotel: \n");
+                    			totalHotel=transaksiHotel();
+                    			printf("Transaksi pulsa: \n");
+                    			totalPembelian=printDecryptedFile(username);
+                    			totalPemasukan= totalHotel + totalPembelian;
+                    			printf("\nTotal transaksi pulsa dan hotel berhasil: Rp. ");
+                    			disHarga(totalPemasukan);
+                    			spaceToContinue();
                     			break;
                     		case 5:
                     			printf("Terima kasih!\n");
