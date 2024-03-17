@@ -10,7 +10,7 @@ void decrypt(char *text);
 //Akun Register Login
 void registerUser(char *username, char *password, char *pin);
 int loginUser(char *username, char *password, char *pin);
-void modifyPass(char *username, char *newPassword);
+void modifyPass(char *username, char *password);
 void modifyPin(char *username, char *newPin);
 void modifyUser(char *username, char *password);
 void showInfo(char *username);
