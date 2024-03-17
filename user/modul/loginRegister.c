@@ -234,7 +234,7 @@ void modifyPin(char *username, char *newPin) {
 
 void modifyUser(char *username, char *password) {
     // Melakukan enkripsi pada password baru sebelum disimpan
-    encrypt(password);
+    //encrypt(password);
     char tempUser[MAX_USERNAME_LENGTH];
     
     FILE *file = fopen("database/users.txt", "r+"); // Buka file untuk membaca
@@ -261,6 +261,8 @@ void modifyUser(char *username, char *password) {
     // Memeriksa apakah password yang diberikan valid
     int validPassword = 0;
     while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
+    	printf("%s\n", password);
+    	printf("%s\n", storedPassword);
         if (strcmp(password, storedPassword) == 0) {
             validPassword = 1;
             strcpy(tempUser, storedUsername);
