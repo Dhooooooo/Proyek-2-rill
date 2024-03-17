@@ -158,3 +158,65 @@ void modifyPass(char *username, char *newPassword) {
     printf("Password berhasil diubah\n");
 }
 
+void modifyPin(char *username, char *newPin) {
+    // Melakukan enkripsi pada password baru sebelum disimpan
+    int pinLength = strlen(newPin);
+    if (pinLength != MAX_PIN) {
+        printf("Panjang PIN harus 6 angka.\n");
+        spaceToContinue();
+        return; // PIN tidak valid
+    }
+    int i;
+    for (i = 0; i < pinLength; i++) {
+        if (newPin[i] < '0' || newPin[i] > '9') {
+            printf("PIN hanya boleh terdiri dari angka.\n");
+            spaceToContinue();
+            return; // PIN tidak valid
+        }
+    }
+    
+    encrypt(newPin);
+    
+    FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
+    if (file == NULL) {
+        printf("Gagal membuka file.\n");
+        return;
+    }
+    
+    FILE *tempFile = fopen("database/temp.txt", "w"); // Buka file sementara untuk menulis
+    if (tempFile == NULL) {
+        fclose(file);
+        printf("Gagal membuka file sementara.\n");
+        return;
+    }
+    
+    char storedUsername[MAX_USERNAME_LENGTH];
+    char storedPassword[MAX_PASSWORD_LENGTH];
+    char storedPin[MAX_PIN];
+    
+    // Membaca file dan menyalin informasi pengguna ke file sementara
+    while (fscanf(file, "%s %s %s", storedUsername, storedPassword, storedPin) == 3) {
+        if (strcmp(username, storedUsername) == 0) {
+            fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, newPin); // Menulis informasi pengguna yang dimodifikasi
+        } else {
+            fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, storedPin); // Menyalin informasi pengguna lain tanpa modifikasi
+        }
+    }
+    
+    fclose(file);
+    fclose(tempFile);
+    
+    // Menghapus file asli dan mengganti dengan file sementara
+    if (remove("database/users.txt") != 0) {
+        printf("Gagal menghapus file asli.\n");
+        return;
+    }
+    if (rename("database/temp.txt", "database/users.txt") != 0) {
+        printf("Gagal mengganti nama file sementara.\n");
+        return;
+    }
+    
+    printf("Password berhasil diubah\n");
+}
+
+

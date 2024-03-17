@@ -103,6 +103,9 @@ int main() {
                                				spaceToContinue();
                                				break;
                         				case 3:
+                        					inputEditPin(username, pin);
+                               				modifyPin(username, pin);
+                               				spaceToContinue();
                         					break;
                        					case 4:
                        						clearScreen();

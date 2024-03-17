@@ -11,6 +11,7 @@ void decrypt(char *text);
 void registerUser(char *username, char *password, char *pin);
 int loginUser(char *username, char *password, char *pin);
 void modifyPass(char *username, char *newPassword);
+void modifyPin(char *username, char *newPin);
 
 void showInfo(char *username);
 

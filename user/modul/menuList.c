@@ -30,10 +30,13 @@ void inputAkun(char *username, char *password, char *pin){
 }
 
 void inputEdit(char *username, char *password){
- 	printf("Username: ");
-  	scanf("%s", username);
    	printf("New Password: ");
     scanf(" %s", password);
+}
+
+void inputEditPin(char *username, char *newPin){
+   	printf("New Pin: ");
+    scanf(" %s", newPin);
 }
 
 int displayMenu() {
