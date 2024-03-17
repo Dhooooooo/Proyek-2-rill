@@ -128,7 +128,7 @@ void modifyPass(char *username, char *password) {
     // Melakukan enkripsi pada password baru sebelum disimpan
     encrypt(password);
     
-    FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
+    FILE *file = fopen("database/users.txt", "r+"); // Buka file untuk membaca
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
@@ -247,28 +247,45 @@ void modifyUser(char *username, char *password) {
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
     
-    // Membaca file dan memeriksa apakah username sudah ada
+    // Membaca file dan memeriksa apakah username baru sudah ada
     while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
         if (strcmp(username, storedUsername) == 0) {
             fclose(file);
             printf("Username sudah digunakan.\n");
-            strcpy(username, storedUsername);
             return;
-        } if (strcmp(password, storedPassword) == 0){
-        	strcpy(tempUser, storedUsername);
-		}
+        }
     }
     
+    rewind(file);
+    
+    // Memeriksa apakah password yang diberikan valid
+    int validPassword = 0;
+    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
+        if (strcmp(password, storedPassword) == 0) {
+            validPassword = 1;
+            strcpy(tempUser, storedUsername);
+            break;
+        }
+    }
+    if (!validPassword) {
+        fclose(file);
+        printf("Password salah.\n");
+        return;
+    }
+    
+    // Mengupdate file saldoUsers.txt
     FILE *files = fopen("database/saldoUsers.txt", "r");
-    if (file == NULL) {
+    if (files == NULL) {
+        fclose(file);
         printf("Gagal membuka file.\n");
         return; //gagal
     }
     
     FILE *tempFiles = fopen("database/saldoUsersTemp.txt", "w");
     if (tempFiles == NULL) {
-        printf("Gagal membuka file.\n");
+        fclose(files);
         fclose(file);
+        printf("Gagal membuka file.\n");
         return; //gagal
     }
     float saldo;
@@ -303,7 +320,7 @@ void modifyUser(char *username, char *password) {
     
     // Membaca file dan menyalin informasi pengguna ke file sementara
     while (fscanf(file, "%s %s %s", storedUsername, storedPassword, storedPin) == 3) {
-        if (strcmp(password, storedPassword) == 0) {
+        if (strcmp(tempUser, storedUsername) == 0) {
             fprintf(tempFile, "%s %s %s\n", username, storedPassword, storedPin); // Menulis informasi pengguna yang dimodifikasi
         } else {
             fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, storedPin); // Menyalin informasi pengguna lain tanpa modifikasi
@@ -325,5 +342,3 @@ void modifyUser(char *username, char *password) {
     
     printf("Username berhasil diubah\n");
 }
-
-
