@@ -253,13 +253,16 @@ void pembelianPulsa(char *username) {
 	printf("\nPotongan\t\t : %d%%", transaction.discount);
 	printf("\nTotal Harga\t\t : Rp. ");disHarga(intTotal);printf("\n\n");
 
+	bool saldoCukup;
     if(confirmPay(username)){
 	
-    if(isSaldoCukup(username, transaction.total)){ // cek apakah saldo cukup
-    	strcpy(transaction.status, "BERHASIL");
-	} else {
-		strcpy(transaction.status, "GAGAL");
-	}
+	    if(isSaldoCukup(username, transaction.total)){ // cek apakah saldo cukup
+	    	strcpy(transaction.status, "BERHASIL");
+	    	saldoCukup = true;
+		} else {
+			saldoCukup = false;
+			strcpy(transaction.status, "GAGAL");
+		}
 	
 	} else { 
 		strcpy(transaction.status, "GAGAL");
@@ -288,4 +291,7 @@ void pembelianPulsa(char *username) {
 	printf("\nPotongan\t\t : %d%%", transaction.discount);
 	printf("\nTotal Harga\t\t : Rp. ");disHarga(intTotal);
 	printf("\nStatus\t\t\t : %s", transaction.status);
+	if (!saldoCukup){
+		printf(". Saldo tidak cukup. Harap isi saldo terlebih dahulu");
+	}
 }

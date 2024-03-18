@@ -18,3 +18,4 @@ panglimaedan 2000000.00
 mail 11000000.00
 prm 5000000.00
 susantay 0.00
+angel 0.00
