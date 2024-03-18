@@ -263,8 +263,8 @@ void modifyUser(char *username, char *password) {
     // Memeriksa apakah password yang diberikan valid
     int validPassword = 0;
     while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
-    	printf("%s\n", password);
-    	printf("%s\n", storedPassword);
+    	//printf("%s\n", password);
+    	//printf("%s\n", storedPassword);
         if (strcmp(password, storedPassword) == 0) {
             validPassword = 1;
             strcpy(tempUser, storedUsername);
