@@ -55,7 +55,7 @@ void addTransactionToFile(Transaction transaction) {
 }
 
 
-// Fungsi untuk mendapatkan nomor antrian terbaru dari file admin.txt
+// Fungsi untuk mendapatkan nomor antrian terbaru dari file HistoryPulsa.txt
 int getLastOrderNumber() {
     FILE *file = fopen(dbsPembelian, "rb");
     if (file == NULL) {
@@ -214,14 +214,14 @@ void pembelianPulsa(char *username) {
 	}
     clearScreen();
     
-    // Mengatur biaya admin ke nilai konstan
+    	// Mengatur biaya admin ke nilai konstan
 	transaction.adminFee = ADMIN_FEE;
     
   	float originalPrice = transaction.originalPrice;
 	float total = transaction.total;
 	float adminFee = transaction.adminFee;
 	
-	// Mengkonversi harga asli, biaya admin, dan total ke tipe data integer
+	// Mengkonversi harga asli dan biaya admin ke tipe data integer
 	int intOriginalPrice = (int)originalPrice;
 	int intAdminFee = (int)adminFee;
 	
@@ -257,7 +257,6 @@ void pembelianPulsa(char *username) {
 	
     if(isSaldoCukup(username, transaction.total)){ // cek apakah saldo cukup
     	strcpy(transaction.status, "BERHASIL");
-    	//noKamar = kamar();
 	} else {
 		strcpy(transaction.status, "GAGAL");
 	}
@@ -266,7 +265,7 @@ void pembelianPulsa(char *username) {
 		strcpy(transaction.status, "GAGAL");
 	}
 	
-    // Menambahkan transaksi ke file admin.txt
+    // Menambahkan transaksi ke file HistoryPulsa.txt
     addTransactionToFile(transaction);
    			
     system("cls");
