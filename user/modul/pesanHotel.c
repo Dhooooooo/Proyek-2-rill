@@ -604,14 +604,30 @@ void pemesananHotel(char username[]){
     int totHarga = (int) hasil; // mengubah bentuk double ke int
     char stats[8];
     
+    system("cls");
+	printf(" /$$   /$$  /$$$$$$  /$$$$$$$$ /$$$$$$$$ /$$                /$$$$$ /$$$$$$$$ /$$$$$$$$ /$$$$$$$$ /$$   /$$  /$$$$$$ \n");
+	printf("| $$  | $$ /$$__  $$|__  $$__/| $$_____/| $$               |__  $$| $$_____/|__  $$__/| $$_____/| $$  /$$/ /$$__  $$\n");
+	printf("| $$  | $$| $$  \\ $$   | $$   | $$      | $$                  | $$| $$         | $$   | $$      | $$ /$$/ | $$  \\ $$\n");
+	printf("| $$$$$$$$| $$  | $$   | $$   | $$$$$   | $$                  | $$| $$$$$      | $$   | $$$$$   | $$$$$/  | $$$$$$$$\n");
+	printf("| $$__  $$| $$  | $$   | $$   | $$__/   | $$             /$$  | $$| $$__/      | $$   | $$__/   | $$  $$  | $$__  $$\n");
+	printf("| $$  | $$| $$  | $$   | $$   | $$      | $$            | $$  | $$| $$         | $$   | $$      | $$\\  $$ | $$  | $$\n");
+	printf("| $$  | $$|  $$$$$$/   | $$   | $$$$$$$$| $$$$$$$$      |  $$$$$$/| $$$$$$$$   | $$   | $$$$$$$$| $$ \\  $$| $$  | $$\n");
+	printf("|__/  |__/ \\______/    |__/   |________/|________/       \\______/ |________/   |__/   |________/|__/  \\__/|__/  |__/\n");
+	printf("----------------------------------------------------------------------------------------------------------------------\n\n");
+    
+    printf("Berikut rincian pesanan anda\n\n");
+	printf("Tanggal CheckIn\t : %s\nTanggal CheckOut : %s\nTotal menginap\t : %d hari\nNo kamar\t : -\n", tanggalCheckIn, tanggalCheckOut, totalHariMenginap);
+	printf("Harga\t\t : Rp. ");disHarga(hargaMenginap);
+	printf("\nPotongan\t : %d%%", potongan);
+	printf("\nTotal Harga\t : Rp. ");disHarga(totHarga);printf("\n\n");
     if(confirmPay(username)){
-	
-    if(isSaldoCukup(username, totHarga)){ // cek apakah saldo cukup
-    	strcpy(stats, "BERHASIL");
-    	noKamar = kamar();
-	} else {
-		strcpy(stats, "GAGAL");
-	}
+	    if(isSaldoCukup(username, hasil)){ // cek apakah saldo cukup
+	    
+	    	strcpy(stats, "BERHASIL");
+	    	noKamar = kamar();
+		} else {
+			strcpy(stats, "GAGAL");
+		}
 	
 	} else { 
 		strcpy(stats, "GAGAL");

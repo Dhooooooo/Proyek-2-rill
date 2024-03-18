@@ -103,6 +103,7 @@ int isSaldoCukup(char *username, float totHarga) {
 }
 
 void topUpSaldo(char *username, float amount) {
+
 	printf("Masukkan jumlah saldo : ");
     scanf("%f", &amount);
     FILE *file = fopen("database/saldoUsers.txt", "r+");
@@ -121,8 +122,11 @@ void topUpSaldo(char *username, float amount) {
     char storedUsername[MAX_USERNAME_LENGTH];
     float saldo;
     int userFound = 0;
+    int intAmount = (int)amount;
 	
 	clearScreen();
+	title();
+	printf("Anda akan menambah saldo Rp. ");disHarga(intAmount);printf("\n\n");
 	if(confirmPay(username)){
     while (fscanf(file, "%s %f", storedUsername, &saldo) == 2) {
         if (strcmp(storedUsername, username) == 0) {
@@ -159,7 +163,6 @@ void topUpSaldo(char *username, float amount) {
 }
 
 int confirmPay(char *username) {
-	title();
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];

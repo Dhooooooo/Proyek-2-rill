@@ -124,6 +124,10 @@ void printDecryptedFile(char *username) {
 }
 
 void pembelianPulsa(char *username) {
+	
+    // Membuat transaksi dengan nilai default
+    Transaction transaction;
+    
 	system("cls");
 	
     printf(" /$$$$$$$  /$$   /$$ /$$        /$$$$$$   /$$$$$$           /$$$$$ /$$$$$$$$ /$$$$$$$$ /$$$$$$  /$$$$$$   /$$$$$$ \n");
@@ -155,46 +159,48 @@ void pembelianPulsa(char *username) {
     fclose(pulsaFile);
 
     // Mendapatkan nomor telepon dari pengguna
+	bool notValid = false;
     char phoneNumber[MAX_LENGTH];
-    printf("Masukkan nomor telepon: ");
-    scanf("%s", phoneNumber);
-	
-	while (strlen(phoneNumber) < 10 || strlen(phoneNumber) > 13) {
-		printf("NOMOR TIDAK VALID. (Nomor telepon harus memiliki minimal 10 angka dan maksimal 13 angka)\n");
+    char*providerName;
+	do{
 		printf("\nMasukkan nomor telepon :");
 		scanf("%s", phoneNumber);
-		
-		if(strlen(phoneNumber) < 10 || strlen(phoneNumber) > 13){
-			break;
+    	providerName = findProvider(phoneNumber, providers, numProviders);
+    	int panjangNomor = strlen(phoneNumber);
+    	if (!strcmp(providerName, "Unknown") || panjangNomor < 10 || panjangNomor > 13){
+    		printf("NOMOR TIDAK VALID.\n");
+    		notValid = true;
 		}
-	}
-
-    // Mencari provider berdasarkan kode area nomor telepon
-	char*providerName = findProvider(phoneNumber, providers, numProviders);
-	
-	while (!strcmp(providerName, "Unknown")) {
-		printf("NOMOR TIDAK VALID. (Provider tidak ditemukan)\n");
-		printf("\nMasukkan nomor telepon :");
-		scanf("%s", phoneNumber);
-		
-		providerName = findProvider(phoneNumber, providers, numProviders);
-		if(strcmp(providerName, "Unknown")){
-			break;
+		else{
+			printf("provider %s\n", providerName);
+			notValid = false;
 		}
-	}
+	}while(notValid); // selama masih unknown maka masih ngeloop
 	
-	printf("Provider : %s\n", providerName);
-	
-    // Membuat transaksi dengan nilai default
-    Transaction transaction;
     transaction.orderNumber = orderNumber;
     strcpy(transaction.topupType, "pulsa");
 
     // Mengisi detail transaksi
     strcpy(transaction.username, username);
 	sprintf(transaction.note, "%s (%s)", phoneNumber, providerName);
-	printf("Masukkan jumlah yang diinginkan: ");
-    scanf("%f", &transaction.originalPrice);
+	float price;
+	
+	do{
+		printf("\nMasukkan jumlah yang diinginkan: ");scanf("%f", &price);
+		if(price < 0){
+			printf("Nominal tidak bisa minus!\n");
+			notValid = true;
+		}
+		else if(price > 1000000){
+			printf("Nominal tidak boleh lebih dari Rp. 1.000.000\n");
+			notValid = true;
+		}
+		else{
+			notValid = false;
+		}
+	}while(notValid);
+    transaction.originalPrice = price;
+    
     char coupon[MAX_COUPON_LENGTH]; // % untuk kupon
     int pilihan;
     int potongan;
@@ -227,6 +233,25 @@ void pembelianPulsa(char *username) {
 	
 	// Mengatur total biaya setelah diskon ke nilai yang dihitung
 	transaction.total = intTotal;
+	system("cls");
+    
+    printf(" /$$$$$$$  /$$   /$$ /$$        /$$$$$$   /$$$$$$           /$$$$$ /$$$$$$$$ /$$$$$$$$ /$$$$$$  /$$$$$$   /$$$$$$ \n");
+    printf("| $$__  $$| $$  | $$| $$       /$$__  $$ /$$__  $$         |__  $$| $$_____/|__  $$__/|_  $$_/ /$$__  $$ /$$__  $$\n");
+    printf("| $$  \\ $$| $$  | $$| $$      | $$  \\__/| $$  \\ $$            | $$| $$         | $$     | $$  | $$  \\__/| $$  \\__/\n");
+    printf("| $$$$$$$/| $$  | $$| $$      |  $$$$$$ | $$$$$$$$            | $$| $$$$$      | $$     | $$  | $$      |  $$$$$$ \n");
+    printf("| $$____/ | $$  | $$| $$       \\____  $$| $$__  $$       /$$  | $$| $$__/      | $$     | $$  | $$       \\____  $$\n");
+    printf("| $$      | $$  | $$| $$       /$$  \\ $$| $$  | $$      | $$  | $$| $$         | $$     | $$  | $$    $$ /$$  \\ $$\n");
+    printf("| $$      |  $$$$$$/| $$$$$$$$|  $$$$$$/| $$  | $$      |  $$$$$$/| $$$$$$$$   | $$    /$$$$$$|  $$$$$$/|  $$$$$$/\n");
+    printf("|__/       \\______/ |________/ \\______/ |__/  |__/       \\______/ |________/   |__/   |______/ \\______/  \\______/ \n");
+
+	printf("--------------------------------------------------------------------------------------------------------------------\n\n");
+    
+	printf("Berikut rincian pesanan anda\n\n");
+	printf("Nomor (Provider)\t : %s\n", transaction.note);
+	printf("Harga\t\t\t : Rp. ");disHarga(intOriginalPrice);
+	printf("\nBiaya Admin\t\t : ");disHarga(intAdminFee);
+	printf("\nPotongan\t\t : %d%%", transaction.discount);
+	printf("\nTotal Harga\t\t : Rp. ");disHarga(intTotal);printf("\n\n");
 
     if(confirmPay(username)){
 	
