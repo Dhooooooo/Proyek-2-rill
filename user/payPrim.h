@@ -120,10 +120,10 @@ void pembelianPulsa(char *username);
 
 #define MAX_COUPON_LENGTH 10
 
-// Fungsi untuk melakukan 
+// Fungsi untuk melakukan readCoupon
 int readCoupon(char *coupon, int discount);
 
-// Prosedur untuk memanggil fitur kupon
+// Fungsi untuk memanggil fitur kupon
 int kupon(char *coupon);
 
 // Prosedur untuk melakukan cek kupon
