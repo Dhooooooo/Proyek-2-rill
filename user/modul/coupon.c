@@ -3,7 +3,7 @@
 #include <string.h>
 #include "../payPrim.h"
 
-void readCoupon(char *coupon, int discount) {
+int readCoupon(char *coupon, int discount) {
     FILE *listCoupon;
     listCoupon = fopen("database/List_coupon.txt", "r");
     if (!listCoupon) {
@@ -41,14 +41,14 @@ void readCoupon(char *coupon, int discount) {
         printf("Kode kupon tidak valid.\n");
         spaceToContinue();
     }
+    return discount;
 }
 
 int kupon(char *coupon) {
 	printf("Masukkan kode kupon: ");
 	scanf("%s", coupon);
-    int discount;
+    int discount = readCoupon(coupon, discount);
     
-    readCoupon(coupon, discount);
     int potongan = discount;
     
     return potongan;
