@@ -6,6 +6,7 @@
 #include "../Jagad.h"
 #include "../Hafidz.h"
 #include "../Prima.h"
+#include "../Angel.h"
 
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50

@@ -4,10 +4,11 @@
 #include <stdbool.h>
 #include "../payPrim.h"
 #include "../Hafidz.h"
+#include "../Angel.h"
 
 char dbsPembelian[] = "database/HistoryPulsa.txt";
 
-// Function to print a transaction
+// Fungsi untuk display transaksi
 void printTransaction(const Transaction* transaction) {
     printf("Order Number: %d\n", transaction->orderNumber);
     printf("Username: %s\n", transaction->username);
@@ -20,7 +21,7 @@ void printTransaction(const Transaction* transaction) {
     printf("Status: %s\n", transaction->status);
 }
 
-// Fungsi untuk mencari provider berdasarkan kode area
+// Fungsi untuk mencari provider berdasarkan 4 angka awal
 char* findProvider(char* phoneNumber, Provider providers[], int numProviders) {
     char areaCode[5];
     strncpy(areaCode, phoneNumber, 4); // Mengambil 4 digit pertama sebagai kode area
