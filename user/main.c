@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "payPrim.h"
 #include "Jagad.h"
+#include "Prima.h"
 
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
