@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "../payPrim.h"
+#include "../Hafidz.h"
 
 char dbsPembelian[] = "database/HistoryPulsa.txt";
 

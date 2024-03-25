@@ -4,8 +4,8 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = main.o modul/enkripDekrip.o modul/menuList.o modul/loginRegister.o modul/Jagad.o modul/pulsa.o modul/coupon.o modul/eWallet.o modul/infoProfil.o
-LINKOBJ  = main.o modul/enkripDekrip.o modul/menuList.o modul/loginRegister.o modul/Jagad.o modul/pulsa.o modul/coupon.o modul/eWallet.o modul/infoProfil.o
+OBJ      = main.o modul/enkripDekrip.o modul/menuList.o modul/loginRegister.o modul/pulsa.o modul/Hafidz.o modul/eWallet.o modul/infoProfil.o modul/Jagad.o
+LINKOBJ  = main.o modul/enkripDekrip.o modul/menuList.o modul/loginRegister.o modul/pulsa.o modul/Hafidz.o modul/eWallet.o modul/infoProfil.o modul/Jagad.o
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
@@ -36,17 +36,17 @@ modul/menuList.o: modul/menuList.c
 modul/loginRegister.o: modul/loginRegister.c
 	$(CC) -c modul/loginRegister.c -o modul/loginRegister.o $(CFLAGS)
 
-modul/Jagad.o: modul/Jagad.c
-	$(CC) -c modul/Jagad.c -o modul/Jagad.o $(CFLAGS)
-
 modul/pulsa.o: modul/pulsa.c
 	$(CC) -c modul/pulsa.c -o modul/pulsa.o $(CFLAGS)
 
-modul/coupon.o: modul/coupon.c
-	$(CC) -c modul/coupon.c -o modul/coupon.o $(CFLAGS)
+modul/Hafidz.o: modul/Hafidz.c
+	$(CC) -c modul/Hafidz.c -o modul/Hafidz.o $(CFLAGS)
 
 modul/eWallet.o: modul/eWallet.c
 	$(CC) -c modul/eWallet.c -o modul/eWallet.o $(CFLAGS)
 
 modul/infoProfil.o: modul/infoProfil.c
 	$(CC) -c modul/infoProfil.c -o modul/infoProfil.o $(CFLAGS)
+
+modul/Jagad.o: modul/Jagad.c
+	$(CC) -c modul/Jagad.c -o modul/Jagad.o $(CFLAGS)

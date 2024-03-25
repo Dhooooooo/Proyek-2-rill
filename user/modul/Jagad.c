@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "../payPrim.h"
 #include "../Jagad.h"
+#include "../Hafidz.h"
 
 // harga hotel per malam
 int hargaPerMalam = 1000000;
