@@ -4,6 +4,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include "../payPrim.h"
+#include "../Jagad.h"
 
 // harga hotel per malam
 int hargaPerMalam = 1000000;
