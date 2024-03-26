@@ -56,45 +56,24 @@ int kupon(char *coupon) {
 }
 
 void checkCoupon (char *username) {
-	char coupon[MAX_COUPON_LENGTH];
-	int discount;
-	
-	printf("Masukkan kode kupon: ");
-    scanf("%s", coupon);
-    
-    FILE *listCoupon;
-    listCoupon = fopen("database/List_coupon.txt", "r");
-    if (!listCoupon) {
+	FILE *couponList;
+    couponList = fopen("database/List_coupon.txt", "r");
+    if (!couponList) {
         printf("File tidak ada.\n");
         return;
     }
 
     char storedCoupon[MAX_COUPON_LENGTH];
     int storedDiscount;
-    int found = 0;
-    long int position;
+
+    printf("\nLIST COUPON\n");
+    printf("============\n");
     
-    // Dekripsi kupon yang diinput
-    
-    decrypt(coupon);
-    
-    // Mencari kupon di database
-    while (!feof(listCoupon)) {
-        position = ftell(listCoupon);
-        fscanf(listCoupon, "%s %d", storedCoupon, &storedDiscount);
-        if (strcmp(coupon, storedCoupon) == 0) {
-            fseek(listCoupon, position, SEEK_SET);
-            discount = storedDiscount;
-            found = 1;
-            break;
-        }
+    // Menampilkan kupon yang ada di database
+    while (fscanf(couponList, "%s %d", storedCoupon, &storedDiscount) != EOF) {
+    	encrypt(storedCoupon);
+        printf("Kode Kupon: %s | Diskon: %d ", storedCoupon, storedDiscount);
     }
 
-    fclose(listCoupon);
-
-    if (found) {
-        printf("Kupon tersedia! Kupon ini memiliki diskon sebesar %d persen\n", discount);
-    } else {
-        printf("Kode kupon tidak valid.\n");
-    }
+    fclose(couponList);
 }

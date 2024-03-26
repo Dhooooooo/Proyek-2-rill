@@ -41,7 +41,4 @@ void printDecryptedFile(char *username);
 // Fungsi untuk memanggil fitur 
 void pembelianPulsa(char *username);
 
-/*TOPUP*/
-void topUpSaldo(char *username, float amount);
-
 #endif

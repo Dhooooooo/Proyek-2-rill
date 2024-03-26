@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
 CompilerSettings=0000000000000000000000000
-UnitCount=12
+UnitCount=14
 
 [VersionInfo]
 Major=1
@@ -151,17 +151,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit13]
-FileName=modul\Prima.c
-CompileCpp=0
-Folder=
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit14]
-FileName=modul\Prima.c
+FileName=Ridho.h
 CompileCpp=0
 Folder=
 Compile=1
@@ -182,6 +172,16 @@ BuildCmd=
 
 [Unit7]
 FileName=Jagad.h
+CompileCpp=0
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit14]
+FileName=modul\Ridho.c
 CompileCpp=0
 Folder=
 Compile=1

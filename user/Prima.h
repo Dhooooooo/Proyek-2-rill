@@ -20,4 +20,7 @@ int confirmPay(char *username);
 //Info Profil
 void showInfo(char *username);
 void title();
+
+
+
 #endif
