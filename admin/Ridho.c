@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "admin.h"
+#include "Ridho.h"
 
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
@@ -14,7 +14,7 @@
 char char_set[] = "1qazZAQ2wsxXSW3edcCDE4rfvVFR5tgbBGT6yhnNHY7ujmMJU8ikKI9olLOpP";
 int mod = sizeof(char_set);
 
-//dekrip
+//dekrip buatan jagad
 char* dekripsi(char cipherText[]) {
 	
     static char dekrip[100]; // assuming the length won't exceed 100 characters
@@ -41,7 +41,7 @@ char* dekripsi(char cipherText[]) {
 }
 
 
-// Fungsi untuk mengenkripsi password
+// Fungsi untuk mengenkripsi password dibikin prima
 void encrypt(char *text) {
     char *ptr = text;
     while (*ptr != '\0') {
@@ -52,7 +52,7 @@ void encrypt(char *text) {
     }
 }
 
-// Fungsi untuk mendekripsi password
+// Fungsi untuk mendekripsi password dibikin prima
 void decrypt(char *text) {
     char *ptr = text;
     while (*ptr != '\0') {
@@ -63,7 +63,7 @@ void decrypt(char *text) {
     }
 }
 
-//file penyimpanan hotel
+//file penyimpanan hotel dibikin jagad
 char dbsPemesanan[] = "../user/database/pemesananHotel.txt";
 //menampilkan harga
 void disHarga(int harga) {
@@ -74,7 +74,7 @@ void disHarga(int harga) {
    disHarga(harga / 1000);
    printf(".%03d", harga % 1000);
 }
-//hitung transaksi hotel
+//hitung transaksi hotel dibikin jagad
 int transaksiHotel() {
     int totalHotel = 0; // Inisialisasi total pemasukan hotel
 
@@ -122,7 +122,7 @@ int transaksiHotel() {
 	
 
 
-//file pulsa
+//file pulsa dibikin angel
 char dbsPembelian[] = "../user/database/HistoryPulsa.txt";
 //hitung transaksi pulsa
 int printDecryptedFile(char *username) {
@@ -184,7 +184,7 @@ int printDecryptedFile(char *username) {
     return totalPembelian;
 };
 
-//fitur kupon
+//fitur kupon dibikin hafidz
 void createCoupon(char *coupon, int discount) {
     // Membuat atau overwrite file database
     FILE *couponList;
@@ -450,7 +450,7 @@ int menuAdmin(){
 	printf("1. Lihat Riwayat hotel\n");
 	printf("2. Lihat riwayat pulsa\n");
 	printf("3. Buat atau ubah kupon\n");
-	printf("4. Pemasukan\n");
+	printf("4. Transaksi\n");
 	printf("5. exit\n");
 	printf("Pilih menu: \n");
 	scanf("%d", &pil);

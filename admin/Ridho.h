@@ -1,5 +1,5 @@
-#ifndef ADMIN_H
-#define ADMIN_H
+#ifndef RIDHO_H
+#define RIDHO_H
 
 int mainMenu();
 int menuadmin();
