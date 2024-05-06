@@ -8,5 +8,5 @@
  |_|          |___/                        
 
 .------------------------------------------.
-|  Layanan Pembelian Pulsa dan Tiket Hotel |
+|    Layanan Pembelian Tiket dan Hotel     |
 '------------------------------------------'
