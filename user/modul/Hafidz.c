@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "../payPrim.h"
 #include "../Hafidz.h"
+
+/* COUPON */
 
 int readCoupon(char *coupon, int discount) {
     FILE *listCoupon;
@@ -76,4 +79,50 @@ void checkCoupon (char *username) {
     }
 
     fclose(couponList);
+}
+
+/* LOGIN HISTORY */
+
+void addLoginHistory(struct LoginHistory **head, const char *username) {
+    // Membuat simpul baru untuk entri login
+    struct LoginHistory *newLogin = (struct LoginHistory *)malloc(sizeof(struct LoginHistory));
+    if (newLogin == NULL) {
+        printf("Memory allocation failed.\n");
+        return;
+    }
+
+    // Mengisi data entri login
+    strncpy(newLogin->username, username, sizeof(newLogin->username) - 1);
+    newLogin->username[sizeof(newLogin->username) - 1] = '\0';
+    newLogin->loginTime = time(NULL);
+    newLogin->next = NULL;
+
+    // Menambahkan entri login ke linked list
+    if (*head == NULL) {
+        *head = newLogin;
+    } else {
+        struct LoginHistory *temp = *head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newLogin;
+    }
+}
+
+// Fungsi untuk mencetak semua entri riwayat login
+void printLoginHistory(struct LoginHistory *head) {
+    printf("Login History:\n");
+    while (head != NULL) {
+        printf("Username: %s, Login Time: %s", head->username, asctime(localtime(&head->loginTime)));
+        head = head->next;
+    }
+}
+
+// Fungsi untuk membebaskan memori yang dialokasikan untuk linked list
+void freeLoginHistory(struct LoginHistory *head) {
+    while (head != NULL) {
+        struct LoginHistory *temp = head;
+        head = head->next;
+        free(temp);
+    }
 }
