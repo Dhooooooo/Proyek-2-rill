@@ -3,6 +3,12 @@
 
 #include <stdbool.h>
 
+// Definisi struktur node
+struct Node {
+    char data[255];
+    struct Node* next;
+};
+
 // Fungsi untuk memvalidasi tanggal yang diinputkan, berlaku untuk tanggal Check In ataupun tanggal Check Out
 bool *isTglValid(char *tanggal);
 
@@ -48,4 +54,12 @@ void pemesananHotel(char username[]);
 // Prosedur untuk menampilkan pesanan ke user berdasarkan username
 void disPemesananUser(char username[]);
 
+// Fungsi untuk menambahkan node baru ke linked list
+void insert(struct Node** head_ref, char new_data[]);
+
+// Fungsi untuk menghapus node paling depan dari linked list
+void deleteFront(struct Node** head_ref);
+
+// Fungsi untuk mencetak isi linked list
+void printList(struct Node* head);
 #endif
