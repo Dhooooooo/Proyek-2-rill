@@ -16,7 +16,7 @@ int hargaPerMalam = 1000000;
 
 // File penyimpanan
 char dbsPemesanan[] = "database/pemesananHotel.txt";
-
+struct Node* head = NULL;
 // Fungsi untuk memvalidasi tanggal yang diinputkan, berlaku untuk tanggal Check In ataupun tanggal Check Out
 bool* isTglValid(char *tanggal) { 
 	// Deklrasi Variabel
@@ -604,7 +604,7 @@ void pemesananHotel(char username[]){
     
     double hasil = hargaMenginap - (hargaMenginap*(double)potongan/100); // menghitung total harga setelah di diskon
     int totHarga = (int) hasil; // mengubah bentuk double ke int
-    char stats[8];
+    char stats[30] = "Dlm Antrian...";
     
     system("cls");
 	printf(" /$$   /$$  /$$$$$$  /$$$$$$$$ /$$$$$$$$ /$$                /$$$$$ /$$$$$$$$ /$$$$$$$$ /$$$$$$$$ /$$   /$$  /$$$$$$ \n");
@@ -622,18 +622,19 @@ void pemesananHotel(char username[]){
 	printf("Harga\t\t : Rp. ");disHarga(hargaMenginap);
 	printf("\nPotongan\t : %d%%", potongan);
 	printf("\nTotal Harga\t : Rp. ");disHarga(totHarga);printf("\n\n");
-    if(confirmPay(username)){
-	    if(isSaldoCukup(username, hasil)){ // cek apakah saldo cukup
-	    
-	    	strcpy(stats, "BERHASIL");
-	    	noKamar = kamar();
-		} else {
-			strcpy(stats, "GAGAL");
-		}
-	
-	} else { 
-		strcpy(stats, "GAGAL");
-	}
+
+//    if(confirmPay(username)){
+//	    if(isSaldoCukup(username, hasil)){ // cek apakah saldo cukup
+//	    
+//	    	strcpy(stats, "BERHASIL");
+//	    	noKamar = kamar();
+//		} else {
+//			strcpy(stats, "GAGAL");
+//		}
+//	
+//	} else { 
+//		strcpy(stats, "GAGAL");
+//	}
     
 	system("cls");
 	printf(" /$$   /$$  /$$$$$$  /$$$$$$$$ /$$$$$$$$ /$$                /$$$$$ /$$$$$$$$ /$$$$$$$$ /$$$$$$$$ /$$   /$$  /$$$$$$ \n");
@@ -654,20 +655,25 @@ void pemesananHotel(char username[]){
 	printf("\nStatus\t\t : %s", stats);
 
     // Menggabungkan tanggal check-in dan check-out ke dalam variabel prompt
-	sprintf(prompt, "%d,%s,%s,%s,%d,%d,%d,%d,%d,%s,\n", no,username,tanggalCheckIn, tanggalCheckOut, totalHariMenginap, hargaMenginap, potongan, totHarga, noKamar, stats);
+	sprintf(prompt, "%d,%s,%s,%s,%d,%d,%d,%d,%d,%s", no,username,tanggalCheckIn, tanggalCheckOut, totalHariMenginap, hargaMenginap, potongan, totHarga, noKamar, stats);
 	
 	// Enkripsi prompt
     char* enkripsiPesanan = enkripsi(prompt);
-
+    
+    
+	insert(&head, prompt);
+	
     FILE *file = fopen(dbsPemesanan, "a"); // membuka dile dengan mode append atau mode menambahkan
     if (file == NULL) {
         printf("Gagal membuka file.\n");
     }
     
-    fprintf(file, "%s", enkripsiPesanan); // menulis ke file
+    fprintf(file, "%s,\n", enkripsiPesanan); // menulis ke file
     
 	
     fclose(file);
+    printf("\n");
+    printList(head);
 }
 
 // Prosedur untuk menampilkan pesanan ke user berdasarkan username
@@ -701,4 +707,62 @@ void disPemesananUser(char username[]){
 	}
     printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
 	fclose(fileInput);
+}
+
+// Fungsi untuk menambahkan node baru ke linked list
+void insert(struct Node** head_ref, char new_data[]) {
+    // Alokasikan memori untuk node baru
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    strcpy(new_node->data, new_data); // Salin data ke node baru
+
+    // Jika linked list kosong, atur node baru sebagai head dan membuatnya menunjuk ke dirinya sendiri
+    if (*head_ref == NULL) {
+        *head_ref = new_node;
+        new_node->next = *head_ref;
+    } else {
+        // Temukan node terakhir dalam linked list
+        struct Node* last = *head_ref;
+        while (last->next != *head_ref)
+            last = last->next;
+
+        // Tambahkan node baru di akhir dan atur next-nya menjadi head
+        last->next = new_node;
+        new_node->next = *head_ref;
+    }
+}
+
+// Fungsi untuk menghapus node paling depan dari linked list
+void deleteFront(struct Node** head_ref) {
+    if (*head_ref == NULL) // Kosong
+        return;
+
+    struct Node* temp = *head_ref;
+    // Jika linked list hanya memiliki satu node
+    if (temp->next == *head_ref) {
+        *head_ref = NULL;
+        free(temp);
+        return;
+    }
+
+    // Temukan node terakhir dan atur next-nya menjadi node kedua
+    struct Node* last = *head_ref;
+    while (last->next != *head_ref)
+        last = last->next;
+    last->next = (*head_ref)->next;
+
+    // Pindahkan head ke node kedua dan hapus node pertama
+    *head_ref = (*head_ref)->next;
+    free(temp);
+}
+
+// Fungsi untuk mencetak isi linked list
+void printList(struct Node* head) {
+    struct Node* temp = head;
+    if (head != NULL) {
+        do {
+            printf("%s -> ", temp->data);
+            temp = temp->next;
+        } while (temp != head);
+//        printf("Head\n");
+    }
 }
