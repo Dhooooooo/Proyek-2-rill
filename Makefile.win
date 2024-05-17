@@ -1,15 +1,15 @@
-# Project: admin
+# Project: kereta
 # Makefile created by Dev-C++ 5.11
 
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = Ridho.o main.o Hafidz_admin.o
-LINKOBJ  = Ridho.o main.o Hafidz_admin.o
+OBJ      = keretaMain.o keretaBody.o
+LINKOBJ  = keretaMain.o keretaBody.o
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
-BIN      = aplikasi.exe
+BIN      = kereta.exe
 CXXFLAGS = $(CXXINCS) 
 CFLAGS   = $(INCS) 
 RM       = rm.exe -f
@@ -24,11 +24,8 @@ clean: clean-custom
 $(BIN): $(OBJ)
 	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
 
-Ridho.o: Ridho.c
-	$(CC) -c Ridho.c -o Ridho.o $(CFLAGS)
+keretaMain.o: keretaMain.c
+	$(CC) -c keretaMain.c -o keretaMain.o $(CFLAGS)
 
-main.o: main.c
-	$(CC) -c main.c -o main.o $(CFLAGS)
-
-Hafidz_admin.o: Hafidz_admin.c
-	$(CC) -c Hafidz_admin.c -o Hafidz_admin.o $(CFLAGS)
+keretaBody.o: keretaBody.c
+	$(CC) -c keretaBody.c -o keretaBody.o $(CFLAGS)
