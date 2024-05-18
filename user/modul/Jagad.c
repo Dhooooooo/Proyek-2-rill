@@ -16,7 +16,7 @@ int hargaPerMalam = 1000000;
 
 // File penyimpanan
 char dbsPemesanan[] = "database/pemesananHotel.txt";
-struct Node* head = NULL;
+struct Node* pesananHotel = NULL;
 // Fungsi untuk memvalidasi tanggal yang diinputkan, berlaku untuk tanggal Check In ataupun tanggal Check Out
 bool* isTglValid(char *tanggal) { 
 	// Deklrasi Variabel
@@ -652,7 +652,6 @@ void pemesananHotel(char username[]){
 	printf("Harga\t\t : Rp. ");disHarga(hargaMenginap);
 	printf("\nPotongan\t : %d%%", potongan);
 	printf("\nTotal Harga\t : Rp. ");disHarga(totHarga);
-	printf("\nStatus\t\t : %s", stats);
 
     // Menggabungkan tanggal check-in dan check-out ke dalam variabel prompt
 	sprintf(prompt, "%d,%s,%s,%s,%d,%d,%d,%d,%d,%s", no,username,tanggalCheckIn, tanggalCheckOut, totalHariMenginap, hargaMenginap, potongan, totHarga, noKamar, stats);
@@ -661,19 +660,25 @@ void pemesananHotel(char username[]){
     char* enkripsiPesanan = enkripsi(prompt);
     
     
-	insert(&head, prompt);
+	if(insert(&pesananHotel, prompt)){
+	    FILE *file = fopen(dbsPemesanan, "a"); // membuka dile dengan mode append atau mode menambahkan
+	    if (file == NULL) {
+	        printf("Gagal membuka file.\n");
+	    }
+	    
+	    fprintf(file, "%s,\n", enkripsiPesanan); // menulis ke file
+	    
+		
+	    fclose(file);
+	}
+	else{
+		strcpy(stats, "Antrean penuh");
+	}
 	
-    FILE *file = fopen(dbsPemesanan, "a"); // membuka dile dengan mode append atau mode menambahkan
-    if (file == NULL) {
-        printf("Gagal membuka file.\n");
-    }
-    
-    fprintf(file, "%s,\n", enkripsiPesanan); // menulis ke file
-    
+	printf("\nStatus\t\t : %s", stats);
 	
-    fclose(file);
     printf("\n");
-    printList(head);
+    printList(pesananHotel);
 }
 
 // Prosedur untuk menampilkan pesanan ke user berdasarkan username
@@ -710,7 +715,25 @@ void disPemesananUser(char username[]){
 }
 
 // Fungsi untuk menambahkan node baru ke linked list
-void insert(struct Node** head_ref, char new_data[]) {
+int insert(struct Node** head_ref, char new_data[]) {
+	
+	int MAX_LIST = 2;
+    // Hitung jumlah node dalam linked list
+    int count = 0;
+    struct Node* temp = *head_ref;
+    if (*head_ref != NULL) {
+        do {
+            count++;
+            temp = temp->next;
+        } while (temp != *head_ref);
+    }
+
+    // Jika linked list sudah penuh (jumlah node sudah mencapai 5), cetak pesan peringatan
+    if (count >= MAX_LIST) {
+//        printf("Linked list sudah penuh, tidak bisa menambahkan node baru.\n");
+        return 0;
+    }
+
     // Alokasikan memori untuk node baru
     struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
     strcpy(new_node->data, new_data); // Salin data ke node baru
@@ -729,6 +752,7 @@ void insert(struct Node** head_ref, char new_data[]) {
         last->next = new_node;
         new_node->next = *head_ref;
     }
+    return 1;
 }
 
 // Fungsi untuk menghapus node paling depan dari linked list
