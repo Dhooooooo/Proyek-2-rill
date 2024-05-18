@@ -55,7 +55,7 @@ void pemesananHotel(char username[]);
 void disPemesananUser(char username[]);
 
 // Fungsi untuk menambahkan node baru ke linked list
-void insert(struct Node** head_ref, char new_data[]);
+int insert(struct Node** head_ref, char new_data[]);
 
 // Fungsi untuk menghapus node paling depan dari linked list
 void deleteFront(struct Node** head_ref);
