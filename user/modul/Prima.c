@@ -3,7 +3,6 @@
 #include <string.h>
 #include <unistd.h>
 #include "../payPrim.h"
-#include "../Jagad.h"
 #include "../Hafidz.h"
 #include "../Prima.h"
 #include "../Angel.h"
@@ -12,6 +11,110 @@
 #define MAX_PASSWORD_LENGTH 50
 #define MAX_PIN 6
 #define ENCRYPTION_KEY 5
+
+/* ENKRIPSI DAN DESKRIPSI SL */
+// Fungsi untuk membuat node baru
+Node* createNode(char data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void deallocateLinkedList(Node *head) {
+    Node *curr = head;
+    while (curr != NULL) {
+        Node *temp = curr;
+        curr = curr->next;
+        free(temp);
+    }
+}
+
+// Proses enkripsi menggunakan linked list
+void encrypt_linked_list(char *text) {
+    Node *head = NULL;
+    Node *tail = NULL;
+    int i;
+
+    // Membuat linked list dari string
+    for ( i = 0; text[i] != '\0'; i++) {
+        Node *newNode = createNode(text[i]);
+        if (head == NULL) {
+            head = tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = tail->next;
+        }
+    }
+
+    // Melakukan enkripsi pada setiap node
+    Node *curr = head;
+    while (curr != NULL) {
+        if (curr->data != ' ') {
+        	 printf("Mengenkripsi karakter: %c\n", curr->data);
+            curr->data = (curr->data + ENCRYPTION_KEY) % 126; // ASCII printable characters range
+        }
+        curr = curr->next;
+    }
+
+    // Menggabungkan karakter dari linked list menjadi string
+    curr = head;
+    i = 0;
+    while (curr != NULL) {
+        text[i++] = curr->data;
+        Node *temp = curr;
+        curr = curr->next;
+        free(temp);
+    }
+    text[i] = '\0'; // Menambahkan terminasi string
+    
+    // Dealokasi linked list setelah digunakan
+    //deallocateLinkedList(head);
+}
+
+// Proses dekripsi menggunakan linked list
+void decrypt_linked_list(char *text) {
+    Node *head = NULL;
+    Node *tail = NULL;
+    int i;
+
+    // Membuat linked list dari string
+    for ( i = 0; text[i] != '\0'; i++) {
+        Node *newNode = createNode(text[i]);
+        if (head == NULL) {
+            head = tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = tail->next;
+        }
+    }
+
+    // Melakukan dekripsi pada setiap node
+    Node *curr = head;
+    while (curr != NULL) {
+        if (curr->data != ' ') {
+        	 printf("Mengenkripsi karakter: %c\n", curr->data);
+            curr->data = (curr->data - ENCRYPTION_KEY + 126) % 126; // ASCII printable characters range
+        }
+        curr = curr->next;
+    }
+
+    // Menggabungkan karakter dari linked list menjadi string
+    curr = head;
+    i = 0;
+    while (curr != NULL) {
+        text[i++] = curr->data;
+        Node *temp = curr;
+        curr = curr->next;
+        free(temp);
+    }
+    text[i] = '\0'; // Menambahkan terminasi string
+    
+    // Dealokasi linked list setelah digunakan
+    //deallocateLinkedList(head);
+}
+
+
 
 /* LOGIN AND REGISTER */
 
@@ -83,8 +186,8 @@ void registerUser(char *username, char *password, char *pin) {
         }
     }
     
-    encrypt(password);
-    encrypt(pin);
+    encrypt_linked_list(password);
+    encrypt_linked_list(pin);
     
     fprintf(file, "%s %s %s\n", username, password, pin);
     fclose(file);
@@ -109,15 +212,15 @@ int loginUser(char *username, char *password, char *pin) {
     
     while (!feof(file)) {
         fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin);
-        decrypt(storedPin);
-        decrypt(storedPassword);
+        decrypt_linked_list(storedPin);
+        decrypt_linked_list(storedPassword);
         
         if (strcmp(username, storedUsername) == 0 && strcmp(password, storedPassword) == 0 && strcmp(pin, storedPin) == 0) {
             fclose(file);
             printf("==================\n");
             printf("= Login berhasil =\n");
             printf("==================\n");
-            encrypt(password);
+            encrypt_linked_list(password);
             return 1; // Login berhasil
         }
     }

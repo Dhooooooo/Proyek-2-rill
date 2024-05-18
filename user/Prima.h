@@ -1,7 +1,17 @@
 #ifndef Prima_h
 #define Prima_h
 
+typedef struct Node {
+    char data;
+    struct Node *next;
+} Node;
+
 //enkrip Dekrip
+Node* createNode(char data);
+void deallocateLinkedList(Node *head);
+void encrypt_linked_list(char *text);
+void decrypt_linked_list(char *text);
+
 void encrypt(char *text);
 void decrypt(char *text);
 
@@ -22,5 +32,5 @@ void showInfo(char *username);
 void title();
 
 
-
+  
 #endif
