@@ -18,9 +18,17 @@ typedef struct {
 
 void pilihJadwal(char* jadwal);
 void inputDataDiri(Penumpang* penumpang);
-void pilihSeat(char* seat, int* gerbong);
+void pilihSeat(char* seat, int* gerbong, Penumpang* penumpang, const char* jadwal);
 int validasiStasiun(char* stasiun, int jenisKeretaPilihan);
-void konfirmasiPembayaran(Tiket* tiket);
+void inputStasiun(Tiket* tiket, int jenisKeretaPilihan);
+int konfirmasiPembayaran(Tiket* tiket);
+int validasiSeat(char* seat, int kelasPilihan);
+int cekKetersediaanSeat(const char* filename, const char* seat);
+void pesanSeat(const char* filename, const char* seat, const char* namaPenumpang);
+void kosongkanSeat(const char* filename, const char* seat);
+void listKeretaLokal();
+void listKeretaAntarKota();
+void spaceToContinue();
 
 #endif
 
