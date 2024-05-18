@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include "../payPrim.h"
 #include "../Hafidz.h"
+#include "../Jagad.h"
 #include "../Prima.h"
 #include "../Angel.h"
 
@@ -14,17 +15,17 @@
 
 /* ENKRIPSI DAN DESKRIPSI SL */
 // Fungsi untuk membuat node baru
-Node* createNode(char data) {
-    Node* newNode = (Node*)malloc(sizeof(Node));
+Nodes* createNode(char data) {
+    Nodes* newNode = (Nodes*)malloc(sizeof(Nodes));
     newNode->data = data;
     newNode->next = NULL;
     return newNode;
 }
 
-void deallocateLinkedList(Node *head) {
-    Node *curr = head;
+void deallocateLinkedList(Nodes *head) {
+    Nodes *curr = head;
     while (curr != NULL) {
-        Node *temp = curr;
+        Nodes *temp = curr;
         curr = curr->next;
         free(temp);
     }
@@ -32,13 +33,13 @@ void deallocateLinkedList(Node *head) {
 
 // Proses enkripsi menggunakan linked list
 void encrypt_linked_list(char *text) {
-    Node *head = NULL;
-    Node *tail = NULL;
+    Nodes *head = NULL;
+    Nodes *tail = NULL;
     int i;
 
     // Membuat linked list dari string
     for ( i = 0; text[i] != '\0'; i++) {
-        Node *newNode = createNode(text[i]);
+        Nodes *newNode = createNode(text[i]);
         if (head == NULL) {
             head = tail = newNode;
         } else {
@@ -48,7 +49,7 @@ void encrypt_linked_list(char *text) {
     }
 
     // Melakukan enkripsi pada setiap node
-    Node *curr = head;
+    Nodes *curr = head;
     while (curr != NULL) {
         if (curr->data != ' ') {
         	 printf("Mengenkripsi karakter: %c\n", curr->data);
@@ -62,7 +63,7 @@ void encrypt_linked_list(char *text) {
     i = 0;
     while (curr != NULL) {
         text[i++] = curr->data;
-        Node *temp = curr;
+        Nodes *temp = curr;
         curr = curr->next;
         free(temp);
     }
@@ -74,13 +75,13 @@ void encrypt_linked_list(char *text) {
 
 // Proses dekripsi menggunakan linked list
 void decrypt_linked_list(char *text) {
-    Node *head = NULL;
-    Node *tail = NULL;
+    Nodes *head = NULL;
+    Nodes *tail = NULL;
     int i;
 
     // Membuat linked list dari string
     for ( i = 0; text[i] != '\0'; i++) {
-        Node *newNode = createNode(text[i]);
+        Nodes *newNode = createNode(text[i]);
         if (head == NULL) {
             head = tail = newNode;
         } else {
@@ -90,7 +91,7 @@ void decrypt_linked_list(char *text) {
     }
 
     // Melakukan dekripsi pada setiap node
-    Node *curr = head;
+    Nodes *curr = head;
     while (curr != NULL) {
         if (curr->data != ' ') {
         	 printf("Mengenkripsi karakter: %c\n", curr->data);
@@ -104,7 +105,7 @@ void decrypt_linked_list(char *text) {
     i = 0;
     while (curr != NULL) {
         text[i++] = curr->data;
-        Node *temp = curr;
+        Nodes *temp = curr;
         curr = curr->next;
         free(temp);
     }
@@ -130,9 +131,10 @@ void registerUser(char *username, char *password, char *pin) {
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
+    float saldo; int ada; float saldoAwal = 0;
     
     // Membaca file dan memeriksa apakah username sudah ada
-    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
+    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin, &saldo) == 4) {
         if (strcmp(username, storedUsername) == 0) {
             fclose(file);
             printf("====================\n");
@@ -144,7 +146,7 @@ void registerUser(char *username, char *password, char *pin) {
         }
     }
     rewind(file);
-    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
+    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin, &saldo) == 4) {
         if (strcmp(password, storedPassword) == 0) {
             fclose(file);
             printf("====================\n");
@@ -189,7 +191,7 @@ void registerUser(char *username, char *password, char *pin) {
     encrypt_linked_list(password);
     encrypt_linked_list(pin);
     
-    fprintf(file, "%s %s %s\n", username, password, pin);
+    fprintf(file, "%s %s %s %.2f\n", username, password, pin, saldoAwal);
     fclose(file);
     
     printf("=======================\n");
@@ -209,9 +211,10 @@ int loginUser(char *username, char *password, char *pin) {
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
+    float saldo; int ada; float saldoAwal = 0;
     
     while (!feof(file)) {
-        fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin);
+        fscanf(file, "%s %s %s %f\n", storedUsername, storedPassword, storedPin, &saldo);
         decrypt_linked_list(storedPin);
         decrypt_linked_list(storedPassword);
         
@@ -467,9 +470,11 @@ void dataSaldoNew(char *username){
     }
     
     char storedUsername[MAX_USERNAME_LENGTH];
+    char storedPassword[MAX_PASSWORD_LENGTH];
+    char storedPin[MAX_PIN];
     float saldo; int ada; float saldoAwal = 0;
     
-    while(fscanf(file, "%s %f\n", storedUsername, &saldo) == 2){
+    while(fscanf(file, "%s %f\n", storedUsername,storedPassword,storedPin, &saldo) == 4){
     	if(strcmp(storedUsername, username) == 0){
     		fclose(file);
     		return;
@@ -477,7 +482,7 @@ void dataSaldoNew(char *username){
 	}
 	fclose(file);
 	
-	file = fopen("database/saldoUsers.txt", "a");
+	file = fopen("database/users.txt", "a");
 	if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
@@ -489,13 +494,13 @@ void dataSaldoNew(char *username){
 }
 
 int isSaldoCukup(char *username, float totHarga) {
-    FILE *file = fopen("database/saldoUsers.txt", "r+");
+    FILE *file = fopen("database/users.txt", "r+");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return 0; //gagal
     }
     
-    FILE *tempFile = fopen("database/saldoUsersTemp.txt", "w");
+    FILE *tempFile = fopen("database/usersTemp.txt", "w");
     if (tempFile == NULL) {
         printf("Gagal membuka file.\n");
         fclose(file);
@@ -503,10 +508,12 @@ int isSaldoCukup(char *username, float totHarga) {
     }
     
     char storedUsername[MAX_USERNAME_LENGTH];
+    char storedPassword[MAX_PASSWORD_LENGTH];
+    char storedPin[MAX_PIN];
     float saldo, lastSaldo;
     int userFound = 0;
 
-    while (fscanf(file, "%s %f", storedUsername, &saldo) == 2) {
+    while (fscanf(file, "%s %s %s %f", storedUsername,storedPassword,storedPin,&saldo) == 4) {
         if (strcmp(storedUsername, username) == 0) {
             userFound = 1;
             if (saldo >= totHarga) {
@@ -528,22 +535,22 @@ int isSaldoCukup(char *username, float totHarga) {
 
     rewind(file);
 
-    while (fscanf(file, "%s %f", storedUsername, &saldo) == 2) {
+    while (fscanf(file, "%s %s %s %f", storedUsername,storedPassword,storedPin, &saldo) == 4) {
         if (strcmp(username, storedUsername) == 0) {
-            fprintf(tempFile, "%s %f\n", username, lastSaldo);
+            fprintf(tempFile, "%s %s %s %f\n", username,storedPassword,storedPin, lastSaldo);
         } else {
-            fprintf(tempFile, "%s %f\n", storedUsername, saldo);
+            fprintf(tempFile, "%s %s %s %f\n", storedUsername,storedPassword,storedPin, saldo);
         }
     }
     
     fclose(file);
     fclose(tempFile);
 
-    if (remove("database/saldoUsers.txt") != 0) {
+    if (remove("database/users.txt") != 0) {
         printf("Gagal menghapus file asli.\n");
         return 0; //gagal
     }
-    if (rename("database/saldoUsersTemp.txt", "database/saldoUsers.txt") != 0) {
+    if (rename("database/usersTemp.txt", "database/users.txt") != 0) {
         printf("Gagal mengganti nama file sementara.\n");
         return 0; //gagal
     }
@@ -558,6 +565,7 @@ int confirmPay(char *username) {
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
     char pin[MAX_PIN];
+    float saldo; int ada; float saldoAwal = 0;
     int acc;
     FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
     if (file == NULL) {
@@ -578,7 +586,7 @@ int confirmPay(char *username) {
         encrypt(pin);
 
         int pinFound = 0; // Variabel penanda untuk mengetahui apakah PIN ditemukan
-        while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
+        while (fscanf(file, "%s %s %s %f\n", storedUsername, storedPassword, storedPin, &saldo) == 4) {
             if (strcmp(username, storedUsername) == 0 && strcmp(pin, storedPin) == 0) {
                 pinFound = 1; // Setel variabel penanda jika PIN ditemukan
                 break; // Keluar dari loop setelah menemukan PIN yang cocok
@@ -607,17 +615,19 @@ int confirmPay(char *username) {
 
 void showInfo(char *username){
 	
-	FILE *file = fopen("database/saldoUsers.txt", "r"); // Buka file untuk membaca
+	FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
     }
     
     char storedUsername[MAX_USERNAME_LENGTH];
+    char storedPassword[MAX_PASSWORD_LENGTH];
+    char storedPin[MAX_PIN];
     float saldo;
     int intSaldo;
     
-    while(fscanf(file, "%s %f\n", storedUsername, &saldo) == 2){
+    while(fscanf(file, "%s %s %s %f\n", storedUsername, storedPassword, storedPin, &saldo) == 4){
     	if(strcmp(username, storedUsername) == 0){
     		intSaldo = (int)saldo;
     		printf("Username : %s\n", storedUsername);

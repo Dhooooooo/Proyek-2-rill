@@ -32,7 +32,7 @@ int main() {
                 inputAkun(username, password, pin); 
                 registerUser(username, password, pin);
                 waitNext();
-                dataSaldoNew(username);
+                //dataSaldoNew(username);
                 break;
             case 2:
                 // Login
@@ -40,7 +40,7 @@ int main() {
                 printf("Login\n");
                 inputAkun(username, password, pin); 
                 if (loginUser(username, password, pin)) {
-                    dataSaldoNew(username);
+                    //dataSaldoNew(username);
                     int menu2;
                     waitNext();
                     do {

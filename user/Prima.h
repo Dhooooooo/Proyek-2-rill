@@ -1,14 +1,14 @@
 #ifndef Prima_h
 #define Prima_h
 
-typedef struct Node {
+typedef struct Nodes {
     char data;
-    struct Node *next;
-} Node;
+    struct Nodes *next;
+} Nodes;
 
 //enkrip Dekrip
-Node* createNode(char data);
-void deallocateLinkedList(Node *head);
+Nodes* createNode(char data);
+void deallocateLinkedList(Nodes *head);
 void encrypt_linked_list(char *text);
 void decrypt_linked_list(char *text);
 
