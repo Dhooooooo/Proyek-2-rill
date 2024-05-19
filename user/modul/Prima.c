@@ -6,7 +6,7 @@
 #include "../Hafidz.h"
 #include "../Jagad.h"
 #include "../Prima.h"
-//#include "../Angel.h"
+#include "../Angel.h"
 
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
@@ -131,10 +131,11 @@ void registerUser(char *username, char *password, char *pin, char *role) {
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
+    char storedRole[MAX_USERNAME_LENGTH];
     float saldo; int ada; float saldoAwal = 0;
     
     // Membaca file dan memeriksa apakah username sudah ada
-    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin, &saldo) == 4) {
+    while (fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
         if (strcmp(username, storedUsername) == 0) {
             fclose(file);
             printf("====================\n");
@@ -146,7 +147,7 @@ void registerUser(char *username, char *password, char *pin, char *role) {
         }
     }
     rewind(file);
-    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin, &saldo) == 4) {
+    while (fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
         if (strcmp(password, storedPassword) == 0) {
             fclose(file);
             printf("====================\n");
@@ -191,7 +192,7 @@ void registerUser(char *username, char *password, char *pin, char *role) {
     encrypt_linked_list(password);
     encrypt_linked_list(pin);
     
-    fprintf(file, "%s %s %s %.2f\n", username, password, pin, saldoAwal);
+    fprintf(file, "%s %s %s %.2f %s\n", username, password, pin, saldoAwal, role);
     fclose(file);
     
     printf("=======================\n");
@@ -211,14 +212,16 @@ int loginUser(char *username, char *password, char *pin, char *role) {
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
+    char storedRole[MAX_USERNAME_LENGTH];
     float saldo; int ada; float saldoAwal = 0;
     
     while (!feof(file)) {
-        fscanf(file, "%s %s %s %f\n", storedUsername, storedPassword, storedPin, &saldo);
+        fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, storedRole);
         decrypt_linked_list(storedPin);
         decrypt_linked_list(storedPassword);
         
         if (strcmp(username, storedUsername) == 0 && strcmp(password, storedPassword) == 0 && strcmp(pin, storedPin) == 0) {
+        	strcpy(role, storedRole);
             fclose(file);
             printf("==================\n");
             printf("= Login berhasil =\n");
@@ -586,7 +589,7 @@ int confirmPay(char *username) {
         encrypt_linked_list(pin);
 
         int pinFound = 0; // Variabel penanda untuk mengetahui apakah PIN ditemukan
-        while (fscanf(file, "%s %s %s %f\n", storedUsername, storedPassword, storedPin, &saldo) == 4) {
+        while (fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, role) == 5) {
             if (strcmp(username, storedUsername) == 0 && strcmp(pin, storedPin) == 0) {
                 pinFound = 1; // Setel variabel penanda jika PIN ditemukan
                 break; // Keluar dari loop setelah menemukan PIN yang cocok
@@ -627,7 +630,7 @@ void showInfo(char *username){
     float saldo;
     int intSaldo;
     
-    while(fscanf(file, "%s %s %s %f\n", storedUsername, storedPassword, storedPin, &saldo) == 4){
+    while(fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, role) == 5){
     	if(strcmp(username, storedUsername) == 0){
     		intSaldo = (int)saldo;
     		printf("Username : %s\n", storedUsername);
