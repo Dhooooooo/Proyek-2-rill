@@ -42,7 +42,7 @@ int main() {
                 strcpy(role, "user");
                 registerUser(username, password, pin, role);
                 waitNext();
-                dataSaldoNew(username);
+                //dataSaldoNew(username);
                 break;
             case 2:
                 // Login
@@ -52,6 +52,7 @@ int main() {
                 if (loginUser(username, password, pin, role)) {
                     char storedRole[MAX_ROLE_LENGTH];
                     getUserRole(username, storedRole);
+                    waitNext();
                     if (strcmp(role, "admin") == 0) { // Check if the user is an admin
                         int adminChoice;
                         do {

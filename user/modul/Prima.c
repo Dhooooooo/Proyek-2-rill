@@ -242,7 +242,7 @@ int loginUser(char *username, char *password, char *pin, char *role) {
 // Fungsi untuk memodifikasi password pengguna
 void modifyPass(char *username, char *password) {
     // Melakukan enkripsi pada password baru sebelum disimpan
-    encrypt(password);
+    encrypt_linked_list(password);
     
     FILE *file = fopen("database/users.txt", "r+"); // Buka file untuk membaca
     if (file == NULL) {
@@ -264,11 +264,11 @@ void modifyPass(char *username, char *password) {
     float saldo; int ada; float saldoAwal = 0;
     
     // Membaca file dan menyalin informasi pengguna ke file sementara
-    while (fscanf(file, "%s %s %s", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
+    while (fscanf(file, "%s %s %s %f %s", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
         if (strcmp(username, storedUsername) == 0) {
-            fprintf(tempFile, "%s %s %s\n", storedUsername, password, storedPin, &saldo, storedRole); // Menulis informasi pengguna yang dimodifikasi
+            fprintf(tempFile, "%s %s %s %.2f %s \n", storedUsername, password, storedPin, saldo, storedRole); // Menulis informasi pengguna yang dimodifikasi
         } else {
-            fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, storedPin, &saldo, storedRole); // Menyalin informasi pengguna lain tanpa modifikasi
+            fprintf(tempFile, "%s %s %s %.2f %s\n", storedUsername, storedPassword, storedPin, saldo, storedRole); // Menyalin informasi pengguna lain tanpa modifikasi
         }
     }
     
@@ -305,7 +305,7 @@ void modifyPin(char *username, char *newPin) {
         }
     }
     
-    encrypt(newPin);
+    encrypt_linked_list(newPin);
     
     FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
     if (file == NULL) {
@@ -324,13 +324,15 @@ void modifyPin(char *username, char *newPin) {
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
+    char storedRole[MAX_USERNAME_LENGTH];
+    float saldo; int ada; float saldoAwal = 0;
     
     // Membaca file dan menyalin informasi pengguna ke file sementara
-    while (fscanf(file, "%s %s %s", storedUsername, storedPassword, storedPin) == 3) {
+    while (fscanf(file, "%s %s %s %f %s", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
         if (strcmp(username, storedUsername) == 0) {
-            fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, newPin); // Menulis informasi pengguna yang dimodifikasi
+            fprintf(tempFile, "%s %s %s %.2f %s\n", storedUsername, storedPassword, newPin, saldo, storedRole); // Menulis informasi pengguna yang dimodifikasi
         } else {
-            fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, storedPin); // Menyalin informasi pengguna lain tanpa modifikasi
+            fprintf(tempFile, "%s %s %s %.2f %s\n", storedUsername, storedPassword, storedPin, saldo, storedRole); // Menyalin informasi pengguna lain tanpa modifikasi
         }
     }
     
@@ -364,9 +366,11 @@ void modifyUser(char *username, char *password) {
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
+    char storedRole[MAX_USERNAME_LENGTH];
+    float saldo; int ada; float saldoAwal = 0;
     
     // Membaca file dan memeriksa apakah username baru sudah ada
-    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
+    while (fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
         if (strcmp(username, storedUsername) == 0) {
             fclose(file);
             printf("Username sudah digunakan.\n");
@@ -379,7 +383,7 @@ void modifyUser(char *username, char *password) {
     
     // Memeriksa apakah password yang diberikan valid
     int validPassword = 0;
-    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
+    while (fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
     	//printf("%s\n", password);
     	//printf("%s\n", storedPassword);
         if (strcmp(password, storedPassword) == 0) {
@@ -395,7 +399,7 @@ void modifyUser(char *username, char *password) {
     }
     
     // Mengupdate file saldoUsers.txt
-    FILE *files = fopen("database/saldoUsers.txt", "r");
+    /*FILE *files = fopen("database/saldoUsers.txt", "r");
     if (files == NULL) {
         fclose(file);
         printf("Gagal membuka file.\n");
@@ -429,7 +433,7 @@ void modifyUser(char *username, char *password) {
         printf("Gagal mengganti nama file sementara.\n");
         return; //gagal
     }
-    
+    */
     rewind(file);
     
     FILE *tempFile = fopen("database/temp.txt", "w"); // Buka file sementara untuk menulis
@@ -440,11 +444,11 @@ void modifyUser(char *username, char *password) {
     }
     
     // Membaca file dan menyalin informasi pengguna ke file sementara
-    while (fscanf(file, "%s %s %s", storedUsername, storedPassword, storedPin) == 3) {
+    while (fscanf(file, "%s %s %s %f %s", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
         if (strcmp(tempUser, storedUsername) == 0) {
-            fprintf(tempFile, "%s %s %s\n", username, storedPassword, storedPin); // Menulis informasi pengguna yang dimodifikasi
+            fprintf(tempFile, "%s %s %s %.2f %s", storedUsername, storedPassword, storedPin, saldo, storedRole); // Menulis informasi pengguna yang dimodifikasi
         } else {
-            fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, storedPin); // Menyalin informasi pengguna lain tanpa modifikasi
+            fprintf(tempFile, "%s %s %s %.2f %s", storedUsername, storedPassword, storedPin, saldo, storedRole); // Menyalin informasi pengguna lain tanpa modifikasi
         }
     }
     
@@ -569,7 +573,8 @@ int confirmPay(char *username) {
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
-    char pin[MAX_PIN];
+    char pin[MAX_PIN]; 
+	char storedRole[MAX_USERNAME_LENGTH];
     float saldo; int ada; float saldoAwal = 0;
     int acc;
     FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
@@ -591,7 +596,7 @@ int confirmPay(char *username) {
         encrypt_linked_list(pin);
 
         int pinFound = 0; // Variabel penanda untuk mengetahui apakah PIN ditemukan
-        while (fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, role) == 5) {
+        while (fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
             if (strcmp(username, storedUsername) == 0 && strcmp(pin, storedPin) == 0) {
                 pinFound = 1; // Setel variabel penanda jika PIN ditemukan
                 break; // Keluar dari loop setelah menemukan PIN yang cocok
@@ -629,10 +634,11 @@ void showInfo(char *username){
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
-    float saldo;
+     char storedRole[MAX_USERNAME_LENGTH];
+    float saldo; int ada; float saldoAwal = 0;
     int intSaldo;
     
-    while(fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, role) == 5){
+    while(fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5){
     	if(strcmp(username, storedUsername) == 0){
     		intSaldo = (int)saldo;
     		printf("Username : %s\n", storedUsername);
