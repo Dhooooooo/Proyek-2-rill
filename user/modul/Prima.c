@@ -266,7 +266,7 @@ void modifyPass(char *username, char *password) {
     // Membaca file dan menyalin informasi pengguna ke file sementara
     while (fscanf(file, "%s %s %s %f %s", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
         if (strcmp(username, storedUsername) == 0) {
-            fprintf(tempFile, "%s %s %s %.2f %s \n", storedUsername, password, storedPin, saldo, storedRole); // Menulis informasi pengguna yang dimodifikasi
+            fprintf(tempFile, "%s %s %s %.2f %s\n", storedUsername, password, storedPin, saldo, storedRole); // Menulis informasi pengguna yang dimodifikasi
         } else {
             fprintf(tempFile, "%s %s %s %.2f %s\n", storedUsername, storedPassword, storedPin, saldo, storedRole); // Menyalin informasi pengguna lain tanpa modifikasi
         }
@@ -356,6 +356,7 @@ void modifyUser(char *username, char *password) {
     // Melakukan enkripsi pada password baru sebelum disimpan
     //encrypt(password);
     char tempUser[MAX_USERNAME_LENGTH];
+    //strcpy(tempUser, username);
     
     FILE *file = fopen("database/users.txt", "r+"); // Buka file untuk membaca
     if (file == NULL) {
@@ -369,17 +370,8 @@ void modifyUser(char *username, char *password) {
     char storedRole[MAX_USERNAME_LENGTH];
     float saldo; int ada; float saldoAwal = 0;
     
-    // Membaca file dan memeriksa apakah username baru sudah ada
-    while (fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
-        if (strcmp(username, storedUsername) == 0) {
-            fclose(file);
-            printf("Username sudah digunakan.\n");
-            strcpy(username, storedUsername);
-            return;
-        }
-    }
-    
     rewind(file);
+    
     
     // Memeriksa apakah password yang diberikan valid
     int validPassword = 0;
@@ -389,6 +381,7 @@ void modifyUser(char *username, char *password) {
         if (strcmp(password, storedPassword) == 0) {
             validPassword = 1;
             strcpy(tempUser, storedUsername);
+            //strcpy(username, tempUser);
             break;
         }
     }
@@ -397,6 +390,21 @@ void modifyUser(char *username, char *password) {
         printf("Password salah.\n");
         return;
     }
+    
+    rewind(file);
+    
+    // Membaca file dan memeriksa apakah username baru sudah ada
+    while (fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
+        if (strcmp(username, storedUsername) == 0) {
+            fclose(file);
+            printf("Username sudah digunakan.\n");
+            strcpy(username, tempUser);
+            return;
+        }
+    }
+    //strcpy(username, tempUser);
+    
+    rewind(file);
     
     // Mengupdate file saldoUsers.txt
     /*FILE *files = fopen("database/saldoUsers.txt", "r");
@@ -444,11 +452,11 @@ void modifyUser(char *username, char *password) {
     }
     
     // Membaca file dan menyalin informasi pengguna ke file sementara
-    while (fscanf(file, "%s %s %s %f %s", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
+    while (fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
         if (strcmp(tempUser, storedUsername) == 0) {
-            fprintf(tempFile, "%s %s %s %.2f %s", storedUsername, storedPassword, storedPin, saldo, storedRole); // Menulis informasi pengguna yang dimodifikasi
+            fprintf(tempFile, "%s %s %s %.2f %s\n", username, storedPassword, storedPin, saldo, storedRole); // Menulis informasi pengguna yang dimodifikasi
         } else {
-            fprintf(tempFile, "%s %s %s %.2f %s", storedUsername, storedPassword, storedPin, saldo, storedRole); // Menyalin informasi pengguna lain tanpa modifikasi
+            fprintf(tempFile, "%s %s %s %.2f %s\n", storedUsername, storedPassword, storedPin, saldo, storedRole); // Menyalin informasi pengguna lain tanpa modifikasi
         }
     }
     
@@ -567,65 +575,7 @@ int isSaldoCukup(char *username, float totHarga) {
     return 1; //berhasil
 }
 
-void topUpSaldo(char *username, float amount) {
 
-	printf("Masukkan jumlah saldo : ");
-    scanf("%f", &amount);
-    FILE *file = fopen("database/saldoUsers.txt", "r+");
-    if (file == NULL) {
-        printf("Gagal membuka file.\n");
-        return;
-    }
-
-    FILE *tempFile = fopen("database/saldoUsersTemp.txt", "w");
-    if (tempFile == NULL) {
-        printf("Gagal membuka file.\n");
-        fclose(file);
-        return;
-    }
-
-    char storedUsername[MAX_USERNAME_LENGTH];
-    float saldo;
-    int userFound = 0;
-    int intAmount = (int)amount;
-	
-	clearScreen();
-	title();
-	printf("Anda akan menambah saldo Rp. ");disHarga(intAmount);printf("\n\n");
-	if(confirmPay(username)){
-    while (fscanf(file, "%s %f", storedUsername, &saldo) == 2) {
-        if (strcmp(storedUsername, username) == 0) {
-            userFound = 1;
-            saldo += amount; // Menambahkan saldo
-        }
-        fprintf(tempFile, "%s %.2f\n", storedUsername, saldo);
-    }
-
-    if (!userFound) {
-        printf("Pengguna tidak ditemukan\n");
-        fclose(file);
-        fclose(tempFile);
-        return;
-    }
-
-    fclose(file);
-    fclose(tempFile);
-
-    if (remove("database/saldoUsers.txt") != 0) {
-        printf("Gagal menghapus file asli.\n");
-        return;
-    }
-    if (rename("database/saldoUsersTemp.txt", "database/saldoUsers.txt") != 0) {
-        printf("Gagal mengganti nama file sementara.\n");
-        return;
-    }
-
-    printf("Saldo berhasil ditambahkan.\n");
-} else{
-	printf("Pengisian Saldo Dibatalkan");
-	return;
-}    
-}
 
 int confirmPay(char *username) {
     char storedUsername[MAX_USERNAME_LENGTH];

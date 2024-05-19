@@ -104,7 +104,7 @@ int transaksiPesawat() {
 
         // Printing the transaction details
         printf("| %-3s | %-12s | %-11s | %-20s | %-20s | %-10s | %-10s | %-9s | %-7s | %-7s |",
-            orderNumber, usernameField, topupType, lokasiAwal, kotaTujuan, jamKeberangkatan, jamKedatangan, jmlTiket, kelas, seat);
+        orderNumber, usernameField, topupType, lokasiAwal, kotaTujuan, jamKeberangkatan, jamKedatangan, jmlTiket, kelas, seat);
         printf(" Rp. ");
         disHarga(atoi(originalPrice));
         printf(" | %-8s%% |", discount);
@@ -332,7 +332,7 @@ void coupon() {
     
     // Main menu
     do {
-        choice = displayMenu();
+        choice = menuKupon();
         system("cls");
         switch (choice) {
             case 1:
@@ -444,14 +444,28 @@ int menuAdmin(){
 	int pil;
 	printf("\tMenu\n");
 	printf("1. Lihat Riwayat hotel\n");
-	printf("2. Lihat riwayat pulsa\n");
+	printf("2. Lihat riwayat pesawat\n");
 	printf("3. Buat atau ubah kupon\n");
 	printf("4. Pemasukan\n");
 	printf("5. Registrasi Admin\n");
 	printf("6. exit\n");
+	printf("7. Approve pesanan\n");
 	printf("Pilih menu: \n");
 	scanf("%d", &pil);
 	return pil;
+}
+
+int menuKupon() {
+    int choice;
+    printf("1. Create coupon\n");
+    printf("2. List coupon\n");
+    printf("3. Change discount\n");
+    printf("4. Exit\n");
+    printf("Pilih menu: ");
+    
+    scanf("%d", &choice);
+    
+    return choice;
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------------

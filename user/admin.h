@@ -3,6 +3,7 @@
 
 int mainMenu();
 int menuadmin();
+int menuKupon();
 int transaksiHotel();
 void createCoupon(char *coupon, int discount);
 void displayCouponList();
