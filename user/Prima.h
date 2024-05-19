@@ -26,6 +26,7 @@ void modifyUser(char *username, char *password);
 void dataSaldoNew(char *username);
 int isSaldoCukup(char *username, float totHarga);
 int confirmPay(char *username);
+void topUpSaldo(char *username, float amount);
 
 //Info Profil
 void showInfo(char *username);
