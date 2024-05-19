@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
 CompilerSettings=0000000000000000000000000
-UnitCount=14
+UnitCount=16
 
 [VersionInfo]
 Major=1
@@ -181,7 +181,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit15]
-FileName=modul\admin.c
+FileName=Ridho.h
 CompileCpp=0
 Folder=
 Compile=1
@@ -192,6 +192,16 @@ BuildCmd=
 
 [Unit5]
 FileName=modul\Hafidz.c
+CompileCpp=0
+Folder=
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit16]
+FileName=modul\Ridho.c
 CompileCpp=0
 Folder=
 Compile=1

@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "../payPrim.h"
 #include "../Hafidz.h"
 
 Tiket tiket;
+Penumpang penumpang;
 
 /* COUPON */
 
@@ -130,6 +132,58 @@ void freeLoginHistory(struct LoginHistory *head) {
 }
 
 /* KERETA */
+bool isLeapYear(int year) {
+    return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+}
+
+bool isValidDate(int day, int month, int year) {
+    if (month < 1 || month > 12) {
+        return false;
+    }
+
+    if (day < 1) {
+        return false;
+    }
+
+    int daysInMonth[] = { 31, (isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    return day <= daysInMonth[month - 1];
+}
+
+bool isDateNotInPast(int day, int month, int year) {
+    time_t t = time(NULL);
+    struct tm today = *localtime(&t);
+
+    if (year < (today.tm_year + 1900)) {
+        return false;
+    } else if (year == (today.tm_year + 1900)) {
+        if (month < (today.tm_mon + 1)) {
+            return false;
+        } else if (month == (today.tm_mon + 1)) {
+            return day >= today.tm_mday;
+        }
+    }
+
+    return true;
+}
+
+void inputTanggal(char* tanggal) {
+    int day, month, year;
+    bool valid = false;
+
+    do {
+        printf("Masukkan tanggal keberangkatan (dd/mm/yyyy): ");
+        scanf("%d/%d/%d", &day, &month, &year);
+
+        if (isValidDate(day, month, year) && isDateNotInPast(day, month, year)) {
+            valid = true;
+        } else {
+            printf("Tanggal tidak valid atau tanggal berada di masa lalu. Silakan coba lagi.\n");
+        }
+    } while (!valid);
+
+    sprintf(tanggal, "%02d/%02d/%04d", day, month, year);
+}
 
 void pilihJadwal(char* jadwal) {
     int pilihan = menuPilihJadwal();
@@ -252,7 +306,8 @@ void pesanSeat(const char* filename, const char* seat, const char* namaPenumpang
 void pilihSeat(char* seat, int* gerbong, Penumpang* penumpang, const char* jadwal) {
 	clearScreen();
     int kelasPilihan = menuPilihKelas();
-
+    tiket.kelas = kelasPilihan;
+    
     if (kelasPilihan == 1) {
         printf("\nPilih gerbong (1-3): ");
         scanf("%d", gerbong);
@@ -323,16 +378,41 @@ void inputStasiun(Tiket* tiket, int jenisKeretaPilihan) {
 			listKeretaAntarKota();
 		}
 		
-        printf("Masukkan nama stasiun keberangkatan: ");
+        printf("Masukkan stasiun keberangkatan: ");
         scanf("%s", tiket->stasiunKeberangkatan);
-        printf("Masukkan nama stasiun tujuan: ");
-        scanf("%s", tiket->stasiunTujuan);
-        
-        if (validasiStasiun(tiket->stasiunKeberangkatan, jenisKeretaPilihan) && validasiStasiun(tiket->stasiunTujuan, jenisKeretaPilihan)) {
+        if (validasiStasiun(tiket->stasiunKeberangkatan, jenisKeretaPilihan)) {
             break;
         } else {
-            printf("Stasiun yang dipilih tidak valid untuk jenis kereta ini. Silakan coba lagi.\n");
+            printf("Stasiun tidak valid. Silakan coba lagi.\n");
             spaceToContinue();
+        }
+    }
+    
+    while (1) {
+        printf("Masukkan stasiun tujuan: ");
+        scanf("%s", tiket->stasiunTujuan);
+        if (validasiStasiun(tiket->stasiunTujuan, jenisKeretaPilihan)) {
+            break;
+        } else {
+            printf("Stasiun tidak valid. Silakan coba lagi.\n");
+            spaceToContinue();
+        }
+    }
+}
+
+void tentukanTarif(Tiket* tiket) {
+    if (strcmp(tiket->jenisKereta, "Kereta Lokal") == 0) {
+        tiket->tarif = 5000;
+    } else if (strcmp(tiket->jenisKereta, "Kereta Antar Kota") == 0) {
+        if ((strcmp(tiket->stasiunKeberangkatan, "Manggarai") == 0 && strcmp(tiket->stasiunTujuan, "Bandung") == 0) ||
+            (strcmp(tiket->stasiunKeberangkatan, "Bandung") == 0 && strcmp(tiket->stasiunTujuan, "Manggarai") == 0)) {
+            tiket->tarif = tiket->kelas == 1 ? 200000 : 150000;
+        } else if ((strcmp(tiket->stasiunKeberangkatan, "Bandung") == 0 && strcmp(tiket->stasiunTujuan, "Yogyakarta") == 0) ||
+                   (strcmp(tiket->stasiunKeberangkatan, "Yogyakarta") == 0 && strcmp(tiket->stasiunTujuan, "Bandung") == 0)) {
+            tiket->tarif = tiket->kelas == 1 ? 400000 : 250000;
+        } else if ((strcmp(tiket->stasiunKeberangkatan, "Manggarai") == 0 && strcmp(tiket->stasiunTujuan, "Yogyakarta") == 0) ||
+                   (strcmp(tiket->stasiunKeberangkatan, "Yogyakarta") == 0 && strcmp(tiket->stasiunTujuan, "Manggarai") == 0)) {
+            tiket->tarif = tiket->kelas == 1 ? 650000 : 400000;
         }
     }
 }
@@ -343,12 +423,15 @@ int konfirmasiPembayaran(Tiket* tiket) {
     printf("NIK: %s\n", tiket->penumpang.nik);
     printf("Stasiun Keberangkatan: %s\n", tiket->stasiunKeberangkatan);
     printf("Stasiun Tujuan: %s\n", tiket->stasiunTujuan);
+    printf("Tanggal Keberangkatan: %s\n", tiket->tanggal);
     printf("Jadwal: %s\n", tiket->jadwal);
+    printf("Jenis Kereta: %s\n", tiket->jenisKereta);
     if (strcmp(tiket->jenisKereta, "Kereta Antar Kota") == 0) {
+        printf("Kelas: %s\n", tiket->kelas == 1 ? "Eksekutif" : "Ekonomi");
         printf("Gerbong: %d\n", tiket->gerbong);
         printf("Seat: %s\n", tiket->seat);
     }
-    printf("Jenis Kereta: %s\n", tiket->jenisKereta);
+    printf("Tarif: Rp %d\n", tiket->tarif);
     printf("Apakah anda ingin melanjutkan pemesanan?\n");
     printf("1. Iya\n");
     printf("2. Tidak\n");
@@ -363,50 +446,121 @@ int konfirmasiPembayaran(Tiket* tiket) {
     return pilihan;
 }
 
+void simpanRiwayat(Tiket* tiket) {
+    FILE* file;
+    if (strcmp(tiket->jenisKereta, "Kereta Lokal") == 0) {
+        file = fopen("database/riwayatKeretaLokal.txt", "a");
+        fprintf(file, "%s, %s, %s, %s, %s, %s, %s, Rp %d\n", 
+                tiket->penumpang.nama, tiket->penumpang.nik, 
+                tiket->stasiunKeberangkatan, tiket->stasiunTujuan, 
+                tiket->tanggal, tiket->jadwal, tiket->jenisKereta, tiket->tarif);
+    } else if (strcmp(tiket->jenisKereta, "Kereta Antar Kota") == 0) {
+        file = fopen("database/riwayatKeretaAntarKota.txt", "a");
+        fprintf(file, "%s, %s, %s, %s, %s, %s, %s, %d, %s, Rp %'d\n", 
+                tiket->penumpang.nama, tiket->penumpang.nik, 
+                tiket->stasiunKeberangkatan, tiket->stasiunTujuan, 
+                tiket->tanggal, tiket->jadwal, tiket->jenisKereta, 
+                tiket->kelas, tiket->seat, tiket->tarif);
+    }
+    fclose(file);
+}
+
+void tampilkanRiwayatPembelian() {
+    clearScreen();
+    FILE* file;
+    printf("Riwayat Pembelian Tiket Kereta\n");
+    printf("\nKereta Lokal (Bandung Raya)\n");
+    printf("| Nama                         | Stasiun Keberangkatan | Stasiun Tujuan         | Tanggal Keberangkatan | Jadwal  | Tarif      |\n");
+    printf("|------------------------------|-----------------------|------------------------|-----------------------|---------|------------|\n");
+
+    file = fopen("database/riwayatKeretaLokal.txt", "r");
+    if (file != NULL) {
+        char line[200];
+        while (fgets(line, sizeof(line), file)) {
+            char nama[50], nik[20], stasiunKeberangkatan[50], stasiunTujuan[50], tanggal[11], jadwal[20], jenisKereta[20];
+            int tarif;
+            sscanf(line, "%[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], Rp %d", 
+                   nama, nik, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, jenisKereta, &tarif);
+            printf("| %-28s | %-21s | %-22s | %-21s | %-7s | Rp %-10d |\n", 
+                   nama, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, tarif);
+        }
+        fclose(file);
+    }
+
+    printf("\nKereta Antar Kota\n");
+    printf("| Nama                         | Stasiun Keberangkatan | Stasiun Tujuan         | Tanggal Keberangkatan | Jadwal  | Kelas      | Gerbong | Seat  | Tarif      |\n");
+    printf("|------------------------------|-----------------------|------------------------|-----------------------|---------|------------|---------|-------|------------|\n");
+
+    file = fopen("database/riwayatKeretaAntarKota.txt", "r");
+    if (file != NULL) {
+        char line[200];
+        while (fgets(line, sizeof(line), file)) {
+            char nama[50], nik[20], stasiunKeberangkatan[50], stasiunTujuan[50], tanggal[11], jadwal[20], jenisKereta[20], seat[10];
+            int kelas, gerbong, tarif;
+            sscanf(line, "%[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %d, %[^,], Rp %d", 
+                   nama, nik, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, jenisKereta, &kelas, seat, &tarif);
+            printf("| %-28s | %-21s | %-22s | %-21s | %-7s | %-10s | %-7d | %-5s | Rp %-10d |\n", 
+                   nama, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, kelas == 1 ? "Eksekutif" : "Ekonomi", gerbong, seat, tarif);
+        }
+        fclose(file);
+    }
+
+    spaceToContinue();
+}
+
 void pemesananKereta(char username[]) {
     int jenisKeretaPilihan;
     
     // Pilih jenis kereta
-    clearScreen();
-    printf("Pilih Jenis Kereta:\n");
-    printf("1. Kereta Lokal Bandung Raya\n");
-    printf("2. Kereta Antar Kota\n");
-    printf("Masukkan pilihan: ");
-    scanf("%d", &jenisKeretaPilihan);
-    system("cls");
+    while (1) {
+        clearScreen();
+        printf("Pilih Jenis Kereta:\n");
+        printf("1. Kereta Lokal Bandung Raya\n");
+        printf("2. Kereta Antar Kota\n");
+        printf("3. Riwayat Pembelian\n");
+        printf("Masukkan pilihan: ");
+        scanf("%d", &jenisKeretaPilihan);
 
-    // Input stasiun keberangkatan dan tujuan
-    inputStasiun(&tiket, jenisKeretaPilihan);
-
-    // Set jenis kereta
-    if (jenisKeretaPilihan == 1) {
-        strcpy(tiket.jenisKereta, "Kereta Lokal");
-    } else if (jenisKeretaPilihan == 2) {
-        strcpy(tiket.jenisKereta, "Kereta Antar Kota");
-    } else {
-        printf("Pilihan jenis kereta tidak valid.\n");
-        pemesananKereta(username);
-    }
-
-    // Pilih jadwal
-    pilihJadwal(tiket.jadwal);
-
-    // Input data diri
-    inputDataDiri(&tiket.penumpang);
-
-    // Pilih seat jika kereta antar kota
-    if (jenisKeretaPilihan == 2) {
-        pilihSeat(tiket.seat, &tiket.gerbong, &tiket.penumpang, tiket.jadwal);
-    }
-
-    // Konfirmasi pembayaran
-    system("cls");
-    int konfirmasi = konfirmasiPembayaran(&tiket);
-    if (konfirmasi == 1) {
-        printf("Pembayaran berhasil. Tiket Anda telah dipesan.\n");
-    } else {
-        printf("Pemesanan dibatalkan.\n");
-    }
+        if (jenisKeretaPilihan == 3) {
+            tampilkanRiwayatPembelian();
+            continue;
+        }
+		
+		inputDataDiri(&penumpang);
+        strcpy(tiket.penumpang.nama, penumpang.nama);
+        strcpy(tiket.penumpang.nik, penumpang.nik);
+        
+        if (jenisKeretaPilihan == 1) {
+            strcpy(tiket.jenisKereta, "Kereta Lokal");
+        } else if (jenisKeretaPilihan == 2) {
+            strcpy(tiket.jenisKereta, "Kereta Antar Kota");
+        } else {
+            printf("Pilihan tidak valid.\n");
+            spaceToContinue();
+            continue;
+        }
+        
+        inputTanggal(tiket.tanggal); // Input tanggal keberangkatan
+        inputStasiun(&tiket, jenisKeretaPilihan);
+        pilihJadwal(tiket.jadwal);
+    
+    	// Pilih seat jika kereta antar kota
+    	if (jenisKeretaPilihan == 2) {
+        	pilihSeat(tiket.seat, &tiket.gerbong, &tiket.penumpang, tiket.jadwal);
+    	}
+		
+		tentukanTarif(&tiket);
+		
+    	// Konfirmasi pembayaran
+    	clearScreen();
+    	int konfirmasi = konfirmasiPembayaran(&tiket);
+    	if (konfirmasi == 1) {
+    		simpanRiwayat(&tiket);
+        	printf("Pembayaran berhasil. Tiket Anda telah dipesan.\n");
+    	} else {
+        	printf("Pemesanan dibatalkan.\n");
+    	}
+	}
 }
 
 void listKeretaLokal() {
