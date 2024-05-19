@@ -12,13 +12,13 @@ void topUpSaldo(char *username, float amount) {
 
 	printf("Masukkan jumlah saldo : ");
     scanf("%f", &amount);
-    FILE *file = fopen("database/saldoUsers.txt", "r+");
+    FILE *file = fopen("database/users.txt", "r+");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
     }
 
-    FILE *tempFile = fopen("database/saldoUsersTemp.txt", "w");
+    FILE *tempFile = fopen("database/usersTemp.txt", "w");
     if (tempFile == NULL) {
         printf("Gagal membuka file.\n");
         fclose(file);
@@ -26,20 +26,22 @@ void topUpSaldo(char *username, float amount) {
     }
 
     char storedUsername[MAX_USERNAME_LENGTH];
+    char storedPassword[MAX_PASSWORD_LENGTH];
+    char storedPin[MAX_PIN];
     float saldo;
     int userFound = 0;
-    int intAmount = (int)amount;
+    int intAmount = (int)amount; 
 	
 	clearScreen();
 	title();
 	printf("Anda akan menambah saldo Rp. ");disHarga(intAmount);printf("\n\n");
 	if(confirmPay(username)){
-    while (fscanf(file, "%s %f", storedUsername, &saldo) == 2) {
+    while (fscanf(file, "%s %s %s %f", storedUsername,storedPassword,storedPin, &saldo) == 4) {
         if (strcmp(storedUsername, username) == 0) {
             userFound = 1;
             saldo += amount; // Menambahkan saldo
         }
-        fprintf(tempFile, "%s %.2f\n", storedUsername, saldo);
+        fprintf(tempFile, "%s %s %s %.2f\n", storedUsername, storedPassword, storedPin, saldo);
     }
 
     if (!userFound) {
@@ -52,11 +54,11 @@ void topUpSaldo(char *username, float amount) {
     fclose(file);
     fclose(tempFile);
 
-    if (remove("database/saldoUsers.txt") != 0) {
+    if (remove("database/users.txt") != 0) {
         printf("Gagal menghapus file asli.\n");
         return;
     }
-    if (rename("database/saldoUsersTemp.txt", "database/saldoUsers.txt") != 0) {
+    if (rename("database/usersTemp.txt", "database/users.txt") != 0) {
         printf("Gagal mengganti nama file sementara.\n");
         return;
     }
