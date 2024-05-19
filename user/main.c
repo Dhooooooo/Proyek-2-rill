@@ -25,7 +25,7 @@ int main() {
     int choice, lolos, backMenu, beli, profil;
     Tiket tiket;
     
-    int pilihan, hotel, pulsa, totalHotel, totalPembelian = 0, totalPemasukan = 0;
+    int pilihan, hotel, pulsa, totalHotel = 0, totalPesawat = 0, totalKereta = 0, totalPemasukan = 0;
     
     do {
     	clearScreen();
@@ -62,14 +62,14 @@ int main() {
                             switch (adminChoice) {
                                 case 1:
                                     clearScreen();
-                                    printf("Riwayat hotel: \n");
+                                    printf("Riwayat pemesanan kamar hotel: \n");
                                     transaksiHotel();
                                     spaceToContinue();
                                     break;
                                 case 2:
                                     clearScreen();
                                     printf("Riwayat pembelian tiket pesawat: \n");
-                                    //transaksiPesawat();
+                                    transaksiPesawat();
                                     spaceToContinue();
                                     break;
                                 case 3:
@@ -82,8 +82,10 @@ int main() {
                                     printf("Transaksi hotel: \n");
                                     totalHotel = transaksiHotel();
                                     printf("Transaksi pesawat: \n");
-                                    //totalPembelian = transaksiPesawat();
-                                    totalPemasukan = totalHotel; //+ totalPembelian;
+                                    totalPesawat = transaksiPesawat();
+                                    printf("Transaksi kereta: \n");
+                                    totalKereta = transaksiKereta();
+                                    totalPemasukan = totalHotel + totalPesawat + totalKereta;
                                     printf("\nTotal transaksi pesawat dan hotel berhasil: Rp. ");
                                     disHarga(totalPemasukan);
                                     spaceToContinue();
@@ -101,6 +103,14 @@ int main() {
                                     printf("Terima kasih!\n");
                                     waitNext();
                                     break;
+                                case 7:
+                                	printf("Approve pesanan");
+                                	break;
+                                case 8:
+                                	printf("Riwayat pembelian tiket kereta");
+                                	transaksiKereta();
+									spaceToContinue();
+                                	break;
                                 default:
                                     printf("Pilihan tidak valid!");
                             }
@@ -136,7 +146,7 @@ int main() {
                                             default:
                                                 printf("Pilihan tidak valid.");
                                         }
-                                    } while (beli != 3);
+                                    } while (beli != 4);
                                     break;
                                 case 2:
                                     // Top-up saldo e-wallet

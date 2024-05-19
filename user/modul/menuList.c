@@ -51,6 +51,10 @@ int displayMenu() {
     printf("3. Exit\n");
     printf("Pilih menu: ");
     scanf("%d", &choice);
+    if (choice != 1 || choice != 2 || choice != 3){
+    	printf("Pilihan tidak valid");
+    	fflush(stdin);
+	}
     return choice;
 }
 

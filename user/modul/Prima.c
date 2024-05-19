@@ -452,7 +452,7 @@ void modifyUser(char *username, char *password) {
     }
     
     // Membaca file dan menyalin informasi pengguna ke file sementara
-    while (fscanf(file, "%s %s %s %f %s\n", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
+    while (fscanf(file, "%s %s %s %f %s", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
         if (strcmp(tempUser, storedUsername) == 0) {
             fprintf(tempFile, "%s %s %s %.2f %s\n", username, storedPassword, storedPin, saldo, storedRole); // Menulis informasi pengguna yang dimodifikasi
         } else {

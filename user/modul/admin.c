@@ -60,51 +60,50 @@ int transaksiHotel() {
 }
 
 int transaksiPesawat() {
-    int totalPembelian = 0;
+    int totalPesawat = 0;
     
     const char *dbsPesawat = "database/HistoryTiket.txt"; // Define the file name
-    FILE *file = fopen(dbsPesawat, "r");
+    FILE *file = fopen(dbsPesawat, "r+");
     if (file == NULL) {
-        printf("Gagal membuka file %s.\n", dbsPesawat);
-        return 0;
+        printf("Gagal membuka file. \n");
     }
 
     // Print header
-    printf("+----------------------------------------------------------------------------------------------------------------------------------+\n");
-    printf("| %-3s | %-12s | %-11s | %-20s | %-20s | %-10s | %-10s | %-9s | %-7s | %-7s | %-12s | %-10s | %-10s | %-10s | %-10s |\n",
-           "No", "Username", "Pembelian", "Lokasi Awal", "Kota Tujuan", "Jam Brgkt", "Jam Kdt", "Jml Tiket", "Kelas", "Seat", "Harga", "Diskon", "Admin", "Total", "Status");
-    printf("+----------------------------------------------------------------------------------------------------------------------------------+\n");
+    printf("+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n");
+    printf("| %-3s | %-12s | %-20s | %-20s | %-10s | %-10s | %-9s | %-7s | %-12s | %-10s | %-10s | %-10s | %-10s |\n",
+           "No", "Username", "Lokasi Awal", "Kota Tujuan", "Jam Brgkt", "Jam Kdt", "Jml Tiket", "Kelas", "Harga", "Diskon", "Admin", "Total", "Status");
+    printf("|--------------------+----------------------+----------------------+------------+------------+-----------+----------------------------------------------------------------------------|\n");
 
     char line[MAX_LENGTH];
     while (fgets(line, sizeof(line), file)) {
+//    	printf("%s", line);
         char *dekripsiLine = dekripsi(line);
-        printf("Decrypted Line: %s\n", dekripsiLine);
+//        printf("Decrypted Line: %s\n", dekripsiLine);
 
         // Tokenizing decrypted line
         char *orderNumber = strtok(dekripsiLine, ",");
         char *usernameField = strtok(NULL, ",");
-        char *topupType = strtok(NULL, ",");
         char *lokasiAwal = strtok(NULL, ",");
         char *kotaTujuan = strtok(NULL, ",");
         char *jamKeberangkatan = strtok(NULL, ",");
         char *jamKedatangan = strtok(NULL, ",");
         char *jmlTiket = strtok(NULL, ",");
         char *kelas = strtok(NULL, ",");
-        char *seat = strtok(NULL, ",");
+//        char *seat = strtok(NULL, ",");
         char *originalPrice = strtok(NULL, ",");
         char *discount = strtok(NULL, ",");
         char *adminFee = strtok(NULL, ",");
         char *total = strtok(NULL, ",");
         char *status = strtok(NULL, ",");
-
-        // Summing up the total purchase if the status is "BERHASIL"
+                
+				// Summing up the total purchase if the status is "BERHASIL"
         if (strcmp(status, "BERHASIL") == 0) {
-            totalPembelian += atoi(total);
+            totalPesawat += atoi(total);
         }
 
         // Printing the transaction details
-        printf("| %-3s | %-12s | %-11s | %-20s | %-20s | %-10s | %-10s | %-9s | %-7s | %-7s |",
-        orderNumber, usernameField, topupType, lokasiAwal, kotaTujuan, jamKeberangkatan, jamKedatangan, jmlTiket, kelas, seat);
+        printf("| %-3s | %-12s | %-20s | %-20s | %-10s | %-10s | %-9s | %-7s |",
+        orderNumber, usernameField, lokasiAwal, kotaTujuan, jamKeberangkatan, jamKedatangan, jmlTiket, kelas);
         printf(" Rp. ");
         disHarga(atoi(originalPrice));
         printf(" | %-8s%% |", discount);
@@ -112,14 +111,63 @@ int transaksiPesawat() {
         disHarga(atoi(adminFee));
         printf(" | Rp. ");
         disHarga(atoi(total));
-        printf(" | %-10s |\n", status);
+        printf(" | %-8s |\n", status);
+    }
+    
+
+    printf("+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n");
+    fclose(file);
+	
+	printf("Total transaksi tiket pesawat: Rp. ");
+    disHarga(totalPesawat);
+}
+
+
+int transaksiKereta(){
+	int totalLokal =0, totalKota = 0, totalKereta = 0;
+	FILE* file;
+    printf("Kereta Lokal (Bandung Raya)\n");
+    printf("| Nama                         | Stasiun Keberangkatan | Stasiun Tujuan         | Tanggal Keberangkatan | Jadwal  | Tarif      |\n");
+    printf("|------------------------------|-----------------------|------------------------|-----------------------|---------|------------|\n");
+
+    file = fopen("database/riwayatKeretaLokal.txt", "r");
+    if (file != NULL) {
+        char line[200];
+        while (fgets(line, sizeof(line), file)) {
+            char nama[50], nik[20], stasiunKeberangkatan[50], stasiunTujuan[50], tanggal[11], jadwal[20], jenisKereta[20];
+            int tarif;
+            sscanf(line, "%[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], Rp %d", 
+                   nama, nik, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, jenisKereta, &tarif);
+            printf("| %-28s | %-21s | %-22s | %-21s | %-7s | Rp %-10d |\n", 
+                   nama, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, tarif);
+                   totalLokal += tarif;
+        }
+        fclose(file);
     }
 
-    printf("+----------------------------------------------------------------------------------------------------------------------------------+\n");
-    fclose(file);
+    printf("\nKereta Antar Kota\n");
+    printf("| Nama                         | Stasiun Keberangkatan | Stasiun Tujuan         | Tanggal Keberangkatan | Jadwal  | Kelas      | Gerbong | Seat  | Tarif      |\n");
+    printf("|------------------------------|-----------------------|------------------------|-----------------------|---------|------------|---------|-------|------------|\n");
 
-    return totalPembelian;
+    file = fopen("database/riwayatKeretaAntarKota.txt", "r");
+    if (file != NULL) {
+        char line[200];
+        while (fgets(line, sizeof(line), file)) {
+            char nama[50], nik[20], stasiunKeberangkatan[50], stasiunTujuan[50], tanggal[11], jadwal[20], jenisKereta[20], seat[10];
+            int kelas, gerbong, tarif;
+            sscanf(line, "%[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %d, %[^,], Rp %d", 
+                   nama, nik, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, jenisKereta, &kelas, seat, &tarif);
+            printf("| %-28s | %-21s | %-22s | %-21s | %-7s | %-10s | %-7d | %-5s | Rp %-10d |\n", 
+                   nama, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, kelas == 1 ? "Eksekutif" : "Ekonomi", gerbong, seat, tarif);
+                   totalKota += tarif;
+        }
+        fclose(file);
+	}
+    totalKereta = totalKota + totalLokal;
+    printf("Total transaksi kereta lokal dan antarkota: Rp. ");
+    disHarga(totalKereta);
 }
+
 
 //int printDecryptedFile(char *username) {
 //    int totalPembelian = 0;
@@ -450,6 +498,7 @@ int menuAdmin(){
 	printf("5. Registrasi Admin\n");
 	printf("6. exit\n");
 	printf("7. Approve pesanan\n");
+	printf("8. Lihat riwayat kereta\n");
 	printf("Pilih menu: \n");
 	scanf("%d", &pil);
 	return pil;

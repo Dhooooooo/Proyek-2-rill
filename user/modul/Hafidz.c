@@ -517,14 +517,8 @@ void pemesananKereta(char username[]) {
         printf("Pilih Jenis Kereta:\n");
         printf("1. Kereta Lokal Bandung Raya\n");
         printf("2. Kereta Antar Kota\n");
-        printf("3. Riwayat Pembelian\n");
         printf("Masukkan pilihan: ");
         scanf("%d", &jenisKeretaPilihan);
-
-        if (jenisKeretaPilihan == 3) {
-            tampilkanRiwayatPembelian();
-            continue;
-        }
 		
 		inputDataDiri(&penumpang);
         strcpy(tiket.penumpang.nama, penumpang.nama);
