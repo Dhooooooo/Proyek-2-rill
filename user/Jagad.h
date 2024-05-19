@@ -4,10 +4,10 @@
 #include <stdbool.h>
 
 // Definisi struktur node
-struct Node {
+typedef struct linkedList {
     char data[255];
-    struct Node* next;
-};
+    struct linkedList* next;
+} linkedListAntrean;
 
 // Fungsi untuk memvalidasi tanggal yang diinputkan, berlaku untuk tanggal Check In ataupun tanggal Check Out
 bool *isTglValid(char *tanggal);
@@ -55,11 +55,11 @@ void pemesananHotel(char username[]);
 void disPemesananUser(char username[]);
 
 // Fungsi untuk menambahkan node baru ke linked list
-int insert(struct Node** head_ref, char new_data[]);
+int insertLinkedList(linkedListAntrean** head_ref, char new_data[]);
 
 // Fungsi untuk menghapus node paling depan dari linked list
-void deleteFront(struct Node** head_ref);
+void deleteFront(linkedListAntrean** head_ref);
 
 // Fungsi untuk mencetak isi linked list
-void printList(struct Node* head);
+void printList(linkedListAntrean* head, char jenis[]);
 #endif
