@@ -23,6 +23,9 @@ typedef struct {
     char jadwal[20];
     char seat[10];
     int gerbong;
+    int tarif;
+    char tanggal[11];
+    int kelas;
     Penumpang penumpang;
 } Tiket;
 
@@ -49,6 +52,7 @@ void printLoginHistory(struct LoginHistory *head);
 void freeLoginHistory(struct LoginHistory *head);
 
 /* KERETA */
+
 // Prosedur untuk memilih jadwal kereta
 void pilihJadwal(char* jadwal);
 
@@ -78,6 +82,14 @@ void pesanSeat(const char* filename, const char* seat, const char* namaPenumpang
 
 // Prosedur untuk memulai pemesanan tiket kereta
 void pemesananKereta(char username[]);
+
+bool isLeapYear(int year);
+bool isValidDate(int day, int month, int year);
+bool isDateNotInPast(int day, int month, int year);
+void inputTanggal(char* tanggal);
+void tentukanTarif(Tiket* tiket);
+void simpanRiwayat(Tiket* tiket);
+void tampilkanRiwayatPembelian();
 
 /* MENU */
 void listKeretaLokal();
