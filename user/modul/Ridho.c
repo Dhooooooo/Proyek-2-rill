@@ -37,12 +37,12 @@ void topUpSaldo(char *username, float amount) {
 	title();
 	printf("Anda akan menambah saldo Rp. ");disHarga(intAmount);printf("\n\n");
 	if(confirmPay(username)){
-    while (fscanf(file, "%s %s %s %f %s", storedUsername,storedPassword,storedPin, &saldo, storedRole) == 5) {
+    while (fscanf(file, "%s %s %s %f %s\n", storedUsername,storedPassword,storedPin, &saldo, storedRole) == 5) {
         if (strcmp(storedUsername, username) == 0) {
             userFound = 1;
             saldo += amount; // Menambahkan saldo
         }
-        fprintf(tempFile, "%s %s %s %.2f %s", storedUsername, storedPassword, storedPin, saldo, storedRole);
+        fprintf(tempFile, "%s %s %s %.2f %s\n", storedUsername, storedPassword, storedPin, saldo, storedRole);
     }
 
     if (!userFound) {
