@@ -71,7 +71,7 @@ int displayMenuPembelian(){
 	int menuPembelian;
 	printf("Silakan pilih menu Pembelian\n");
 	printf("1. Pesan hotel\n");
-	printf("2. Isi Pulsa\n");
+	printf("2. Pesan Tiket Pesawat\n");
 	printf("3. Kereta Api\n");
 	printf("4. Kembali\n");
 	printf("Pilih Menu : ");

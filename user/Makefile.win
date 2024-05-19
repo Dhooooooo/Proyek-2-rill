@@ -4,8 +4,8 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = main.o modul/enkripDekrip.o modul/menuList.o modul/pulsa.o modul/Hafidz.o modul/Jagad.o modul/Prima.o modul/Ridho.o
-LINKOBJ  = main.o modul/enkripDekrip.o modul/menuList.o modul/pulsa.o modul/Hafidz.o modul/Jagad.o modul/Prima.o modul/Ridho.o
+OBJ      = main.o modul/enkripDekrip.o modul/menuList.o modul/Hafidz.o modul/Jagad.o modul/Prima.o modul/Angel.o modul/admin.o modul/Ridho.o
+LINKOBJ  = main.o modul/enkripDekrip.o modul/menuList.o modul/Hafidz.o modul/Jagad.o modul/Prima.o modul/Angel.o modul/admin.o modul/Ridho.o
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
@@ -33,9 +33,6 @@ modul/enkripDekrip.o: modul/enkripDekrip.c
 modul/menuList.o: modul/menuList.c
 	$(CC) -c modul/menuList.c -o modul/menuList.o $(CFLAGS)
 
-modul/pulsa.o: modul/pulsa.c
-	$(CC) -c modul/pulsa.c -o modul/pulsa.o $(CFLAGS)
-
 modul/Hafidz.o: modul/Hafidz.c
 	$(CC) -c modul/Hafidz.c -o modul/Hafidz.o $(CFLAGS)
 
@@ -44,6 +41,12 @@ modul/Jagad.o: modul/Jagad.c
 
 modul/Prima.o: modul/Prima.c
 	$(CC) -c modul/Prima.c -o modul/Prima.o $(CFLAGS)
+
+modul/Angel.o: modul/Angel.c
+	$(CC) -c modul/Angel.c -o modul/Angel.o $(CFLAGS)
+
+modul/admin.o: modul/admin.c
+	$(CC) -c modul/admin.c -o modul/admin.o $(CFLAGS)
 
 modul/Ridho.o: modul/Ridho.c
 	$(CC) -c modul/Ridho.c -o modul/Ridho.o $(CFLAGS)

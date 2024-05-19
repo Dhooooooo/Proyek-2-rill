@@ -16,8 +16,8 @@ void encrypt(char *text);
 void decrypt(char *text);
 
 //Akun Register Login
-void registerUser(char *username, char *password, char *pin);
-int loginUser(char *username, char *password, char *pin);
+//void registerUser(char *username, char *password, char *pin);
+//int loginUser(char *username, char *password, char *pin);
 void modifyPass(char *username, char *password);
 void modifyPin(char *username, char *newPin);
 void modifyUser(char *username, char *password);
@@ -26,6 +26,7 @@ void modifyUser(char *username, char *password);
 void dataSaldoNew(char *username);
 int isSaldoCukup(char *username, float totHarga);
 int confirmPay(char *username);
+void topUpSaldo(char *username, float amount);
 
 //Info Profil
 void showInfo(char *username);
