@@ -15,8 +15,8 @@ int hargaPerMalam = 1000000;
 #define maxKamar 300
 
 // File penyimpanan
-char dbsPemesanan[] = "database/pemesananHotel.txt";
-struct Node* pesananHotel = NULL;
+char dbsPemesananHotel[] = "database/pemesananHotel.txt";
+linkedListAntrean* pesananHotel = NULL;
 // Fungsi untuk memvalidasi tanggal yang diinputkan, berlaku untuk tanggal Check In ataupun tanggal Check Out
 bool* isTglValid(char *tanggal) { 
 	// Deklrasi Variabel
@@ -390,7 +390,7 @@ int hitungHariMenginap(char *tanggalCheckIn, char *tanggalCheckOut){
 
 // Fungsi untuk memeriksa apakah nomor kamar sudah ada di dalam file
 bool isKamarExists(int noKamar) {
-    FILE *file = fopen(dbsPemesanan, "r+");
+    FILE *file = fopen(dbsPemesananHotel, "r+");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         exit(1);
@@ -439,7 +439,6 @@ void disHarga(int harga) {
    disHarga(harga / 1000);
    printf(".%03d", harga % 1000);
 }
-
 
 // Untuk menghitung ada berapa baris di file
 int hitungBaris() {
@@ -528,7 +527,7 @@ void disPemesananAdmin(){
 	int i;
     char line[100];
     
-    FILE *files = fopen(dbsPemesanan, "r");
+    FILE *files = fopen(dbsPemesananHotel, "r");
     if (files == NULL) {
         printf("Gagal membuka file.\n");
     }
@@ -623,18 +622,35 @@ void pemesananHotel(char username[]){
 	printf("\nPotongan\t : %d%%", potongan);
 	printf("\nTotal Harga\t : Rp. ");disHarga(totHarga);printf("\n\n");
 
-//    if(confirmPay(username)){
-//	    if(isSaldoCukup(username, hasil)){ // cek apakah saldo cukup
-//	    
-//	    	strcpy(stats, "BERHASIL");
-//	    	noKamar = kamar();
-//		} else {
-//			strcpy(stats, "GAGAL");
-//		}
-//	
-//	} else { 
-//		strcpy(stats, "GAGAL");
-//	}
+	char tempTanggalCheckIn[20];
+	char tempTanggalCheckOut[20];
+	
+    if(confirmPay(username)){
+    	strcpy(tempTanggalCheckIn, tanggalCheckIn);
+    	strcpy(tempTanggalCheckOut, tanggalCheckOut);
+    	// Menggabungkan tanggal check-in dan check-out ke dalam variabel prompt
+		sprintf(prompt, "%d,%s,%s,%s,%d,%d,%d,%d,%d,%s", no,username,tanggalCheckIn, tanggalCheckOut, totalHariMenginap, hargaMenginap, potongan, totHarga, noKamar, stats);
+    	
+//    	printf("%s %s!!!!!!!!!3\n", tanggalCheckIn, tanggalCheckOut);
+		// Enkripsi prompt
+	    char* enkripsiPesanan = enkripsi(prompt);
+	    
+		if(insertLinkedList(&pesananHotel, prompt)){
+		    FILE *file = fopen(dbsPemesananHotel, "a"); // membuka dile dengan mode append atau mode menambahkan
+		    if (file == NULL) {
+		        printf("Gagal membuka file.\n");
+		    }
+		    
+		    fprintf(file, "%s,\n", enkripsiPesanan); // menulis ke file
+		    
+		    fclose(file);
+		}
+		else{
+			strcpy(stats, "Antrean penuh");
+		}
+	}else{
+		strcpy(stats, "Dibatalkan");
+	}
     
 	system("cls");
 	printf(" /$$   /$$  /$$$$$$  /$$$$$$$$ /$$$$$$$$ /$$                /$$$$$ /$$$$$$$$ /$$$$$$$$ /$$$$$$$$ /$$   /$$  /$$$$$$ \n");
@@ -647,43 +663,20 @@ void pemesananHotel(char username[]){
 	printf("|__/  |__/ \\______/    |__/   |________/|________/       \\______/ |________/   |__/   |________/|__/  \\__/|__/  |__/\n");
 	printf("----------------------------------------------------------------------------------------------------------------------\n\n");
     
-	printf("Berikut rincian pesanan anda\n\n");
-	printf("Tanggal CheckIn\t : %s\nTanggal CheckOut : %s\nTotal menginap\t : %d hari\nNo kamar\t : %d\n", tanggalCheckIn, tanggalCheckOut, totalHariMenginap, noKamar);
+    printf("Berikut rincian pesanan anda\n\n");
+	printf("Tanggal CheckIn\t : %s\nTanggal CheckOut : %s\nTotal menginap\t : %d hari\nNo kamar\t : %d\n", tempTanggalCheckIn, tempTanggalCheckOut, totalHariMenginap, noKamar);
 	printf("Harga\t\t : Rp. ");disHarga(hargaMenginap);
 	printf("\nPotongan\t : %d%%", potongan);
 	printf("\nTotal Harga\t : Rp. ");disHarga(totHarga);
-
-    // Menggabungkan tanggal check-in dan check-out ke dalam variabel prompt
-	sprintf(prompt, "%d,%s,%s,%s,%d,%d,%d,%d,%d,%s", no,username,tanggalCheckIn, tanggalCheckOut, totalHariMenginap, hargaMenginap, potongan, totHarga, noKamar, stats);
-	
-	// Enkripsi prompt
-    char* enkripsiPesanan = enkripsi(prompt);
-    
-    
-	if(insert(&pesananHotel, prompt)){
-	    FILE *file = fopen(dbsPemesanan, "a"); // membuka dile dengan mode append atau mode menambahkan
-	    if (file == NULL) {
-	        printf("Gagal membuka file.\n");
-	    }
-	    
-	    fprintf(file, "%s,\n", enkripsiPesanan); // menulis ke file
-	    
-		
-	    fclose(file);
-	}
-	else{
-		strcpy(stats, "Antrean penuh");
-	}
-	
 	printf("\nStatus\t\t : %s", stats);
 	
-    printf("\n");
-    printList(pesananHotel);
+    printf("\n\n");
+    printList(pesananHotel, "hotel");
 }
 
 // Prosedur untuk menampilkan pesanan ke user berdasarkan username
 void disPemesananUser(char username[]){
-	FILE *fileInput = fopen(dbsPemesanan, "r+");
+	FILE *fileInput = fopen(dbsPemesananHotel, "r+");
 	if (fileInput == NULL) {
         printf("Gagal membuka file.\n");
     }
@@ -714,13 +707,12 @@ void disPemesananUser(char username[]){
 	fclose(fileInput);
 }
 
+
 // Fungsi untuk menambahkan node baru ke linked list
-int insert(struct Node** head_ref, char new_data[]) {
-	
-	int MAX_LIST = 2;
+int insertLinkedList(linkedListAntrean** head_ref, char new_data[]) {
     // Hitung jumlah node dalam linked list
     int count = 0;
-    struct Node* temp = *head_ref;
+    linkedListAntrean* temp = *head_ref;
     if (*head_ref != NULL) {
         do {
             count++;
@@ -728,14 +720,13 @@ int insert(struct Node** head_ref, char new_data[]) {
         } while (temp != *head_ref);
     }
 
-    // Jika linked list sudah penuh (jumlah node sudah mencapai 5), cetak pesan peringatan
-    if (count >= MAX_LIST) {
-//        printf("Linked list sudah penuh, tidak bisa menambahkan node baru.\n");
+    // Jika linked list sudah penuh (jumlah node sudah mencapai 2), cetak pesan peringatan
+    if (count >= 2) {
         return 0;
     }
 
     // Alokasikan memori untuk node baru
-    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+    linkedListAntrean* new_node = (linkedListAntrean*)malloc(sizeof(linkedListAntrean));
     strcpy(new_node->data, new_data); // Salin data ke node baru
 
     // Jika linked list kosong, atur node baru sebagai head dan membuatnya menunjuk ke dirinya sendiri
@@ -744,7 +735,7 @@ int insert(struct Node** head_ref, char new_data[]) {
         new_node->next = *head_ref;
     } else {
         // Temukan node terakhir dalam linked list
-        struct Node* last = *head_ref;
+        linkedListAntrean* last = *head_ref;
         while (last->next != *head_ref)
             last = last->next;
 
@@ -756,11 +747,11 @@ int insert(struct Node** head_ref, char new_data[]) {
 }
 
 // Fungsi untuk menghapus node paling depan dari linked list
-void deleteFront(struct Node** head_ref) {
+void deleteFront(linkedListAntrean** head_ref) {
     if (*head_ref == NULL) // Kosong
         return;
 
-    struct Node* temp = *head_ref;
+    linkedListAntrean* temp = *head_ref;
     // Jika linked list hanya memiliki satu node
     if (temp->next == *head_ref) {
         *head_ref = NULL;
@@ -769,7 +760,7 @@ void deleteFront(struct Node** head_ref) {
     }
 
     // Temukan node terakhir dan atur next-nya menjadi node kedua
-    struct Node* last = *head_ref;
+    linkedListAntrean* last = *head_ref;
     while (last->next != *head_ref)
         last = last->next;
     last->next = (*head_ref)->next;
@@ -780,13 +771,59 @@ void deleteFront(struct Node** head_ref) {
 }
 
 // Fungsi untuk mencetak isi linked list
-void printList(struct Node* head) {
-    struct Node* temp = head;
+void printList(linkedListAntrean* head, char jenis[]) {
+    linkedListAntrean* temp = head;
     if (head != NULL) {
-        do {
-            printf("%s -> ", temp->data);
-            temp = temp->next;
-        } while (temp != head);
-//        printf("Head\n");
+	    if(!strcmp(jenis, "hotel")){
+	        do {
+	            char dekripPemesanan[50];
+	            strcpy(dekripPemesanan, temp->data); // Buat salinan dari data untuk diproses
+	            char* noOrder = strtok(dekripPemesanan, ",");
+	            char* namaCust = strtok(NULL, ",");
+	            char* CI = strtok(NULL, ",");
+	            char* CO = strtok(NULL, ",");
+	            char* hari = strtok(NULL, ",");
+	            char* harga = strtok(NULL, ",");
+	            char* ptgan = strtok(NULL, ",");
+	            char* total = strtok(NULL, ",");
+	            char* no = strtok(NULL, ",");
+	            char* status = strtok(NULL, ",");
+	
+	            printf("No: %s\nNama: %s\nCheck In: %s\nCheck Out: %s\nHari: %s\nHarga: %s\nPotongan: %s\nTotal: %s\nNo Kamar:%s\n\n", 
+	                noOrder, namaCust, CI, CO, hari, harga, ptgan, total, no);
+	
+	            temp = temp->next;
+	        } while (temp != head);
+		}
+		if(!strcmp(jenis, "pesawat")){
+			do{
+				
+				char *dekripsiLine[500];
+				strcpy(dekripsiLine, temp->data); // Buat salinan dari data untuk diproses
+//	            printf("%s", dekripsiLine);
+
+		        char *orderNumber = strtok(dekripsiLine, ",");
+		        char *usernameField = strtok(NULL, ",");
+		        char *lokasiAwal = strtok(NULL, ",");
+		        char *kotaTujuan = strtok(NULL, ",");
+		        char *jamKeberangkatan = strtok(NULL, ",");
+		        char *jamKedatangan = strtok(NULL, ",");
+		        char *jmlTiket = strtok(NULL, ",");
+		        char *kelas = strtok(NULL, ",");
+		        char *originalPrice = strtok(NULL, ",");
+		        char *discount = strtok(NULL, ",");
+		        char *adminFee = strtok(NULL, ",");
+		        char *total = strtok(NULL, ",");
+		        char *status = strtok(NULL, ",");
+		        
+		        printf("No: %s\nNama: %s\nDari: %s\nMenuju: %s\nJam berangkat: %s\nJam tiba: %s\nJumlah Tiket: %s\nKelas: %s\nHarga: %s\nPotongan: %s\nAdmin: %s\nTotal: %s", orderNumber, usernameField, lokasiAwal, kotaTujuan, jamKeberangkatan, jamKedatangan, jmlTiket, kelas, originalPrice, discount, adminFee, total);
+		        temp = temp->next;
+			}while (temp != head);
+		}
     }
 }
+
+// Fungsi untuk menambahkan yang sedang dalam antrian di dalam database ke linked list
+//void restartLinkedList(linkedListAntrean* head){
+//	
+//}
