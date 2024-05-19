@@ -119,7 +119,7 @@ void decrypt_linked_list(char *text) {
 
 /* LOGIN AND REGISTER */
 
-void registerUser(char *username, char *password, char *pin) {
+void registerUser(char *username, char *password, char *pin, char *role) {
     // Melakukan enkripsi pada password sebelum disimpan
     
     FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
@@ -200,7 +200,7 @@ void registerUser(char *username, char *password, char *pin) {
 }
 
 // Fungsi untuk login
-int loginUser(char *username, char *password, char *pin) {
+int loginUser(char *username, char *password, char *pin, char *role) {
     FILE *file = fopen("database/users.txt", "r");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
