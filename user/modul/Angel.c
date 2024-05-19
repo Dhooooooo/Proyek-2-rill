@@ -6,7 +6,7 @@
 #include "../Hafidz.h"
 #include "../Jagad.h"
 #include "../Angel.h"
-#include "../admin.h"
+//#include "../admin.h"
 
 #define MAX_LENGTH 100
 #define ADMIN_FEE 1500
@@ -14,15 +14,15 @@
 char dbsPesawat[] = "database/HistoryTiket.txt";
 char dbsArt[] = "art/jeticsPlane.txt";
 
-char char_set[] = "1qazZAQ2wsxXSW3edcCDE4rfvVFR5tgbBGT6yhnNHY7ujmMJU8ikKI9olLOpP";
-int mod = sizeof(char_set);
+//char char_set[] = "1qazZAQ2wsxXSW3edcCDE4rfvVFR5tgbBGT6yhnNHY7ujmMJU8ikKI9olLOpP";
+//int mod = sizeof(char_set);
 
 char dbsPemesanan[] = "database/pemesananHotel.txt";
 
 
 linkedListAntrean* pesananPesawat = NULL;
 // Fungsi untuk Membuat Node Baru
-struct Node* createNode(int hargaMenginap, int adminFee, int discount) {
+struct Node* createNodes(int hargaMenginap, int adminFee, int discount) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->hargaMenginap = hargaMenginap;
     newNode->adminFee = adminFee;
@@ -35,7 +35,7 @@ struct Node* createNode(int hargaMenginap, int adminFee, int discount) {
 // Fungsi untuk Menambahkan Node ke Pohon Biner
 struct Node* insert(struct Node* root, int hargaMenginap, int adminFee, int discount) {
     if (root == NULL) {
-        return createNode(hargaMenginap, adminFee, discount);
+        return createNodes(hargaMenginap, adminFee, discount);
     }
     return root;
 }
