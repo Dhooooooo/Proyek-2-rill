@@ -260,13 +260,15 @@ void modifyPass(char *username, char *password) {
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
+    char storedRole[MAX_USERNAME_LENGTH];
+    float saldo; int ada; float saldoAwal = 0;
     
     // Membaca file dan menyalin informasi pengguna ke file sementara
-    while (fscanf(file, "%s %s %s", storedUsername, storedPassword, storedPin) == 3) {
+    while (fscanf(file, "%s %s %s", storedUsername, storedPassword, storedPin, &saldo, storedRole) == 5) {
         if (strcmp(username, storedUsername) == 0) {
-            fprintf(tempFile, "%s %s %s\n", storedUsername, password, storedPin); // Menulis informasi pengguna yang dimodifikasi
+            fprintf(tempFile, "%s %s %s\n", storedUsername, password, storedPin, &saldo, storedRole); // Menulis informasi pengguna yang dimodifikasi
         } else {
-            fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, storedPin); // Menyalin informasi pengguna lain tanpa modifikasi
+            fprintf(tempFile, "%s %s %s\n", storedUsername, storedPassword, storedPin, &saldo, storedRole); // Menyalin informasi pengguna lain tanpa modifikasi
         }
     }
     
