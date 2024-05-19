@@ -42,7 +42,7 @@ void topUpSaldo(char *username, float amount) {
             userFound = 1;
             saldo += amount; // Menambahkan saldo
         }
-        fprintf(tempFile, "%s %s %s %.2f\n &s", storedUsername, storedPassword, storedPin, saldo, storedRole);
+        fprintf(tempFile, "%s %s %s %.2f %s", storedUsername, storedPassword, storedPin, saldo, storedRole);
     }
 
     if (!userFound) {
