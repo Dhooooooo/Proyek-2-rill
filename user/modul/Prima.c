@@ -11,6 +11,7 @@
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
 #define MAX_PIN 6
+#define MAX_ROLE 5
 #define ENCRYPTION_KEY 5
 
 /* ENKRIPSI DAN DESKRIPSI SL */
@@ -119,10 +120,8 @@ void decrypt_linked_list(char *text) {
 
 /* LOGIN AND REGISTER */
 
-void registerUser(char *username, char *password, char *pin) {
-    // Melakukan enkripsi pada password sebelum disimpan
-    
-    FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
+void registerUser(char *username, char *password, char *pin, char* role) {
+    FILE *file = fopen("database/users.txt", "r+"); // Buka file untuk membaca dan menulis
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return;
@@ -131,47 +130,42 @@ void registerUser(char *username, char *password, char *pin) {
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
-    float saldo; int ada; float saldoAwal = 0;
+    char storedRole[MAX_ROLE];
     
-    // Membaca file dan memeriksa apakah username sudah ada
-    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin, &saldo) == 4) {
+    // Membaca file dan memeriksa apakah username atau password sudah ada
+    while (fscanf(file, "%s %s %s %s\n", storedUsername, storedPassword, storedPin, storedRole) == 4) {
+        decrypt(storedUsername);
+        decrypt(storedPassword);
+        decrypt(storedPin);
+        decrypt(storedRole);
+
         if (strcmp(username, storedUsername) == 0) {
             fclose(file);
             printf("====================\n");
-    		printf("= Registrasi Gagal =\n");
-    		printf("====================\n");
+            printf("= Registrasi Gagal =\n");
+            printf("====================\n");
             printf("Username sudah digunakan.\n");
             spaceToContinue();
             return;
         }
-    }
-    rewind(file);
-    while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin, &saldo) == 4) {
+
         if (strcmp(password, storedPassword) == 0) {
             fclose(file);
             printf("====================\n");
-    		printf("= Registrasi Gagal =\n");
-    		printf("====================\n");
+            printf("= Registrasi Gagal =\n");
+            printf("====================\n");
             printf("Password sudah digunakan.\n");
             spaceToContinue();
             return;
         }
     }
-    
-    fclose(file);
-    
-    file = fopen("database/users.txt", "a");
-    if (file == NULL) {
-        printf("Gagal membuka file.\n");
-        return;
-    }
-    
+
     // Memeriksa PIN
     int pinLength = strlen(pin);
     if (pinLength != MAX_PIN) {
-    	printf("====================\n");
-   		printf("= Registrasi Gagal =\n");
-   		printf("====================\n");
+        printf("====================\n");
+        printf("= Registrasi Gagal =\n");
+        printf("====================\n");
         printf("Panjang PIN harus 6 angka.\n");
         spaceToContinue();
         return; // PIN tidak valid
@@ -179,62 +173,65 @@ void registerUser(char *username, char *password, char *pin) {
     int i;
     for (i = 0; i < pinLength; i++) {
         if (pin[i] < '0' || pin[i] > '9') {
-        	printf("====================\n");
-    		printf("= Registrasi Gagal =\n");
-    		printf("====================\n");
+            printf("====================\n");
+            printf("= Registrasi Gagal =\n");
+            printf("====================\n");
             printf("PIN hanya boleh terdiri dari angka.\n");
             spaceToContinue();
             return; // PIN tidak valid
         }
     }
-    
-    encrypt_linked_list(password);
-    encrypt_linked_list(pin);
-    
-    fprintf(file, "%s %s %s %.2f\n", username, password, pin, saldoAwal);
+
+    // Enkripsi data sebelum disimpan
+    encrypt(password);
+    encrypt(pin);
+    encrypt(role);
+
+    // Menulis data terenkripsi ke file
+    fseek(file, 0, SEEK_END); // Pindahkan penunjuk file ke akhir untuk menambahkan data baru
+    fprintf(file, "%s %s %s %s\n", username, password, pin, role);
     fclose(file);
-    
+
     printf("=======================\n");
     printf("= Registrasi berhasil =\n");
     printf("=======================\n");
 }
 
-// Fungsi untuk login
-int loginUser(char *username, char *password, char *pin) {
+int loginUser(char *username, char *password, char *pin, char *role) {
     FILE *file = fopen("database/users.txt", "r");
     if (file == NULL) {
         printf("Gagal membuka file.\n");
         return 0;
     }
-    rewind(file);
-    
+
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
-    float saldo; int ada; float saldoAwal = 0;
-    
-    while (!feof(file)) {
-        fscanf(file, "%s %s %s %f\n", storedUsername, storedPassword, storedPin, &saldo);
-        decrypt_linked_list(storedPin);
-        decrypt_linked_list(storedPassword);
-        
+    char storedRole[MAX_ROLE];
+
+    while (fscanf(file, "%s %s %s %s\n", storedUsername, storedPassword, storedPin, storedRole) == 4) {
+        decrypt(storedPassword);
+        decrypt(storedPin);
+        decrypt(storedRole);
+
         if (strcmp(username, storedUsername) == 0 && strcmp(password, storedPassword) == 0 && strcmp(pin, storedPin) == 0) {
+            strcpy(role, storedRole);
             fclose(file);
             printf("==================\n");
             printf("= Login berhasil =\n");
             printf("==================\n");
-            encrypt_linked_list(password);
             return 1; // Login berhasil
         }
     }
-    
+
     printf("===============\n");
     printf("= Login Gagal =\n");
-	printf("===============\n");
-	spaceToContinue();
+    printf("===============\n");
+    spaceToContinue();
     fclose(file);
     return 0; // Login gagal
 }
+
 
 // Fungsi untuk memodifikasi password pengguna
 void modifyPass(char *username, char *password) {
@@ -565,7 +562,6 @@ int confirmPay(char *username) {
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
     char pin[MAX_PIN];
-    float saldo; int ada; float saldoAwal = 0;
     int acc;
     FILE *file = fopen("database/users.txt", "r"); // Buka file untuk membaca
     if (file == NULL) {
@@ -586,7 +582,7 @@ int confirmPay(char *username) {
         encrypt(pin);
 
         int pinFound = 0; // Variabel penanda untuk mengetahui apakah PIN ditemukan
-        while (fscanf(file, "%s %s %s %f\n", storedUsername, storedPassword, storedPin, &saldo) == 4) {
+        while (fscanf(file, "%s %s %s\n", storedUsername, storedPassword, storedPin) == 3) {
             if (strcmp(username, storedUsername) == 0 && strcmp(pin, storedPin) == 0) {
                 pinFound = 1; // Setel variabel penanda jika PIN ditemukan
                 break; // Keluar dari loop setelah menemukan PIN yang cocok
