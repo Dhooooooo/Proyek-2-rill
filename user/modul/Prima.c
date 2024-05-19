@@ -50,13 +50,27 @@ void encrypt_linked_list(char *text) {
 
     // Melakukan enkripsi pada setiap node
     Nodes *curr = head;
-    while (curr != NULL) {
-        if (curr->data != ' ') {
-        	 printf("Mengenkripsi karakter: %c\n", curr->data);
-            curr->data = (curr->data + ENCRYPTION_KEY) % 126; // ASCII printable characters range
+	int loop = 0;
+	while (curr != NULL) {
+    if (curr->data != ' ') {
+        printf("Mengenkripsi karakter: %c\n", curr->data);
+        if (loop == 0) {
+            curr->data = (curr->data + ENCRYPTION_KEY) % 126;
+            if (curr->data < 32) { // Menghindari karakter non-printable
+                curr->data += 32;
+            }
+            loop++;
+        } else if (loop == 1) {
+            curr->data = (curr->data - ENCRYPTION_KEY);
+            if (curr->data < 32) { // Menghindari karakter non-printable
+                curr->data += 126 - 32;
+            }
+            loop--;
         }
-        curr = curr->next;
     }
+    curr = curr->next;
+}
+
 
     // Menggabungkan karakter dari linked list menjadi string
     curr = head;
@@ -92,13 +106,27 @@ void decrypt_linked_list(char *text) {
 
     // Melakukan dekripsi pada setiap node
     Nodes *curr = head;
-    while (curr != NULL) {
-        if (curr->data != ' ') {
-        	 printf("Mengenkripsi karakter: %c\n", curr->data);
-            curr->data = (curr->data - ENCRYPTION_KEY + 126) % 126; // ASCII printable characters range
+	int loop = 0;
+	while (curr != NULL) {
+    if (curr->data != ' ') {
+        printf("Mendekripsi karakter: %c\n", curr->data);
+        if (loop == 0) {
+            curr->data = curr->data - ENCRYPTION_KEY;
+            if (curr->data < 32) { // Menghindari karakter non-printable
+                curr->data += 126 - 32;
+            }
+            loop++;
+        } else if (loop == 1) {
+            curr->data = (curr->data + ENCRYPTION_KEY) % 126;
+            if (curr->data < 32) { // Menghindari karakter non-printable
+                curr->data += 32;
+            }
+            loop--;
         }
-        curr = curr->next;
     }
+    curr = curr->next;
+}
+
 
     // Menggabungkan karakter dari linked list menjadi string
     curr = head;
