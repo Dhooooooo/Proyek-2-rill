@@ -1,0 +1,3 @@
+Hafidz, 3205093005050007, Manggarai, Bandung, 19/05/2024, Pagi, Kereta Antar Kota, 1, B4, Rp 200000
+Hafidz, 3205093005050007, Manggarai, Yogyakarta, 19/05/2024, Pagi, Kereta Antar Kota, 1, B4, Rp 650000
+Hafidz, 3205093005050007, Yogyakarta, Bandung, 19/05/2024, Pagi, Kereta Antar Kota, 1, B1, Rp 400000
