@@ -6,6 +6,7 @@
 #include "Jagad.h"
 #include "Prima.h"
 #include "Ridho.h"
+#include "Hafidz.h"
 
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
@@ -18,6 +19,7 @@ int main() {
     char pin[MAX_PIN];
     float harga, amount;
     int choice, lolos, backMenu, beli, profil;
+    Tiket tiket;
     
     do {
     	clearScreen();
@@ -65,6 +67,11 @@ int main() {
                                             spaceToContinue();
                                             break;
                                         case 3:
+                                        	printf("Anda akan memesan tiket kereta");
+                                        	pemesananKereta(username);
+                                        	spaceToContinue();
+                                            break;
+                                        case 4:
                                             
                                             waitNext();
                                             
@@ -72,7 +79,7 @@ int main() {
                                         default:
                                             printf("Pilihan tidak valid.");
                                     }
-                                } while (beli != 3);
+                                } while (beli != 4);
                                 break;
                             case 2:
                                 //top-up saldo e-wallet :ridho
@@ -82,6 +89,7 @@ int main() {
                             	spaceToContinue();
                                 break;
                             case 3:
+                            	// Check coupon : Hafidz
                             	clearScreen();
                             	title();
             					checkCoupon(username);

@@ -11,6 +11,21 @@ struct LoginHistory {
     struct LoginHistory *next;
 };
 
+typedef struct {
+    char nama[50];
+    char nik[20];
+} Penumpang;
+
+typedef struct {
+    char stasiunKeberangkatan[50];
+    char stasiunTujuan[50];
+    char jenisKereta[20];
+    char jadwal[20];
+    char seat[10];
+    int gerbong;
+    Penumpang penumpang;
+} Tiket;
+
 /* COUPON */
 
 // Fungsi untuk melakukan readCoupon
@@ -32,5 +47,42 @@ void printLoginHistory(struct LoginHistory *head);
 
 // Fungsi untuk membebaskan memori yang dialokasikan untuk linked list
 void freeLoginHistory(struct LoginHistory *head);
+
+/* KERETA */
+// Prosedur untuk memilih jadwal kereta
+void pilihJadwal(char* jadwal);
+
+// Prosedur untuk melakukan input data diri dalam pemesanan tiket kereta
+void inputDataDiri(Penumpang* penumpang);
+
+// Prosedur untuk memilih seat di kereta antar kota
+void pilihSeat(char* seat, int* gerbong, Penumpang* penumpang, const char* jadwal);
+
+// Fungsi untuk mengecek stasiun yang diinput sesuai dengan stasiun yang tersedia
+int validasiStasiun(char* stasiun, int jenisKeretaPilihan);
+
+// Prosedur untuk melakukan input stasiun keberangkatan dan stasiun tujuan
+void inputStasiun(Tiket* tiket, int jenisKeretaPilihan);
+
+// Fungsi untuk melakukan konfirmasi pembayaran
+int konfirmasiPembayaran(Tiket* tiket);
+
+// Fungsi untuk mengecek seat yang diinput sesuai dengan seat yang tersedia di gerbong
+int validasiSeat(char* seat, int kelasPilihan);
+
+// Fungsi untuk mengecek seat yang diinput masih kosong atau sudah terisi
+int cekKetersediaanSeat(const char* filename, const char* seat);
+
+// Prosedur untuk melakukan pemesanan seat
+void pesanSeat(const char* filename, const char* seat, const char* namaPenumpang);
+
+// Prosedur untuk memulai pemesanan tiket kereta
+void pemesananKereta(char username[]);
+
+/* MENU */
+void listKeretaLokal();
+void listKeretaAntarKota();
+int menuPilihKelas();
+int menuPilihJadwal();
 
 #endif
