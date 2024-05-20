@@ -555,10 +555,11 @@ int isSaldoCukup(char *username, float totHarga) {
     char storedUsername[MAX_USERNAME_LENGTH];
     char storedPassword[MAX_PASSWORD_LENGTH];
     char storedPin[MAX_PIN];
+     char storedRole[MAX_USERNAME_LENGTH];
     float saldo, lastSaldo;
     int userFound = 0;
 
-    while (fscanf(file, "%s %s %s %f", storedUsername,storedPassword,storedPin,&saldo) == 4) {
+    while (fscanf(file, "%s %s %s %f", storedUsername,storedPassword,storedPin,&saldo, storedRole) == )5 {
         if (strcmp(storedUsername, username) == 0) {
             userFound = 1;
             if (saldo >= totHarga) {
@@ -580,11 +581,11 @@ int isSaldoCukup(char *username, float totHarga) {
 
     rewind(file);
 
-    while (fscanf(file, "%s %s %s %f", storedUsername,storedPassword,storedPin, &saldo) == 4) {
+    while (fscanf(file, "%s %s %s %f &s", storedUsername,storedPassword,storedPin, &saldo, storedRole) == 4) {
         if (strcmp(username, storedUsername) == 0) {
-            fprintf(tempFile, "%s %s %s %f\n", username,storedPassword,storedPin, lastSaldo);
+            fprintf(tempFile, "%s %s %s %f %s\n", username,storedPassword,storedPin, lastSaldo, storedRole);
         } else {
-            fprintf(tempFile, "%s %s %s %f\n", storedUsername,storedPassword,storedPin, saldo);
+            fprintf(tempFile, "%s %s %s %f %s\n", storedUsername,storedPassword,storedPin, saldo, storedRole);
         }
     }
     
