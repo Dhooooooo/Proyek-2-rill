@@ -26,6 +26,8 @@ typedef struct {
     int tarif;
     char tanggal[11];
     int kelas;
+    int potongan;
+    int total;
     Penumpang penumpang;
 } Tiket;
 
