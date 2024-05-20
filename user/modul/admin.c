@@ -125,8 +125,10 @@ int transaksiPesawat() {
 
 int transaksiKereta(){
 	int totalLokal =0, totalKota = 0, totalKereta = 0;
-	FILE* file;
-    printf("Kereta Lokal (Bandung Raya)\n");
+	clearScreen();
+    FILE* file;
+    printf("Riwayat Pembelian Tiket Kereta\n");
+    printf("\nKereta Lokal (Bandung Raya)\n");
     printf("| Nama                         | Stasiun Keberangkatan | Stasiun Tujuan         | Tanggal Keberangkatan | Jadwal  | Tarif      |\n");
     printf("|------------------------------|-----------------------|------------------------|-----------------------|---------|------------|\n");
 
@@ -138,7 +140,7 @@ int transaksiKereta(){
             int tarif;
             sscanf(line, "%[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], Rp %d", 
                    nama, nik, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, jenisKereta, &tarif);
-            printf("| %-28s | %-21s | %-22s | %-21s | %-7s | Rp %-10d |\n", 
+            printf("| %-28s | %-21s | %-22s | %-21s | %-7s | Rp %-7d |\n", 
                    nama, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, tarif);
                    totalLokal += tarif;
         }
@@ -146,23 +148,23 @@ int transaksiKereta(){
     }
 
     printf("\nKereta Antar Kota\n");
-    printf("| Nama                         | Stasiun Keberangkatan | Stasiun Tujuan         | Tanggal Keberangkatan | Jadwal  | Kelas      | Gerbong | Seat  | Tarif      |\n");
-    printf("|------------------------------|-----------------------|------------------------|-----------------------|---------|------------|---------|-------|------------|\n");
+    printf("| Nama                         | Stasiun Keberangkatan | Stasiun Tujuan         | Tanggal Keberangkatan | Jadwal  | Kelas      | Gerbong | Seat  | Tarif      | Potongan | Total      |\n");
+    printf("|------------------------------|-----------------------|------------------------|-----------------------|---------|------------|---------|-------|------------|----------|------------|\n");
 
     file = fopen("database/riwayatKeretaAntarKota.txt", "r");
     if (file != NULL) {
         char line[200];
         while (fgets(line, sizeof(line), file)) {
             char nama[50], nik[20], stasiunKeberangkatan[50], stasiunTujuan[50], tanggal[11], jadwal[20], jenisKereta[20], seat[10];
-            int kelas, gerbong, tarif;
-            sscanf(line, "%[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %d, %[^,], Rp %d", 
-                   nama, nik, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, jenisKereta, &kelas, seat, &tarif);
-            printf("| %-28s | %-21s | %-22s | %-21s | %-7s | %-10s | %-7d | %-5s | Rp %-10d |\n", 
-                   nama, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, kelas == 1 ? "Eksekutif" : "Ekonomi", gerbong, seat, tarif);
-                   totalKota += tarif;
+            int kelas, gerbong, tarif, potongan, total;
+            sscanf(line, "%[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %d, %d, %[^,], Rp %d, %d, Rp %d ", 
+                   nama, nik, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, jenisKereta, &kelas, &gerbong, seat, &tarif, &potongan, &total);
+            printf("| %-28s | %-21s | %-22s | %-21s | %-7s | %-10s | %-7d | %-5s | Rp %-7d | %-8d | Rp %-7d |\n", 
+                   nama, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, kelas == 1 ? "Eksekutif" : "Ekonomi", gerbong, seat, tarif, potongan, total);
+            	   totalKota += total;
         }
         fclose(file);
-	}
+    }
     totalKereta = totalKota + totalLokal;
     printf("Total transaksi kereta lokal dan antarkota: Rp. ");
     disHarga(totalKereta);

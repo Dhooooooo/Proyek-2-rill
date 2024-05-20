@@ -418,6 +418,23 @@ void tentukanTarif(Tiket* tiket) {
 }
 
 int konfirmasiPembayaran(Tiket* tiket) {
+	char coupon[MAX_COUPON_LENGTH];
+	int choice;
+	double hasil;
+	
+	if (strcmp(tiket->jenisKereta, "Kereta Antar Kota") == 0) {
+    	printf("Apakah anda ingin menggunakan kupon?\n(1) Ya\n(2) Tidak\n");
+    	printf("Masukkan pilihan anda: ");
+    	scanf("%d", &choice);
+    
+    	if (choice == 1) {
+    		tiket->potongan = kupon(coupon); // melakukan read coupon
+    		hasil = tiket->tarif - (tiket->tarif * (double)tiket->potongan/100);
+			tiket->total = (int) hasil;
+		}
+	}
+	
+	clearScreen();
     printf("Konfirmasi Pembayaran:\n");
     printf("Nama: %s\n", tiket->penumpang.nama);
     printf("NIK: %s\n", tiket->penumpang.nik);
@@ -432,6 +449,12 @@ int konfirmasiPembayaran(Tiket* tiket) {
         printf("Seat: %s\n", tiket->seat);
     }
     printf("Tarif: Rp %d\n", tiket->tarif);
+    if (choice == 1) {
+    	if (strcmp(tiket->jenisKereta, "Kereta Antar Kota") == 0) {
+    		printf("Diskon: %d%%\n", tiket->potongan);
+    		printf("Total Tarif: Rp %d\n", tiket->total);
+		}
+	}
     printf("Apakah anda ingin melanjutkan pemesanan?\n");
     printf("1. Iya\n");
     printf("2. Tidak\n");
@@ -456,11 +479,11 @@ void simpanRiwayat(Tiket* tiket) {
                 tiket->tanggal, tiket->jadwal, tiket->jenisKereta, tiket->tarif);
     } else if (strcmp(tiket->jenisKereta, "Kereta Antar Kota") == 0) {
         file = fopen("database/riwayatKeretaAntarKota.txt", "a");
-        fprintf(file, "%s, %s, %s, %s, %s, %s, %s, %d, %s, Rp %'d\n", 
+        fprintf(file, "%s, %s, %s, %s, %s, %s, %s, %d, %d, %s, Rp %d, %d, Rp %d\n", 
                 tiket->penumpang.nama, tiket->penumpang.nik, 
                 tiket->stasiunKeberangkatan, tiket->stasiunTujuan, 
                 tiket->tanggal, tiket->jadwal, tiket->jenisKereta, 
-                tiket->kelas, tiket->seat, tiket->tarif);
+                tiket->kelas, tiket->gerbong, tiket->seat, tiket->tarif, tiket->potongan, tiket->total);
     }
     fclose(file);
 }
@@ -488,19 +511,19 @@ void tampilkanRiwayatPembelian() {
     }
 
     printf("\nKereta Antar Kota\n");
-    printf("| Nama                         | Stasiun Keberangkatan | Stasiun Tujuan         | Tanggal Keberangkatan | Jadwal  | Kelas      | Gerbong | Seat  | Tarif      |\n");
-    printf("|------------------------------|-----------------------|------------------------|-----------------------|---------|------------|---------|-------|------------|\n");
+    printf("| Nama                         | Stasiun Keberangkatan | Stasiun Tujuan         | Tanggal Keberangkatan | Jadwal  | Kelas      | Gerbong | Seat  | Tarif      | Potongan | Total      |\n");
+    printf("|------------------------------|-----------------------|------------------------|-----------------------|---------|------------|---------|-------|------------|----------|------------|\n");
 
     file = fopen("database/riwayatKeretaAntarKota.txt", "r");
     if (file != NULL) {
         char line[200];
         while (fgets(line, sizeof(line), file)) {
             char nama[50], nik[20], stasiunKeberangkatan[50], stasiunTujuan[50], tanggal[11], jadwal[20], jenisKereta[20], seat[10];
-            int kelas, gerbong, tarif;
-            sscanf(line, "%[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %d, %[^,], Rp %d", 
-                   nama, nik, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, jenisKereta, &kelas, seat, &tarif);
-            printf("| %-28s | %-21s | %-22s | %-21s | %-7s | %-10s | %-7d | %-5s | Rp %-10d |\n", 
-                   nama, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, kelas == 1 ? "Eksekutif" : "Ekonomi", gerbong, seat, tarif);
+            int kelas, gerbong, tarif, potongan, total;
+            sscanf(line, "%[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %d, %d, %[^,], Rp %d, %d%%, Rp %d", 
+                   nama, nik, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, jenisKereta, &kelas, &gerbong, seat, &tarif, &potongan, &total);
+            printf("| %-28s | %-21s | %-22s | %-21s | %-7s | %-10s | %-7d | %-5s | Rp %-10d | %-8d | Rp %-10d |\n", 
+                   nama, stasiunKeberangkatan, stasiunTujuan, tanggal, jadwal, kelas == 1 ? "Eksekutif" : "Ekonomi", gerbong, seat, tarif, potongan, total);
         }
         fclose(file);
     }
@@ -517,9 +540,13 @@ void pemesananKereta(char username[]) {
         printf("Pilih Jenis Kereta:\n");
         printf("1. Kereta Lokal Bandung Raya\n");
         printf("2. Kereta Antar Kota\n");
+        printf("3. Kembali\n");
         printf("Masukkan pilihan: ");
         scanf("%d", &jenisKeretaPilihan);
 		
+		if (jenisKeretaPilihan == 3) {
+			break;
+		}
 		inputDataDiri(&penumpang);
         strcpy(tiket.penumpang.nama, penumpang.nama);
         strcpy(tiket.penumpang.nik, penumpang.nik);
@@ -551,8 +578,10 @@ void pemesananKereta(char username[]) {
     	if (konfirmasi == 1) {
     		simpanRiwayat(&tiket);
         	printf("Pembayaran berhasil. Tiket Anda telah dipesan.\n");
+        	spaceToContinue();
     	} else {
         	printf("Pemesanan dibatalkan.\n");
+        	spaceToContinue();
     	}
 	}
 }
