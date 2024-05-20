@@ -493,7 +493,7 @@ void adminApprove(int nomorDicari){
         printf("Gagal membuka file.\n");
     }
 
-    char baris[100];
+    char baris[255];
 
     // Menulis hasil ke file output
     while (fgets(baris, sizeof(baris), fileInput)) {
@@ -603,7 +603,7 @@ void pemesananHotel(char username[]){
     
     double hasil = hargaMenginap - (hargaMenginap*(double)potongan/100); // menghitung total harga setelah di diskon
     int totHarga = (int) hasil; // mengubah bentuk double ke int
-    char stats[30] = "Dlm Antrian...";
+    char stats[30] = "Dlm Antrean...";
     
     system("cls");
 	printf(" /$$   /$$  /$$$$$$  /$$$$$$$$ /$$$$$$$$ /$$                /$$$$$ /$$$$$$$$ /$$$$$$$$ /$$$$$$$$ /$$   /$$  /$$$$$$ \n");
@@ -823,7 +823,182 @@ void printList(linkedListAntrean* head, char jenis[]) {
     }
 }
 
+void approveAdmin(){
+    int approve;
+    int hotel;
+    char line[100];
+    char barisBaru[100];
+    printf("\n1. Hotel\n");
+    printf("2. Pesawat\n");
+    printf("3. Kembali\n");
+    printf("Masukkan pilihan anda: ");
+    scanf("%d", &approve);
+    switch(approve){
+        case 1:
+            clearScreen();
+            printf("\nList pesan kamar hotel\n");
+            printList(pesananHotel, "hotel");
+            
+//            FILE *Hotel = fopen("database/pemesananHotel.txt", "r");
+//            if (Hotel == NULL){
+//                printf("Gagal membuka file");
+//                return;
+//            }
+//            
+//            FILE *tempHotel = fopen("database/pemesananHotelTemp.txt", "w");
+//            if(tempHotel == NULL){
+//                printf("Gagal membuka temp file\n");
+//                fclose(Hotel);
+//                return;
+//            }
+//            
+//            printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
+//            printf("| %-3s | %-10s | %-12s | %-12s | %-4s | %-21s | %-4s | %-21s | %-6s | %-10s |\n", "No", " Username", "  CheckIn", "  CheckOut", "Hari", "        Harga","Kupon", "        Total", "NoKamar", "status");
+//            printf("|-----+------------+--------------+--------------+------+-----------------------+-------+-----------------------+---------+------------|\n");
+//
+//            while (fgets(line, sizeof(line), Hotel)) {
+//                char *dekripPemesanan = dekripsi(line);
+//                char *noOrder = strtok(dekripPemesanan, ",");
+//                char *namaCust = strtok(NULL, ",");
+//                char *CI = strtok(NULL, ",");
+//                char *CO = strtok(NULL, ",");
+//                char *hari = strtok(NULL, ",");
+//                char *harga = strtok(NULL, ",");
+//                char *ptgan = strtok(NULL, ",");
+//                char *total = strtok(NULL, ",");
+//                char *no = strtok(NULL, ",");
+//                char *status = strtok(NULL, ",");
+//                
+//                printf("| %-3s | %-10s | %-12s | %-12s | %-4s |", noOrder, namaCust, CI, CO, hari); 
+//                printf("     Rp. "); disHarga(atoi(harga)); 
+//                printf("\t| %-4s%% |", ptgan); 
+//                printf("     Rp. "); disHarga(atoi(total)); 
+//                printf("\t| %-7s | %-10s |\n", no, status);
+//            }
+//            printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
+//            fclose(Hotel);
+
+            printf("Pilih pesanan yang ingin anda approve: \n");
+            scanf("%d", &hotel);
+            adminApprove(hotel);
+
+          /*  Hotel = fopen("database/pemesananHotel.txt", "r");
+            if (Hotel == NULL){
+                printf("Gagal membuka file");
+                fclose(tempHotel);
+                return;
+			}         
+
+            while (fgets(line, sizeof(line), Hotel)) {
+                char *dekripPemesanan = dekripsi(line);
+                char *noOrder = strtok(dekripPemesanan, ",");
+                char *namaCust = strtok(NULL, ",");
+                char *CI = strtok(NULL, ",");
+                char *CO = strtok(NULL, ",");
+                char *hari = strtok(NULL, ",");
+                char *harga = strtok(NULL, ",");
+                char *ptgan = strtok(NULL, ",");
+                char *total = strtok(NULL, ",");
+                char *no = strtok(NULL, ",");
+                char *status = strtok(NULL, ",");
+                
+                if (atoi(noOrder) == hotel) {
+                    strcpy(status, "BERHASIL");
+                }
+                
+                sprintf(barisBaru, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", noOrder, namaCust, CI, CO, hari, harga, ptgan, total, no, status);
+                char* enkripsiPesanan = enkripsi (barisBaru);
+                fprintf(tempHotel, "%s,\n", enkripsiPesanan);
+            }
+
+            fclose(Hotel);
+            fclose(tempHotel);
+
+            remove("database/pemesananHotel.txt");
+            rename("database/pemesananHotelTemp.txt", "database/pemesananHotel.txt");*/
+
+            spaceToContinue();
+            break;
+            
+            case 2:
+            	break;
+            	
+        
+        default:
+            printf("Pilihan tidak valid\n");
+            break;
+    }
+}
+
+
+void start(){
+	restartLinkedList(pesananHotel, "hotel");
+}
+
 // Fungsi untuk menambahkan yang sedang dalam antrian di dalam database ke linked list
-//void restartLinkedList(linkedListAntrean* head){
-//	
-//}
+void restartLinkedList(linkedListAntrean* head, char jenis[50]){
+	char dbsPesanHotel[] = "database/pemesananHotel.txt";
+	char dbsPesanPesawat[] = "database/HistoryTiket.txt";
+	char dbsPesanKereta[] = "";
+	
+	char tempDekrip[255];
+	
+	char database[50];
+	
+	FILE *fileInput = fopen(database, "r+");
+	if (fileInput == NULL) {
+        printf("Gagal membuka file.\n");
+    }
+    char baris[100];
+	if(!strcmp(jenis, "hotel")){
+		
+		strcpy(database, dbsPesanHotel);
+	
+	//    printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
+	//    printf("| %-3s | %-10s | %-12s | %-12s | %-4s | %-21s | %-4s | %-21s | %-6s | %-10s |\n", "No", " Username", "  CheckIn", "  CheckOut", "Hari", "        Harga","Kupon", "        Total", "NoKamar", "status");
+	//    printf("|-----+------------+--------------+--------------+------+-----------------------+-------+-----------------------+---------+------------|\n");
+	
+	    while (fgets(baris, sizeof(baris), fileInput)) {
+	    	char *dekripPemesanan = dekripsi(baris);
+	    	strcpy(tempDekrip, dekripPemesanan);
+	    	char *noOrder = strtok(dekripPemesanan, ",");
+	    	char *namaCust = strtok(NULL, ",");
+	    	char *CI = strtok(NULL, ",");
+	    	char *CO = strtok(NULL, ",");
+	    	char *hari = strtok(NULL, ",");
+	    	char *harga = strtok(NULL, ",");
+	    	char *ptgan = strtok(NULL, ",");
+	    	char *total = strtok(NULL, ",");
+	    	char *no = strtok(NULL, ",");
+	    	char *status = strtok(NULL, ",");
+		
+			if (!strcmp(status, "Dlm Antrian...")) {
+	//	    	printf("| %-3s | %-10s | %-12s | %-12s | %-4s |",noOrder,namaCust, CI, CO, hari);printf("     Rp. ");disHarga(atoi(harga));printf("\t| %-4s%% |", ptgan);printf("     Rp. ");disHarga(atoi(total));printf("\t| %-7s | %-10s |\n", no, status);
+	    		insertLinkedList(&pemesananHotel, dekripPemesanan);
+			}
+		}
+	//    printf("+--------------------------------------------------------------------------------------------------------------------------------------+\n");
+	}
+//	else if(!strcmp(jenis, "pesawat")){
+//		strcpy(database, dbsPesanPesawat);
+//		while (fgets(baris, sizeof(baris), fileInput)) {
+//	    	char *dekripPemesanan = dekripsi(baris);
+//	    	strcpy(tempDekrip, dekripPemesanan);
+//	    	if (!strcmp(status, "Dlm Antrean...")) {
+//				
+//				insertLinkedList(&pemesananPesawat, dekripPemesanan);
+//			}
+//	    }
+//	}
+//	else if(!strcmp(jenis, "kereta")){
+//		strcpy(database, dbsPesanKereta);
+//		while (fgets(baris, sizeof(baris), fileInput)) {
+//	    	char *dekripPemesanan = dekripsi(baris);
+//	    	strcpy(tempDekrip, dekripPemesanan);
+//	    	if (!strcmp(status, "Dlm Antrean...")) {
+//				insertLinkedList(&pemesananKereta, dekripPemesanan);
+//			}
+//	    }
+//	}
+	fclose(fileInput);
+}

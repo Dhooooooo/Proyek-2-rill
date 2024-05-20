@@ -72,27 +72,17 @@ void topUpSaldo(char *username, float amount) {
 }    
 }
 
-int menuApprove(){
-	int approve;
-	printf("1. Hotel\n");
-	printf("2. Pesawat\n");
-	printf("3. Kereta\n");
-	printf("Masukkan pilihan anda");
-	scanf("%d", &approve);
-}
 
-void approveAdmin(int *approve){
-	char p1[] = "hotel";
-	char p2[] = "pesawat";
-	char p3[] = "kereta";
-	linkedListAntrean antri;
-	switch (*approve){
-		case 1:
-			printf("List pemesanan hotel:\n");
-			break;
-		case 2:
-			break;
-		case 3:
-			break;
-	}		
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
