@@ -53,7 +53,7 @@ void encrypt_linked_list(char *text) {
 	int loop = 0;
 	while (curr != NULL) {
     if (curr->data != ' ') {
-        printf("Mengenkripsi karakter: %c\n", curr->data);
+        //printf("Mengenkripsi karakter: %c\n", curr->data);
         if (loop == 0) {
             curr->data = (curr->data + ENCRYPTION_KEY) % 126;
             if (curr->data < 32) { // Menghindari karakter non-printable
@@ -109,7 +109,7 @@ void decrypt_linked_list(char *text) {
 	int loop = 0;
 	while (curr != NULL) {
     if (curr->data != ' ') {
-        printf("Mendekripsi karakter: %c\n", curr->data);
+        //printf("Mendekripsi karakter: %c\n", curr->data);
         if (loop == 0) {
             curr->data = curr->data - ENCRYPTION_KEY;
             if (curr->data < 32) { // Menghindari karakter non-printable
