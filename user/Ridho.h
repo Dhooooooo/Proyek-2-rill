@@ -3,5 +3,6 @@
 
 /*TOPUP*/
 void topUpSaldo(char *username, float amount);
+void approveAdmin();
 
 #endif

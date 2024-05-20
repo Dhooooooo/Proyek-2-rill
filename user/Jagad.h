@@ -62,4 +62,11 @@ void deleteFront(linkedListAntrean** head_ref);
 
 // Fungsi untuk mencetak isi linked list
 void printList(linkedListAntrean* head, char jenis[]);
+
+/// Fungsi untuk menambahkan yang sedang dalam antrian di dalam database ke linked list
+void restartLinkedList(linkedListAntrean* head, char jenis[50]);
+
+void approveAdmin();
+
+void start();
 #endif
