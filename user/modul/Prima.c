@@ -559,7 +559,7 @@ int isSaldoCukup(char *username, float totHarga) {
     float saldo, lastSaldo;
     int userFound = 0;
 
-    while (fscanf(file, "%s %s %s %f", storedUsername,storedPassword,storedPin,&saldo, storedRole) == )5 {
+    while (fscanf(file, "%s %s %s %f %s", storedUsername,storedPassword,storedPin,&saldo, storedRole) == )5 {
         if (strcmp(storedUsername, username) == 0) {
             userFound = 1;
             if (saldo >= totHarga) {
